@@ -3,3 +3,13 @@
 ################################################################################
 
 /LandHubWebService/Command/bin/Debug/netcoreapp3.1
+/LandHubWebService/.vs/LandHubWebService
+/LandHubWebService/Command/obj
+/LandHubWebService/CommandHandler/bin/Debug/netcoreapp3.1
+/LandHubWebService/CommandHandler/obj
+/LandHubWebService/Domain/bin/Debug/netcoreapp3.1
+/LandHubWebService/Domain/obj
+/LandHubWebService/Infruscture/bin/Debug/netcoreapp3.1
+/LandHubWebService/Infruscture/obj
+/LandHubWebService/LandHubWebService/bin/Debug/netcoreapp3.1
+/LandHubWebService/LandHubWebService/obj
