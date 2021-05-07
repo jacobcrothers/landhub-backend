@@ -28,7 +28,7 @@ namespace LandHubWebService
             app.UseSwagger();
             app.UseSwaggerUI(c =>
             {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Land Hub API ");
+                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Land Hub API");
             });
 
             if (env.IsDevelopment())
