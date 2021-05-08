@@ -1,4 +1,12 @@
-﻿using Microsoft.AspNetCore.Builder;
+﻿using Command;
+
+using CommandHandler;
+
+using FluentValidation;
+
+using MediatR;
+
+using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -20,6 +28,8 @@ namespace LandHubWebService
         {
             services.AddControllers();
             services.AddSwaggerGen();
+            services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
+            services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

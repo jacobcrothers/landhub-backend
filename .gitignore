@@ -13,3 +13,8 @@
 /LandHubWebService/Infruscture/obj
 /LandHubWebService/LandHubWebService/bin/Debug/netcoreapp3.1
 /LandHubWebService/LandHubWebService/obj
+/LandHubWebService/LandHubWebService/bin/Debug/net5.0
+/LandHubWebService/Infruscture/bin/Debug/net5.0
+/LandHubWebService/Domain/bin/Debug/net5.0
+/LandHubWebService/CommandHandler/bin/Debug/net5.0
+/LandHubWebService/Command/bin/Debug/net5.0
