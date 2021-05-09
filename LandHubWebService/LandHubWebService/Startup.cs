@@ -4,6 +4,9 @@ using CommandHandler;
 
 using FluentValidation;
 
+using LandHubWebService.Pipeline;
+using LandHubWebService.Validations;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Builder;
@@ -28,7 +31,9 @@ namespace LandHubWebService
         {
             services.AddControllers();
             services.AddSwaggerGen();
-            services.AddValidatorsFromAssembly(typeof(CreateUserCommand).Assembly);
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
+            services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
+            services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
             services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
         }
 

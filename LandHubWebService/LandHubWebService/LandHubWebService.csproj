@@ -17,5 +17,9 @@
     <ProjectReference Include="..\Command\Commands.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="FluentValidation\" />
+  </ItemGroup>
+
 
 </Project>
