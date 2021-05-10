@@ -1,10 +1,8 @@
-﻿using MongoDB.Driver;
-
-namespace Services.Repository
+﻿namespace Services.Repository
 {
     public class Mongosettings
     {
-        public MongoClientSettings Connection { get; internal set; }
-        public string DatabaseName { get; internal set; }
+        public string Connection { get; set; }
+        public string DatabaseName { get; set; }
     }
 }

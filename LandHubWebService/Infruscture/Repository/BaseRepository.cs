@@ -1,4 +1,5 @@
-﻿using MongoDB.Bson;
+﻿using Domains.DBModels;
+
 using MongoDB.Driver;
 
 using System;
@@ -7,26 +8,22 @@ using System.Threading.Tasks;
 
 namespace Services.Repository
 {
-    public abstract class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : class
+    public class BaseRepository<TEntity> : IBaseRepository<TEntity> where TEntity : BaseEntity
     {
-        protected readonly IMongoLandHubDBContext _mongoContext;
-        protected IMongoCollection<TEntity> _dbCollection;
+        private readonly IMongoLandHubDBContext _mongoContext;
+        private readonly IMongoCollection<TEntity> _dbCollection;
 
-        protected BaseRepository(IMongoLandHubDBContext context)
+        public BaseRepository(IMongoLandHubDBContext context)
         {
             _mongoContext = context;
-            _dbCollection = _mongoContext.GetCollection<TEntity>(typeof(TEntity).Name);
+            _dbCollection = _mongoContext.GetCollection<TEntity>($"{typeof(TEntity).Name}");
         }
+
 
 
         public async Task<TEntity> Get(string id)
         {
-            //ex. 5dc1039a1521eaa36835e541
-
-            var objectId = new ObjectId(id);
-
-            FilterDefinition<TEntity> filter = Builders<TEntity>.Filter.Eq("_id", objectId);
-
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
             return await _dbCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
 
         }
@@ -44,10 +41,11 @@ namespace Services.Repository
             {
                 throw new ArgumentNullException(typeof(TEntity).Name + " object is null");
             }
+            obj.Id = Guid.NewGuid().ToString();
             await _dbCollection.InsertOneAsync(obj);
         }
 
-        public virtual void Update(TEntity obj)
+        public void Update(TEntity obj)
         {
             _ = _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.ToString()), obj);
         }
@@ -56,8 +54,10 @@ namespace Services.Repository
         {
             //ex. 5dc1039a1521eaa36835e541
 
-            var objectId = new ObjectId(id);
-            _dbCollection.DeleteOneAsync(Builders<TEntity>.Filter.Eq("_id", objectId));
+            var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
+
+
+            _dbCollection.DeleteOneAsync(filter);
 
         }
     }

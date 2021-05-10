@@ -10,6 +10,8 @@ namespace Services.Repository
         private IMongoDatabase _db { get; set; }
         private MongoClient _mongoClient { get; set; }
         public IClientSessionHandle Session { get; set; }
+
+
         public MongoLandHubDBContext(IOptions<Mongosettings> configuration)
         {
             _mongoClient = new MongoClient(configuration.Value.Connection);
@@ -19,11 +21,6 @@ namespace Services.Repository
         public IMongoCollection<T> GetCollection<T>(string name)
         {
             return _db.GetCollection<T>(name);
-        }
-
-        IMongoCollection<Book> IMongoLandHubDBContext.GetCollection<Book>(string name)
-        {
-            throw new System.NotImplementedException();
         }
     }
 }

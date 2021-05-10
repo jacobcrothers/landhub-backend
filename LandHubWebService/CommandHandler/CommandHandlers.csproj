@@ -6,6 +6,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Command\Commands.csproj" />
+    <ProjectReference Include="..\Infruscture\LandHubCoreService.csproj" />
   </ItemGroup>
 
 </Project>
