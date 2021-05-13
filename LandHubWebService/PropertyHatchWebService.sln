@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandHubWebApi", "LandHubWebService\LandHubWebApi.csproj", "{EBF3E164-E5E6-499B-B448-508BD0547C52}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyHatchWebApi", "LandHubWebService\PropertyHatchWebApi.csproj", "{EBF3E164-E5E6-499B-B448-508BD0547C52}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "LandHubCoreService", "Infruscture\LandHubCoreService.csproj", "{FAE44B65-0E25-48DF-86CD-6D785C2EB066}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PropertyHatchCoreService", "Infruscture\PropertyHatchCoreService.csproj", "{FAE44B65-0E25-48DF-86CD-6D785C2EB066}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Domains", "Domain\Domains.csproj", "{A26818F8-D41E-4EF5-A39D-EBAFD312EDEC}"
 EndProject

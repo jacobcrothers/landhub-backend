@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace Domains.DBModels
 {
@@ -9,13 +10,17 @@ namespace Domains.DBModels
         public string MiddleName { get; set; }
         public string Address { get; set; }
         public string Email { get; set; }
-        public string[] Roles { get; set; }
+        public List<string> Roles { get; set; }
         public string OrganizationId { get; set; }
-        public string OrganizationTitle { get; set; }
+        public string OrganizationName { get; set; }
         public string CountryName { get; set; }
 
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
+        public User()
+        {
+            this.Roles = new List<string>();
+        }
 
     }
 }

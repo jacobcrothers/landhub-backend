@@ -15,6 +15,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.OpenApi.Models;
 
 using Services.IManagers;
 using Services.Managers;
@@ -34,6 +35,11 @@ namespace LandHubWebService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PropertyHatch.Service", Version = "v1" });
+            });
+
             var x = Configuration.GetSection("Mongosettings");
             services.Configure<Mongosettings>(Configuration.GetSection("Mongosettings"));
             services.AddAutoMapper(typeof(MappingProfiles));
@@ -48,16 +54,15 @@ namespace LandHubWebService
             services.AddTransient<IUserManager, UserManager>();
             services.AddTransient(typeof(IBaseRepository<>), (typeof(BaseRepository<>)));
             services.AddTransient<IMongoLandHubDBContext, MongoLandHubDBContext>();
+            services.AddTransient<IMappingService, MappingService>();
+            services.AddTransient<IOrganizationManager, OrganizationManager>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Land Hub API");
-            });
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PropertyHatch.Service v1"));
 
             if (env.IsDevelopment())
             {
