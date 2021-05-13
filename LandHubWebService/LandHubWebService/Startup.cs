@@ -62,15 +62,7 @@ namespace LandHubWebService
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             app.UseSwagger();
-<<<<<<< HEAD
             app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "PropertyHatch.Service v1"));
-=======
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "Land Hub API");
-                c.RoutePrefix = string.Empty;
-            });
->>>>>>> 13de8378ad8c7457afbbe4fb2ba3ac5b5564a5b3
 
             if (env.IsDevelopment())
             {
