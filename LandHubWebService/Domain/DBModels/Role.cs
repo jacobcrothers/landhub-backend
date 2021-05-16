@@ -1,9 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Domains.DBModels
+﻿namespace Domains.DBModels
 {
     public class Role : BaseEntity
     {

@@ -1,13 +1,15 @@
 ﻿using AutoMapper;
+
 using Command;
+
 using Domains.DBModels;
+
 using MediatR;
+
 using Services.IManagers;
 using Services.Repository;
+
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -47,15 +49,16 @@ namespace CommandHandlers
                 Address = request.Address,
                 Description = request.Description,
                 ImageId = request.ImageId
-                
+
             };
-            
+
             _organizationManager.CreateOrganization(organization);
             _usermanager.CreateUser(user);
-            foreach (var roleId in user.Roles){
+            foreach (var roleId in user.Roles)
+            {
                 _mappingService.MapUserOrgRole(roleId, user.Id, organization.Id);
             }
-            
+
             return Task.CompletedTask;
         }
     }

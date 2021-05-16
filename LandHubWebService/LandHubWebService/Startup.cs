@@ -2,6 +2,8 @@
 
 using CommandHandler;
 
+using Domains.DBModels;
+
 using FluentValidation;
 
 using LandHubWebService.Helpers;
@@ -10,16 +12,26 @@ using LandHubWebService.Validations;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
+
+using MongoDbGenericRepository;
+
+using PropertyHatchCoreService.IManagers;
+using PropertyHatchCoreService.Managers;
 
 using Services.IManagers;
 using Services.Managers;
 using Services.Repository;
+
+using System.Text;
 
 namespace LandHubWebService
 {
@@ -56,6 +68,33 @@ namespace LandHubWebService
             services.AddTransient<IMongoLandHubDBContext, MongoLandHubDBContext>();
             services.AddTransient<IMappingService, MappingService>();
             services.AddTransient<IOrganizationManager, OrganizationManager>();
+            services.AddTransient<IRoleManager, RoleManager>();
+
+            var mongoDbContext = new MongoDbContext(Configuration.GetSection("Mongosettings:Connection").Value, Configuration.GetSection("Mongosettings:DatabaseName").Value);
+            services.AddIdentity<ApplicationUser, ApplicationRole>()
+              .AddMongoDbStores<IMongoDbContext>(mongoDbContext)
+              .AddDefaultTokenProviders();
+
+            services.AddMvc();
+
+            services.AddAuthentication(x =>
+            {
+                x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            }).AddJwtBearer(options =>
+            {
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuerSigningKey = true,
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Token:Key"])),
+                    ValidIssuer = Configuration["Token:Issuer"],
+                    ValidateIssuer = true,
+                    ValidateAudience = false
+                };
+
+            });
+            services.AddAuthorization();
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
