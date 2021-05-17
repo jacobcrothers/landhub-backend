@@ -1,15 +1,17 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
 
-using System;
+using MongoDbGenericRepository.Attributes;
 
+using System;
 namespace Domains.DBModels
 {
-    public class ApplicationUser : MongoIdentityUser<Guid>
+    [CollectionName("ApplicationUsers")]
+    public class ApplicationUser : MongoIdentityUser<string>
     {
-
 
         public ApplicationUser() : base()
         {
+
         }
 
         public ApplicationUser(string userName, string email) : base(userName, email)
@@ -19,7 +21,25 @@ namespace Domains.DBModels
         {
             this.DisplayName = displayName;
         }
-        public string DisplayName { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
+        public string MiddleName { get; set; }
+        public string PassportNumber { get; set; }
+        public string DisplayName
+        {
+            get { return $"{FirstName} {LastName}"; }
+            set { }
+        }
+
+        public string Address { get; set; }
+        //  public string OrganizationId { get; set; }
+        // public string OrganizationName { get; set; }
+        public string CountryName { get; set; }
+
+        public DateTime DOB { get; set; }
+        public string Salutation { get; set; }
+        public string OrganizationId { get; set; }
+
 
     }
 }

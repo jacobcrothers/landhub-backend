@@ -12,6 +12,7 @@ namespace Services.Repository
         void Delete(string id);
         Task<TEntity> Get(string id);
         Task<IEnumerable<TEntity>> Get();
-        Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>> criteria);
+        Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> criteria);
+        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria);
     }
 }

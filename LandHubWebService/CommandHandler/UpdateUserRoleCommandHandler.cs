@@ -17,10 +17,10 @@ namespace CommandHandler
 {
     public class UpdateUserRoleCommandHandler : AsyncRequestHandler<UpdateUserRoleCommand>
     {
-        private IUserManager _usermanager;
+        private IBaseUserManager _usermanager;
         private readonly IMapper _mapper;
 
-        public UpdateUserRoleCommandHandler(IUserManager userManager,
+        public UpdateUserRoleCommandHandler(IBaseUserManager userManager,
                                           IMapper mapper
             )
         {

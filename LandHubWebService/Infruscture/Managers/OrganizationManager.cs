@@ -5,6 +5,7 @@ using Services.IManagers;
 using Services.Repository;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace Services.Managers
 {
@@ -21,6 +22,11 @@ namespace Services.Managers
         public void CreateOrganization(Organization organization)
         {
             _organizationBaseRepository.Create(organization);
+        }
+
+        public async Task<Organization> GetOrganizationByCreatorAsync(string createdBy)
+        {
+            return await _organizationBaseRepository.GetAsync(it => it.CreatedBy == createdBy);
         }
 
         public void UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings)

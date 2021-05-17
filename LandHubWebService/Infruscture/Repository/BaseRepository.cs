@@ -28,7 +28,7 @@ namespace Services.Repository
             return await _dbCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
 
         }
-        public async Task<List<TEntity>> ListAsync(Expression<Func<TEntity, bool>> criteria)
+        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var filter = Builders<TEntity>.Filter.Empty;
             return await _dbCollection.Find(criteria).ToListAsync();
@@ -61,13 +61,14 @@ namespace Services.Repository
 
         public void Delete(string id)
         {
-            //ex. 5dc1039a1521eaa36835e541
-
             var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
-
-
             _dbCollection.DeleteOneAsync(filter);
+        }
 
+        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> criteria)
+        {
+            var filter = Builders<TEntity>.Filter.Empty;
+            return (TEntity)await _dbCollection.FindAsync(criteria);
         }
     }
 }

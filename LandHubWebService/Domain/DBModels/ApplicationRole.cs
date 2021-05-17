@@ -1,10 +1,8 @@
 ﻿using AspNetCore.Identity.MongoDbCore.Models;
 
-using System;
-
 namespace Domains.DBModels
 {
-    public class ApplicationRole : MongoIdentityRole<Guid>
+    public class ApplicationRole : MongoIdentityRole<string>
     {
         public ApplicationRole() : base()
         {

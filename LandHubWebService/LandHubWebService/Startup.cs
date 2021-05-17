@@ -28,8 +28,10 @@ using PropertyHatchCoreService.IManagers;
 using PropertyHatchCoreService.Managers;
 
 using Services.IManagers;
+using Services.IServices;
 using Services.Managers;
 using Services.Repository;
+using Services.Services;
 
 using System.Text;
 
@@ -63,12 +65,13 @@ namespace LandHubWebService
             services.AddValidatorsFromAssembly(typeof(CreateUserCommandValidator).Assembly);
             services.AddMediatR(typeof(CreateUserCommand).Assembly, typeof(CreateUserCommandHandler).Assembly);
 
-            services.AddTransient<IUserManager, UserManager>();
+            services.AddTransient<IBaseUserManager, BaseUserManager>();
             services.AddTransient(typeof(IBaseRepository<>), (typeof(BaseRepository<>)));
             services.AddTransient<IMongoLandHubDBContext, MongoLandHubDBContext>();
             services.AddTransient<IMappingService, MappingService>();
             services.AddTransient<IOrganizationManager, OrganizationManager>();
             services.AddTransient<IRoleManager, RoleManager>();
+            services.AddTransient<ITokenService, TokenService>();
 
             var mongoDbContext = new MongoDbContext(Configuration.GetSection("Mongosettings:Connection").Value, Configuration.GetSection("Mongosettings:DatabaseName").Value);
             services.AddIdentity<ApplicationUser, ApplicationRole>()

@@ -4,17 +4,23 @@ using PropertyHatchCoreService.IManagers;
 
 using Services.Repository;
 
+using System.Collections.Generic;
+
 namespace PropertyHatchCoreService.Managers
 {
     public class RoleManager : IRoleManager
     {
         private readonly IBaseRepository<Role> _roleBaseRepository;
         private readonly IBaseRepository<RolePermissionMapping> _rolePermissionMappingBaseRepository;
+        private readonly IBaseRepository<UserRoleMapping> _userRoleMappingBaseRepository;
 
-        public RoleManager(IBaseRepository<Role> roleBaseRepository, IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository)
+        public RoleManager(IBaseRepository<Role> roleBaseRepository
+            , IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository
+            , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository)
         {
             this._roleBaseRepository = roleBaseRepository;
             this._rolePermissionMappingBaseRepository = rolePermissionMappingBaseRepository;
+            this._userRoleMappingBaseRepository = userRoleMappingBaseRepository;
         }
 
 
@@ -26,6 +32,11 @@ namespace PropertyHatchCoreService.Managers
         public void CreateRolePermissionMapping(RolePermissionMapping rolePermissionMapping)
         {
             _rolePermissionMappingBaseRepository.Create(rolePermissionMapping);
+        }
+
+        public List<Role> GetRoleByUserByOrgAsync(string userId, string orgId)
+        {
+            return null;
         }
     }
 }

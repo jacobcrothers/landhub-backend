@@ -23,7 +23,7 @@ namespace LandHubWebService.Controllers
     public class OrganizationController : ControllerBase
     {
 
-        private readonly ILogger<AccountManagerController> _logger;
+        private readonly ILogger<AccountController> _logger;
         private readonly IMediator _mediator;
         private readonly IBaseRepository<Organization> _organizationRepo;
         private readonly IBaseRepository<UserRoleMapping> _userRoleMapping;
@@ -31,7 +31,7 @@ namespace LandHubWebService.Controllers
         private readonly IBaseRepository<Permission> _permissionBaseRepository;
         private readonly IBaseRepository<RolePermissionMapping> _rolePermissionMappingBaseRepository;
 
-        public OrganizationController(ILogger<AccountManagerController> logger
+        public OrganizationController(ILogger<AccountController> logger
             , IMediator mediator
             , IBaseRepository<UserRoleMapping> userRoleMapping
             , IBaseRepository<Organization> organizationRepo
@@ -60,7 +60,7 @@ namespace LandHubWebService.Controllers
         public async Task<List<UserRoleMapping>> GetRoleDetailsWithOrgId(string orgId)
         {
             if (orgId != null)
-                return await _userRoleMapping.ListAsync(x => x.OrganizationId == orgId);
+                return await _userRoleMapping.GetAllAsync(x => x.OrganizationId == orgId);
             else return null;
         }
 
@@ -80,14 +80,14 @@ namespace LandHubWebService.Controllers
         [HttpGet("[action]")]
         public async Task<ActionResult> GetAllPermissionAsync()
         {
-            List<Permission> permissions = await _permissionBaseRepository.ListAsync(x => x.IsActive == true);
+            List<Permission> permissions = await _permissionBaseRepository.GetAllAsync(x => x.IsActive == true);
             return Ok(permissions);
         }
 
         [HttpGet("[action]")]
         public async Task<ActionResult> GetPermissionByRoleIdAsync(string role)
         {
-            List<RolePermissionMapping> permissions = await _rolePermissionMappingBaseRepository.ListAsync(x => x.RoleId == role);
+            List<RolePermissionMapping> permissions = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.RoleId == role);
             return Ok(permissions);
         }
     }

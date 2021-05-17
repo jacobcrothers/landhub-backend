@@ -18,10 +18,10 @@ namespace CommandHandlers
     public class CreateNewUserWithOrgCommandHandler : AsyncRequestHandler<CreateNewUserWithOrgCommand>
     {
         private readonly IMapper _mapper;
-        private IUserManager _usermanager;
+        private IBaseUserManager _usermanager;
         private IOrganizationManager _organizationManager;
         private IMappingService _mappingService;
-        public CreateNewUserWithOrgCommandHandler(IUserManager userManager,
+        public CreateNewUserWithOrgCommandHandler(IBaseUserManager userManager,
                                                 IOrganizationManager organizationManager,
                                                 IMappingService mappingService,
                                                 IMapper mapper)
