@@ -4,6 +4,7 @@ using MongoDB.Driver;
 
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
 
@@ -30,8 +31,14 @@ namespace Services.Repository
         }
         public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
-            var filter = Builders<TEntity>.Filter.Empty;
-            return await _dbCollection.Find(criteria).ToListAsync();
+            var all = await _dbCollection.FindAsync(criteria);
+            return await all.ToListAsync();
+        }
+
+        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> criteria)
+        {
+            var all = await _dbCollection.FindAsync(criteria);
+            return all.FirstOrDefault();
         }
 
         public async Task<IEnumerable<TEntity>> Get()
@@ -65,10 +72,5 @@ namespace Services.Repository
             _dbCollection.DeleteOneAsync(filter);
         }
 
-        public async Task<TEntity> GetAsync(Expression<Func<TEntity, bool>> criteria)
-        {
-            var filter = Builders<TEntity>.Filter.Empty;
-            return (TEntity)await _dbCollection.FindAsync(criteria);
-        }
     }
 }

@@ -9,6 +9,8 @@ using MediatR;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using Services.IManagers;
+
 using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -22,12 +24,14 @@ namespace LandHubWebService.Controllers
 
         private readonly ILogger<AccountController> _logger;
         private readonly IMediator _mediator;
-
-        public AccountController(ILogger<AccountController> logger,
-                                        IMediator mediator)
+        private readonly IBaseUserManager baseUserManager;
+        public AccountController(ILogger<AccountController> logger
+            , IMediator mediator
+            , IBaseUserManager baseUserManager)
         {
             _logger = logger;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
+            this.baseUserManager = baseUserManager;
         }
 
         [HttpPost("[action]")]
@@ -45,9 +49,9 @@ namespace LandHubWebService.Controllers
         }
 
         [HttpPost("[action]")]
-        public ActionResult Register([FromBody] CreateUserCommand command)
+        public async Task<ActionResult> RegisterAsync([FromBody] CreateUserCommand command)
         {
-            _mediator.Send(command);
+            await _mediator.Send(command);
             return Ok();
 
         }

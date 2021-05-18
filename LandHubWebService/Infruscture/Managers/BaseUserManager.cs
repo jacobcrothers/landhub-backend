@@ -36,14 +36,14 @@ namespace Services.Managers
 
         public async Task<bool> RegisterUserAsync(ApplicationUser user, string password = "")
         {
-            var absence = _userManager.FindByEmailAsync(user.Email).Result;
+            var absence = await _userManager.FindByEmailAsync(user.Email);
             if (absence != null)
             {
                 return false;
             }
             var result = await _userManager.CreateAsync(user, password);
 
-            return true;
+            return result.Succeeded;
         }
         public async Task<bool> Login(string email, string password = "")
         {

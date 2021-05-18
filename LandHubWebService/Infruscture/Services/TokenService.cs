@@ -37,7 +37,7 @@ namespace Services.Services
 
         public async Task<string> CreateTokenAsync(ApplicationUser appicationUser)
         {
-            var org = await organizationManager.GetOrganizationByCreatorAsync(appicationUser.Id);
+            var org = await organizationManager.GetSingleOrganizationByCreatorAsync(appicationUser.Id);
             var userRoleMapping = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, org.Id);
             List<string> list = new List<string>();
 

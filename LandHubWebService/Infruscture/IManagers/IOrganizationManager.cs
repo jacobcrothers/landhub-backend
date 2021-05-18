@@ -10,7 +10,7 @@ namespace Services.IManagers
         void UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings);
 
         void CreateOrganization(Organization organization);
-        Task<Organization> GetOrganizationByCreatorAsync(string createdBy);
+        Task<Organization> GetSingleOrganizationByCreatorAsync(string createdBy);
 
     }
 

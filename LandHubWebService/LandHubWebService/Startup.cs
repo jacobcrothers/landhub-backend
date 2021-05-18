@@ -54,7 +54,6 @@ namespace LandHubWebService
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PropertyHatch.Service", Version = "v1" });
             });
 
-            var x = Configuration.GetSection("Mongosettings");
             services.Configure<Mongosettings>(Configuration.GetSection("Mongosettings"));
             services.AddAutoMapper(typeof(MappingProfiles));
 
