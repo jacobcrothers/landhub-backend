@@ -8,11 +8,11 @@ namespace Services.Repository
     public interface IBaseRepository<TEntity> where TEntity : class
     {
         Task<string> Create(TEntity obj);
-        void Update(TEntity obj);
+        Task<bool> UpdateAsync(TEntity obj);
         void Delete(string id);
-        Task<TEntity> Get(string id);
-        Task<IEnumerable<TEntity>> Get();
-        Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria);
-        Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> criteria);
+        Task<TEntity> GetByIdAsync(string id);
+        Task<IEnumerable<TEntity>> GetAsync();
+        Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria);
+        Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria);
     }
 }

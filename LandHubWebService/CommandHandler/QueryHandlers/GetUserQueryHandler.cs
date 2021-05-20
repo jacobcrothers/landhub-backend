@@ -1,4 +1,6 @@
-﻿using Commands;
+﻿using AutoMapper;
+
+using Commands;
 
 using Domains.DBModels;
 
@@ -17,17 +19,21 @@ namespace CommandHandlers.QueryHandlers
 
         private readonly IBaseRepository<User> _userBaseRepository;
         private readonly IBaseRepository<UserRoleMapping> _userRoleMappingBaseRepository;
+        private readonly IMapper _mapper;
 
         public GetUserQueryHandler(IBaseRepository<User> userBaseRepository
-            , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository)
+            , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository
+            , IMapper mapper)
         {
             _userBaseRepository = userBaseRepository;
             _userRoleMappingBaseRepository = userRoleMappingBaseRepository;
+            _mapper = mapper;
         }
 
         public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
-            var user = await _userBaseRepository.Get(request.UserId);
+            var user = await _userBaseRepository.GetByIdAsync(request.UserId);
+            //  var user = _mapper.Map<ApplicationUser, User>(applicationUser);
             var rolesMapping = await _userRoleMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.UserId == request.UserId);
             List<string> rolesId = new List<string>();
             foreach (UserRoleMapping rolePermissionMapping in rolesMapping)

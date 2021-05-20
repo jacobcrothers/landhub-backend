@@ -1,4 +1,8 @@
 ﻿
+using AspNetCore.Identity.MongoDbCore.Models;
+
+using Microsoft.AspNetCore.Identity;
+
 using System;
 using System.Collections.Generic;
 
@@ -22,8 +26,33 @@ namespace Domains.DBModels
         public string OrganizationName { get; set; }
         public string CountryName { get; set; }
 
+        public string PassportNumber { get; set; }
+        public string UserName { get; set; }
+
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
+
+        public List<MongoClaim> Claims { get; set; }
+        public DateTime CreatedOn { get; set; }
+        public int Version { get; set; }
+        public List<UserLoginInfo> Logins { get; set; }
+        public List<Token> Tokens { get; set; }
+        public DateTimeOffset? LockoutEnd { get; set; }
+        public bool TwoFactorEnabled { get; set; }
+        public bool PhoneNumberConfirmed { get; set; }
+        public string PhoneNumber { get; set; }
+        public string ConcurrencyStamp { get; set; }
+        public string SecurityStamp { get; set; }
+        public string PasswordHash { get; set; }
+        public bool EmailConfirmed { get; set; }
+        public string NormalizedEmail { get; set; }
+        public string NormalizedUserName { get; set; }
+        public bool LockoutEnabled { get; set; }
+        public int AccessFailedCount { get; set; }
+        public string ProfileImageUrl { get; set; }
+
+
+
         public User()
         {
             this.Roles = new List<string>();

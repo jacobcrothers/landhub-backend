@@ -2,7 +2,7 @@
 
 using System;
 
-namespace Command
+namespace Commands
 {
     public class CreateUserCommand : IRequest
     {

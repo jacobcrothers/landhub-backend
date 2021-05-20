@@ -23,25 +23,25 @@ namespace Services.Repository
 
 
 
-        public async Task<TEntity> Get(string id)
+        public async Task<TEntity> GetByIdAsync(string id)
         {
             var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
             return await _dbCollection.FindAsync(filter).Result.FirstOrDefaultAsync();
 
         }
-        public async Task<List<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
+        public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var all = await _dbCollection.FindAsync(criteria);
             return await all.ToListAsync();
         }
 
-        public async Task<TEntity> GetOneAsync(Expression<Func<TEntity, bool>> criteria)
+        public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var all = await _dbCollection.FindAsync(criteria);
             return all.FirstOrDefault();
         }
 
-        public async Task<IEnumerable<TEntity>> Get()
+        public async Task<IEnumerable<TEntity>> GetAsync()
         {
             var all = await _dbCollection.FindAsync(Builders<TEntity>.Filter.Empty);
             return await all.ToListAsync();
@@ -61,9 +61,10 @@ namespace Services.Repository
             return obj.Id;
         }
 
-        public void Update(TEntity obj)
+        public async Task<bool> UpdateAsync(TEntity obj)
         {
-            _ = _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.ToString()), obj);
+            var result = await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.ToString()), obj);
+            return result.IsAcknowledged;
         }
 
         public void Delete(string id)

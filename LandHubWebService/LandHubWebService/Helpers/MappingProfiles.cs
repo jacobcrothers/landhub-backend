@@ -1,7 +1,5 @@
 ﻿using AutoMapper;
 
-using Command;
-
 using Commands;
 
 using Domains.DBModels;

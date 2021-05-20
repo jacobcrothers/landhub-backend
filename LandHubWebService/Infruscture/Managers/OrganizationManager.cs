@@ -26,7 +26,7 @@ namespace Services.Managers
 
         public async Task<Organization> GetSingleOrganizationByCreatorAsync(string createdBy)
         {
-            return await _organizationBaseRepository.GetOneAsync(it => it.CreatedBy == createdBy);
+            return await _organizationBaseRepository.GetSingleAsync(it => it.CreatedBy == createdBy);
         }
 
         public void UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings)

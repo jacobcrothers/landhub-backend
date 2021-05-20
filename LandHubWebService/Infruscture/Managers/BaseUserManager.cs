@@ -9,6 +9,7 @@ using Services.IManagers;
 using Services.Repository;
 
 using System.Collections.Generic;
+using System.Linq;
 using System.Threading.Tasks;
 
 namespace Services.Managers
@@ -75,7 +76,8 @@ namespace Services.Managers
 
         public async Task<List<UserRoleMapping>> FindRolesByUserIdByOrgIdAsync(string userId, string orgId)
         {
-            return await _userRoleMappingBaseRepository.GetAllAsync(it => it.OrganizationId == orgId && it.UserId == userId);
+            var data = await _userRoleMappingBaseRepository.GetAllAsync(it => it.OrganizationId == orgId && it.UserId == userId);
+            return data.ToList();
         }
     }
 }

@@ -1,5 +1,5 @@
 ﻿
-using Command;
+using Commands;
 
 using FluentValidation;
 

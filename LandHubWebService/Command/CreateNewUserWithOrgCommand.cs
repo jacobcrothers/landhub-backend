@@ -1,7 +1,6 @@
 ﻿using MediatR;
-using System;
 
-namespace Command
+namespace Commands
 {
     public class CreateNewUserWithOrgCommand : IRequest
     {

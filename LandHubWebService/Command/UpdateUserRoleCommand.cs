@@ -1,6 +1,6 @@
 ﻿using MediatR;
 
-namespace Command
+namespace Commands
 {
     public class UpdateUserRoleCommand : IRequest
     {

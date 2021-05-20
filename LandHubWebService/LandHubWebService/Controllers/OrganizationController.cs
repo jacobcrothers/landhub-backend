@@ -1,11 +1,11 @@
-﻿using Command;
-
+﻿
 using Commands;
 
 using Domains.DBModels;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
@@ -13,7 +13,6 @@ using Services.IManagers;
 using Services.Repository;
 
 using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace LandHubWebService.Controllers
@@ -26,10 +25,6 @@ namespace LandHubWebService.Controllers
         private readonly ILogger<AccountController> _logger;
         private readonly IMediator _mediator;
         private readonly IBaseRepository<Organization> _organizationRepo;
-        private readonly IBaseRepository<UserRoleMapping> _userRoleMapping;
-        private readonly IOrganizationManager _organizationManager;
-        private readonly IBaseRepository<Permission> _permissionBaseRepository;
-        private readonly IBaseRepository<RolePermissionMapping> _rolePermissionMappingBaseRepository;
 
         public OrganizationController(ILogger<AccountController> logger
             , IMediator mediator
@@ -40,14 +35,21 @@ namespace LandHubWebService.Controllers
             , IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository
                                        )
         {
-            _userRoleMapping = userRoleMapping;
-            _organizationManager = organizationManager;
             _organizationRepo = organizationRepo;
             _logger = logger;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            _permissionBaseRepository = permissionBaseRepository;
-            _rolePermissionMappingBaseRepository = rolePermissionMappingBaseRepository;
         }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetOrgDetail(string orgId)
+        {
+            var result = await _mediator.Send(new GetOrgQuery { OrgId = orgId });
+            return Ok(result);
+        }
+
+
+        /*
 
         [HttpPost("[action]")]
         public ActionResult CreateOrganization([FromBody] CreateNewUserWithOrgCommand command)
@@ -64,12 +66,7 @@ namespace LandHubWebService.Controllers
             else return null;
         }
 
-        [HttpGet("[action]")]
-        public async Task<Organization> GetOrgDetails(string orgId)
-        {
-            return await _organizationRepo.Get(orgId);
-        }
-
+       
         [HttpPost("[action]")]
         public ActionResult CreateRole([FromBody] CreateRoleCommand createRoleCommand)
         {
@@ -90,5 +87,6 @@ namespace LandHubWebService.Controllers
             List<RolePermissionMapping> permissions = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.RoleId == role);
             return Ok(permissions);
         }
+        */
     }
 }
