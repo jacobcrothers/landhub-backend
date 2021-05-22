@@ -9,7 +9,7 @@ using Microsoft.Extensions.Logging;
 using System;
 using System.Threading.Tasks;
 
-namespace LandHubWebService.Controllers
+namespace PropertyHatchWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]

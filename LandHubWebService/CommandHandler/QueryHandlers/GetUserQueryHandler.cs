@@ -3,6 +3,7 @@
 using Commands;
 
 using Domains.DBModels;
+using Domains.Dtos;
 
 using MediatR;
 
@@ -14,7 +15,7 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers.QueryHandlers
 {
-    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, User>
+    public class GetUserQueryHandler : IRequestHandler<GetUserQuery, UserForUi>
     {
 
         private readonly IBaseRepository<User> _userBaseRepository;
@@ -30,10 +31,9 @@ namespace CommandHandlers.QueryHandlers
             _mapper = mapper;
         }
 
-        public async Task<User> Handle(GetUserQuery request, CancellationToken cancellationToken)
+        public async Task<UserForUi> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             var user = await _userBaseRepository.GetByIdAsync(request.UserId);
-            //  var user = _mapper.Map<ApplicationUser, User>(applicationUser);
             var rolesMapping = await _userRoleMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.UserId == request.UserId);
             List<string> rolesId = new List<string>();
             foreach (UserRoleMapping rolePermissionMapping in rolesMapping)
@@ -41,7 +41,7 @@ namespace CommandHandlers.QueryHandlers
                 rolesId.Add(rolePermissionMapping.Id);
             }
             user.Roles = rolesId;
-            return user;
+            return _mapper.Map<User, UserForUi>(user);
         }
 
     }

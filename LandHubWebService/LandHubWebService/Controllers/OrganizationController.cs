@@ -1,52 +1,45 @@
 ﻿
 using Commands;
 
-using Domains.DBModels;
-
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
-
-using Services.IManagers;
-using Services.Repository;
 
 using System;
 using System.Threading.Tasks;
 
-namespace LandHubWebService.Controllers
+namespace PropertyHatchWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class OrganizationController : ControllerBase
+    public class OrganizationController : BaseController
     {
 
-        private readonly ILogger<AccountController> _logger;
         private readonly IMediator _mediator;
-        private readonly IBaseRepository<Organization> _organizationRepo;
 
-        public OrganizationController(ILogger<AccountController> logger
-            , IMediator mediator
-            , IBaseRepository<UserRoleMapping> userRoleMapping
-            , IBaseRepository<Organization> organizationRepo
-            , IOrganizationManager organizationManager
-            , IBaseRepository<Permission> permissionBaseRepository
-            , IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository
-                                       )
+        public OrganizationController(IMediator mediator
+            )
         {
-            _organizationRepo = organizationRepo;
-            _logger = logger;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
         }
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<ActionResult> GetOrgDetail(string orgId)
+        public async Task<ActionResult> GetOrgDetail()
         {
-            var result = await _mediator.Send(new GetOrgQuery { OrgId = orgId });
+            var result = await _mediator.Send(new GetOrgQuery { OrgId = SecurityContext.OrgId });
             return Ok(result);
         }
+
+        [HttpPost("[action]")]
+        public ActionResult CreateOrganization([FromBody] CreateNewOrgCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            _mediator.Send(command);
+            return Ok();
+        }
+
 
 
         /*

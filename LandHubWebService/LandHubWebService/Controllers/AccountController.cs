@@ -2,6 +2,7 @@
 using Commands;
 
 using Domains.DBModels;
+using Domains.Dtos;
 
 using MediatR;
 
@@ -10,14 +11,16 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 
+using PropertyHatchWebApi.ApplicationContext;
+
 using System;
 using System.Threading.Tasks;
 
-namespace LandHubWebService.Controllers
+namespace PropertyHatchWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class AccountController : ControllerBase
+    public class AccountController : BaseController
     {
 
         private readonly ILogger<AccountController> _logger;
@@ -50,9 +53,19 @@ namespace LandHubWebService.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<ActionResult<User>> GetUserInformation(GetUserQuery getUserQuery)
+        public async Task<ActionResult<UserForUi>> GetUserInformation()
         {
+            var getUserQuery = new GetUserQuery { OrgId = SecurityContext.OrgId, UserId = SecurityContext.UserId };
             var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult<UserForUi>> TokenExchange([FromBody] ExchangeTokenCommand exchangeTokenCommand)
+        {
+            exchangeTokenCommand.UserName = SecurityContext.UserName;
+            var response = await _mediator.Send(exchangeTokenCommand);
             return Ok(response);
         }
 

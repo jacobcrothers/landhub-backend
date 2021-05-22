@@ -53,7 +53,7 @@ namespace CommandHandler
                 Address = request.Address
             };
 
-            _organizationManager.CreateOrganization(organization);
+            _organizationManager.CreateOrganizationAsync(organization);
             await _mappingService.MapUserOrgRole(Const.DEFAULT_ADMIN_ROLE_ID, user.Id, organization.Id);
             var result = await _usermanager.RegisterUserAsync(user, request.Password);
             return result;

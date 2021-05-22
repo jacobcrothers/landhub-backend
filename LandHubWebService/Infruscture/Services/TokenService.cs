@@ -11,6 +11,7 @@ using Services.IServices;
 using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
 using System.Security.Claims;
 using System.Text;
 using System.Threading.Tasks;
@@ -29,7 +30,6 @@ namespace Services.Services
             , IOrganizationManager organizationManager)
         {
             _config = configuration;
-            var hle = _config["Token:key"];
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:key"]));
             this.userManager = userManager;
             this.organizationManager = organizationManager;
@@ -39,22 +39,54 @@ namespace Services.Services
         {
             var org = await organizationManager.GetSingleOrganizationByCreatorAsync(appicationUser.Id);
             var userRoleMapping = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, org.Id);
+            List<Claim> claims = await PrepareClaimsAsync(appicationUser, org, userRoleMapping);
+            var token = GenerateToken(claims);
+            return token;
+        }
+        public async Task<string> ExchangeTokenAsync(ApplicationUser appicationUser, string orgId)
+        {
+            var userRoleMapping = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, orgId);
+            if (userRoleMapping == null || userRoleMapping.Count == 0)
+                return string.Empty;
+
+            var org = await organizationManager.GetSingleOrganizationByIdAsync(orgId);
+            List<Claim> claims = await PrepareClaimsAsync(appicationUser, org, userRoleMapping);
+
+            if (claims == null)
+                return string.Empty;
+
+            var token = GenerateToken(claims);
+            return token;
+        }
+
+
+        private async Task<List<Claim>> PrepareClaimsAsync(ApplicationUser applicationUser, Organization org, List<UserRoleMapping> userRoleMapping)
+        {
             List<string> list = new List<string>();
+            List<string> permission = new List<string>();
+            if (applicationUser == null && org == null && userRoleMapping == null && userRoleMapping.Count == 0)
+            {
+                return null;
+            }
 
             foreach (UserRoleMapping roleMapping in userRoleMapping)
             {
                 list.Add(roleMapping.RoleId);
+                var permissionMapping = await userManager.FindRolesPermissionMappingByUserIdByOrgIdAsync(roleMapping.RoleId, org.Id);
+                permission.AddRange(permissionMapping.Select(x => x.PermissionKey));
             }
 
             var claims = new List<Claim>{
-                new Claim(ClaimTypes.Email, appicationUser.Email),
-                new Claim(ClaimTypes.GivenName, appicationUser.DisplayName),
+                new Claim(ClaimTypes.Email, applicationUser.Email),
+                new Claim(ClaimTypes.GivenName, applicationUser.DisplayName),
+                new Claim("UserName", applicationUser.Email),
+                new Claim("UserId", applicationUser.Id),
+                new Claim("OrgId", org.Id),
+                new Claim("OrgName", org.Title),
+                new Claim("Permissions", JsonConvert.SerializeObject(permission)),
                 new Claim("Roles", JsonConvert.SerializeObject(list)),
-                new Claim("OrgId", org.Id)
             };
-
-            var token = GenerateToken(claims);
-            return token;
+            return claims;
         }
 
 

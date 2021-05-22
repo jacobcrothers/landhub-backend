@@ -1,12 +1,10 @@
-﻿using Domains;
-using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 
 namespace Services.Repository
 {
-    public interface IMappingService 
+    public interface IMappingService
     {
-        public Task MapUserOrgRole(string roleId, string userId, string organizationId);
+        Task MapUserOrgRole(string roleId, string userId, string organizationId);
 
     }
 }

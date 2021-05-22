@@ -31,7 +31,7 @@ namespace CommandHandlers
             _mappingService = mappingService;
             _mapper = mapper;
         }
-        protected override Task Handle(CreateNewUserWithOrgCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(CreateNewUserWithOrgCommand request, CancellationToken cancellationToken)
         {
 
             var user = _mapper.Map<CreateNewUserWithOrgCommand, User>(request);
@@ -52,14 +52,12 @@ namespace CommandHandlers
 
             };
 
-            _organizationManager.CreateOrganization(organization);
-            _usermanager.CreateUser(user);
+            await _organizationManager.CreateOrganizationAsync(organization);
+            await _usermanager.CreateUser(user);
             foreach (var roleId in user.Roles)
             {
-                _mappingService.MapUserOrgRole(roleId, user.Id, organization.Id);
+                await _mappingService.MapUserOrgRole(roleId, user.Id, organization.Id);
             }
-
-            return Task.CompletedTask;
         }
     }
 }

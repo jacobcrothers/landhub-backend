@@ -7,10 +7,10 @@ namespace Services.IManagers
 {
     public interface IOrganizationManager
     {
-        void UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings);
-
-        void CreateOrganization(Organization organization);
+        Task UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings);
+        Task CreateOrganizationAsync(Organization organization);
         Task<Organization> GetSingleOrganizationByCreatorAsync(string createdBy);
+        Task<Organization> GetSingleOrganizationByIdAsync(string orgId);
 
     }
 

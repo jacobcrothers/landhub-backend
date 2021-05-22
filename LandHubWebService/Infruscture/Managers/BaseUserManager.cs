@@ -18,6 +18,7 @@ namespace Services.Managers
     {
         private readonly IBaseRepository<User> _userBaseRepository;
         private readonly IBaseRepository<UserRoleMapping> _userRoleMappingBaseRepository;
+        private readonly IBaseRepository<RolePermissionMapping> _rolePermissionMappingBaseRepository;
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
 
@@ -26,13 +27,15 @@ namespace Services.Managers
             , IMapper mapper
             , UserManager<ApplicationUser> userManager
              , SignInManager<ApplicationUser> signInManager
-            , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository)
+            , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository
+            , IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository)
         {
             _userBaseRepository = userBaseRepository;
             _mapper = mapper;
             _userRoleMappingBaseRepository = userRoleMappingBaseRepository;
             _userManager = userManager;
             _signInManager = signInManager;
+            _rolePermissionMappingBaseRepository = rolePermissionMappingBaseRepository;
         }
 
         public async Task<bool> RegisterUserAsync(ApplicationUser user, string password = "")
@@ -52,9 +55,9 @@ namespace Services.Managers
             return result.Succeeded;
         }
 
-        public void CreateUser(User user)
+        public async Task CreateUser(User user)
         {
-            _userBaseRepository.Create(user);
+            await _userBaseRepository.Create(user);
         }
 
         public User GetUserByEmail(string email)
@@ -77,6 +80,11 @@ namespace Services.Managers
         public async Task<List<UserRoleMapping>> FindRolesByUserIdByOrgIdAsync(string userId, string orgId)
         {
             var data = await _userRoleMappingBaseRepository.GetAllAsync(it => it.OrganizationId == orgId && it.UserId == userId);
+            return data.ToList();
+        }
+        public async Task<List<RolePermissionMapping>> FindRolesPermissionMappingByUserIdByOrgIdAsync(string roleId, string orgId)
+        {
+            var data = await _rolePermissionMappingBaseRepository.GetAllAsync(it => it.OrganizationId == orgId && it.RoleId == roleId);
             return data.ToList();
         }
     }

@@ -19,9 +19,9 @@ namespace Services.Managers
             _organizationBaseRepository = organizationBaseRepository;
         }
 
-        public void CreateOrganization(Organization organization)
+        public async Task CreateOrganizationAsync(Organization organization)
         {
-            _organizationBaseRepository.Create(organization);
+            await _organizationBaseRepository.Create(organization);
         }
 
         public async Task<Organization> GetSingleOrganizationByCreatorAsync(string createdBy)
@@ -29,7 +29,12 @@ namespace Services.Managers
             return await _organizationBaseRepository.GetSingleAsync(it => it.CreatedBy == createdBy);
         }
 
-        public void UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings)
+        public async Task<Organization> GetSingleOrganizationByIdAsync(string orgId)
+        {
+            return await _organizationBaseRepository.GetByIdAsync(orgId);
+        }
+
+        public Task UserRoleOrgMapsDetails(List<UserRoleMapping> userRoleMappings)
         {
             throw new System.NotImplementedException();
         }

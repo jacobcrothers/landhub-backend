@@ -1,12 +1,10 @@
-﻿using AutoMapper;
-
+﻿
 using Commands;
 
 using Domains.DBModels;
 
 using MediatR;
 
-using Services.IManagers;
 using Services.Repository;
 
 using System.Threading;
@@ -17,13 +15,8 @@ namespace CommandHandler
     public class UserUpdateCommandHandler : AsyncRequestHandler<UserUpdateCommand>
     {
         private IBaseRepository<User> _userManager;
-        private readonly IMapper _mapper;
 
-        public UserUpdateCommandHandler(IBaseRepository<User> userManager
-            , IMapper mapper
-            , IOrganizationManager organizationManager
-            , IMappingService mappingService
-            )
+        public UserUpdateCommandHandler(IBaseRepository<User> userManager)
         {
             _userManager = userManager;
         }
