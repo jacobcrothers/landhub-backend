@@ -105,6 +105,12 @@ namespace LandHubWebService
 
             services.AddMvc();
 
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+            });
+
             services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -141,6 +147,9 @@ namespace LandHubWebService
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
