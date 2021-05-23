@@ -53,9 +53,15 @@ namespace CommandHandler
                 Address = request.Address
             };
 
-            _organizationManager.CreateOrganizationAsync(organization);
+            await _organizationManager.CreateOrganizationAsync(organization);
             await _mappingService.MapUserOrgRole(Const.DEFAULT_ADMIN_ROLE_ID, user.Id, organization.Id);
             var result = await _usermanager.RegisterUserAsync(user, request.Password);
+            var rolePermissionMappingTemplate = await _mappingService.GetRolePermissionMappingTemplateById(Const.DEFAULT_ADMIN_ROLE_ID);
+            foreach (Permission permission in rolePermissionMappingTemplate.Permissions)
+            {
+                await _mappingService.MapRolePermissionByOrg(Const.DEFAULT_ADMIN_ROLE_ID, permission, orgId);
+            }
+            await _mappingService.MapOrgUser(userId, orgId);
             return result;
         }
     }
