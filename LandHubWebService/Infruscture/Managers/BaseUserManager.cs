@@ -84,7 +84,7 @@ namespace Services.Managers
         }
         public async Task<List<RolePermissionMapping>> FindRolesPermissionMappingByUserIdByOrgIdAsync(string roleId, string orgId)
         {
-            var data = await _rolePermissionMappingBaseRepository.GetAllAsync(it => it.OrganizationId == orgId && it.RoleId == roleId);
+            var data = await _rolePermissionMappingBaseRepository.GetAllAsync(it => (it.OrganizationId == orgId || it.OrganizationId == null) && it.RoleId == roleId);
             return data.ToList();
         }
     }
