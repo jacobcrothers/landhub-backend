@@ -3,6 +3,7 @@
 using Domains.DBModels;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace Services.Repository
@@ -72,6 +73,9 @@ namespace Services.Repository
             return await _rolePermissionMappingTemplateRepo.GetByIdAsync(id);
         }
 
-
+        public async Task<List<RolePermissionMapping>> GetRolePermissionMappingByRoleId(string defaultRoleId)
+        {
+            return (List<RolePermissionMapping>)await _rolePermissionMappingRepo.GetAllAsync(x => x.RoleId == defaultRoleId);
+        }
     }
 }

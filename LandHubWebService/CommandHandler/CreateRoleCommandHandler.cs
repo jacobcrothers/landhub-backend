@@ -32,13 +32,18 @@ namespace CommandHandlers
             _mapper = mapper;
         }
 
-        protected override Task Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
 
             var role = _mapper.Map<CreateRoleCommand, Role>(request);
             var roleId = Guid.NewGuid().ToString();
             role.Id = roleId;
-            _roleManager.CreateRole(role);
+            role.OrganizationId = request.OrgId;
+            role.IsActive = true;
+            role.IsShownInUi = true;
+            role.Title = request.RoleName;
+
+            await _roleManager.CreateRole(role);
 
             foreach (string permissionId in request.Permissions)
             {
@@ -50,7 +55,7 @@ namespace CommandHandlers
                     RoleId = roleId
                 };
 
-                _roleManager.CreateRolePermissionMapping(rolePermissionMapping);
+                await _roleManager.CreateRolePermissionMapping(rolePermissionMapping);
             }
 
             return Task.CompletedTask;

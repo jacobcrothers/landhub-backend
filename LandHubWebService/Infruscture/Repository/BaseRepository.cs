@@ -32,7 +32,7 @@ namespace Services.Repository
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var all = await _dbCollection.FindAsync(criteria);
-            return await all.ToListAsync();
+            return all.ToList();
         }
 
         public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria)
@@ -44,7 +44,7 @@ namespace Services.Repository
         public async Task<IEnumerable<TEntity>> GetAsync()
         {
             var all = await _dbCollection.FindAsync(Builders<TEntity>.Filter.Empty);
-            return await all.ToListAsync();
+            return all.ToList();
         }
 
         public async Task<string> Create(TEntity obj)
