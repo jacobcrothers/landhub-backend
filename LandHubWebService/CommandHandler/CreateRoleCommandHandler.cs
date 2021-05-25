@@ -22,19 +22,22 @@ namespace CommandHandlers
 
         private IRoleManager _roleManager;
         private IMappingService _mappingService;
-        public CreateRoleCommandHandler(IRoleManager roleManager,
-                                                IMappingService mappingService,
-                                                IMapper mapper)
+        private IBaseRepository<Permission> _baseRepositoryPermission;
+        public CreateRoleCommandHandler(IRoleManager roleManager
+            , IMappingService mappingService
+            , IMapper mapper
+            , IBaseRepository<Permission> baseRepositoryPermission
+                                                )
         {
 
             _roleManager = roleManager;
             _mappingService = mappingService;
             _mapper = mapper;
+            _baseRepositoryPermission = baseRepositoryPermission;
         }
 
-        protected override async Task Handle(CreateRoleCommand request, CancellationToken cancellationToken)
+        protected override async Task<Task> Handle(CreateRoleCommand request, CancellationToken cancellationToken)
         {
-
             var role = _mapper.Map<CreateRoleCommand, Role>(request);
             var roleId = Guid.NewGuid().ToString();
             role.Id = roleId;
@@ -47,15 +50,21 @@ namespace CommandHandlers
 
             foreach (string permissionId in request.Permissions)
             {
-                var rolePermissionMapping = new RolePermissionMapping()
-                {
-                    Id = Guid.NewGuid().ToString(),
-                    OrganizationId = request.OrgId,
-                    PermissionId = permissionId,
-                    RoleId = roleId
-                };
+                var permission = await _baseRepositoryPermission.GetByIdAsync(permissionId);
 
-                await _roleManager.CreateRolePermissionMapping(rolePermissionMapping);
+                if (permission != null)
+                {
+                    var rolePermissionMapping = new RolePermissionMapping()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        OrganizationId = request.OrgId,
+                        PermissionId = permissionId,
+                        RoleId = roleId,
+                        PermissionKey = permission.Key
+                    };
+
+                    await _roleManager.CreateRolePermissionMapping(rolePermissionMapping);
+                }
             }
 
             return Task.CompletedTask;

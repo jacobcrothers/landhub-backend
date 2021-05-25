@@ -67,10 +67,15 @@ namespace Services.Repository
             return result.IsAcknowledged;
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
             var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
-            _dbCollection.DeleteOneAsync(filter);
+            await _dbCollection.DeleteOneAsync(filter);
+        }
+
+        public async Task DeleteAllAsync(Expression<Func<TEntity, bool>> criteria)
+        {
+            await _dbCollection.DeleteManyAsync(criteria);
         }
 
     }

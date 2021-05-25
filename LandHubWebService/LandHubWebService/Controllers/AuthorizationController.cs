@@ -40,5 +40,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public ActionResult AssignUserRole([FromBody] AssignRoleCommand command)
+        {
+            command.OrgId = SecurityContext.OrgId;
+            _mediator.Send(command);
+            return Ok();
+        }
+
     }
 }
