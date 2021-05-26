@@ -16,7 +16,7 @@ namespace CommandHandlers
 {
     public class AssignRoleCommandHandler : AsyncRequestHandler<AssignRoleCommand>
     {
-        private IRoleManager _roleManager;
+        private readonly IRoleManager _roleManager;
         private IBaseRepository<UserRoleMapping> _baseRepositoryUserRoleMapping;
 
         public AssignRoleCommandHandler(IBaseRepository<UserRoleMapping> _baseRepositoryUserRoleMapping)

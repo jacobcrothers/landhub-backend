@@ -79,6 +79,7 @@ namespace Services.Services
             var claims = new List<Claim>{
                 new Claim(ClaimTypes.Email, applicationUser.Email),
                 new Claim(ClaimTypes.GivenName, applicationUser.DisplayName),
+                new Claim("DisplayName", applicationUser.DisplayName),
                 new Claim("UserName", applicationUser.Email),
                 new Claim("UserId", applicationUser.Id),
                 new Claim("OrgId", org.Id),

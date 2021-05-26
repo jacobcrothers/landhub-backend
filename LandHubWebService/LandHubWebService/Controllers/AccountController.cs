@@ -76,5 +76,17 @@ namespace PropertyHatchWebApi.Controllers
             _mediator.Send(command);
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public ActionResult InviteUser([FromBody] SendInvitationCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            command.UserDisplayName = SecurityContext.DisplayName;
+            command.OrgId = SecurityContext.OrgId;
+            command.OrgName = SecurityContext.OrgName;
+            _mediator.Send(command);
+            return Ok();
+        }
     }
 }

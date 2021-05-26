@@ -21,7 +21,7 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public async Task<ActionResult> RegisterAsync([FromBody] CreateUserCommand command)
+        public async Task<ActionResult> RegisterUserAsync([FromBody] CreateUserCommand command)
         {
             await _mediator.Send(command);
             return Ok();

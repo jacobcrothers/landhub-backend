@@ -42,13 +42,14 @@ namespace CommandHandlers.QueryHandlers
             var roles = await _roleBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
             var permissions = await _permissionBaseRepository.GetAsync();
             var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
-
+            var defaultRolePermissionMappingList = defaultRolePermissionMapping.ToList();
             foreach (Role role in roles)
             {
                 var defaultRoleTemplate = new RolePermissionMappingTemplate
                 {
                     Id = role.Id,
                     Title = role.Title,
+                    Permissions = new List<Permission>()
                 };
 
                 var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
@@ -56,9 +57,9 @@ namespace CommandHandlers.QueryHandlers
                 {
                     defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
                 }
-                defaultRolePermissionMapping.ToList().Add(defaultRoleTemplate);
+                defaultRolePermissionMappingList.Add(defaultRoleTemplate);
             }
-            return defaultRolePermissionMapping.ToList();
+            return defaultRolePermissionMappingList;
         }
 
     }

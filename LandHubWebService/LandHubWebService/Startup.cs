@@ -97,6 +97,7 @@ namespace LandHubWebService
             services.AddTransient<IOrganizationManager, OrganizationManager>();
             services.AddTransient<IRoleManager, RoleManager>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IMailManager, MailManager>();
 
             var mongoDbContext = new MongoDbContext(Configuration.GetSection("Mongosettings:Connection").Value, Configuration.GetSection("Mongosettings:DatabaseName").Value);
             services.AddIdentity<ApplicationUser, ApplicationRole>()
