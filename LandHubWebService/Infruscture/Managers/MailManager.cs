@@ -66,7 +66,7 @@ namespace PropertyHatchCoreService.Managers
         {
             foreach (string mail in mails)
             {
-                mailAddresses.Add(new MailAddress("propertyhatch@yopmail.com"));
+                mailAddresses.Add(new MailAddress(mail));
             }
         }
 

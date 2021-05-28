@@ -6,7 +6,5 @@
         public string SenderEmail { get; set; }
         public string OrgId { get; set; }
         public string InvitedUserEmail { get; set; }
-
-        public string InvitationCode { get; set; }
     }
 }

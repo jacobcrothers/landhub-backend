@@ -68,7 +68,7 @@ namespace PropertyHatchWebApi.Controllers
             var response = await _mediator.Send(exchangeTokenCommand);
             return Ok(response);
         }
-
+        /*
         [HttpPut("[action]")]
         [Authorize]
         public ActionResult UpdateUserRole([FromBody] UpdateUserRoleCommand command)
@@ -76,6 +76,7 @@ namespace PropertyHatchWebApi.Controllers
             _mediator.Send(command);
             return Ok();
         }
+        */
 
         [HttpPost("[action]")]
         [Authorize]
