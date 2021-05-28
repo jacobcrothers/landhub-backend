@@ -7,6 +7,7 @@ using Newtonsoft.Json;
 
 using Services.IManagers;
 using Services.IServices;
+using Services.Repository;
 
 using System;
 using System.Collections.Generic;
@@ -24,20 +25,29 @@ namespace Services.Services
         private readonly SymmetricSecurityKey _key;
         private readonly IBaseUserManager userManager;
         private readonly IOrganizationManager organizationManager;
+        private readonly IBaseRepository<UserOrganizationMapping> _userOrganizationMappingBaseRepository;
 
         public TokenService(IConfiguration configuration
             , IBaseUserManager userManager
-            , IOrganizationManager organizationManager)
+            , IOrganizationManager organizationManager
+            , IBaseRepository<UserOrganizationMapping> _userOrganizationMappingBaseRepository)
         {
             _config = configuration;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:key"]));
             this.userManager = userManager;
             this.organizationManager = organizationManager;
+            this._userOrganizationMappingBaseRepository = _userOrganizationMappingBaseRepository;
         }
 
         public async Task<string> CreateTokenAsync(ApplicationUser appicationUser)
         {
             var org = await organizationManager.GetSingleOrganizationByCreatorAsync(appicationUser.Id);
+            if (org == null)
+            {
+                var userOrganizationMapping = await _userOrganizationMappingBaseRepository.GetSingleAsync(x => x.UserId == appicationUser.Id);
+                org = await organizationManager.GetSingleOrganizationByIdAsync(userOrganizationMapping.OrganizationId);
+            }
+
             var userRoleMapping = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, org.Id);
             List<Claim> claims = await PrepareClaimsAsync(appicationUser, org, userRoleMapping);
             var token = GenerateToken(claims);

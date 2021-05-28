@@ -33,7 +33,7 @@ namespace CommandHandlers
 
         protected override async Task Handle(SendInvitationCommand request, CancellationToken cancellationToken)
         {
-            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             keyValuePairs.Add("{@orgName}", request.OrgName);
             keyValuePairs.Add("{@senderName}", request.UserDisplayName);
 

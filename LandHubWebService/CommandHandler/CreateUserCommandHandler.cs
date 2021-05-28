@@ -92,11 +92,12 @@ namespace CommandHandler
                 var user = _mapper.Map<CreateUserCommand, ApplicationUser>(request);
                 var userId = Guid.NewGuid().ToString();
                 orgId = invitation.OrgId;
+                user.Id = userId;
 
                 result = await _usermanager.RegisterUserAsync(user, request.Password);
                 if (result)
                 {
-                    await _mappingService.MapUserOrgRole(Const.DEFAULT_USER_ROLE_ID, user.Id, invitation.Id);
+                    await _mappingService.MapUserOrgRole(Const.DEFAULT_USER_ROLE_ID, user.Id, orgId);
 
                     var rolePermissionMappingTemplate = await _mappingService.GetRolePermissionMappingTemplateById(Const.DEFAULT_USER_ROLE_ID);
                     foreach (Permission permission in rolePermissionMappingTemplate.Permissions)

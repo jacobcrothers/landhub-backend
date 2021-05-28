@@ -80,6 +80,15 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
+        public async Task<ActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command)
+        {
+            command.UserName = SecurityContext.UserName;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
         public ActionResult InviteUser([FromBody] SendInvitationCommand command)
         {
             command.UserId = SecurityContext.UserId;
