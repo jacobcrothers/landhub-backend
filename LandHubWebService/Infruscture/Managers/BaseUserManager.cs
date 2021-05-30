@@ -60,6 +60,18 @@ namespace Services.Managers
             await _userBaseRepository.Create(user);
         }
 
+        public async Task<bool> VerifyEmail(string code, string email)
+        {
+            var result = await _userBaseRepository.GetSingleAsync(x => x.Id == code && x.Email == email);
+            if (result != null)
+            {
+                result.EmailConfirmed = true;
+                await _userBaseRepository.UpdateAsync(result);
+                return true;
+            }
+            return false;
+        }
+
         public User GetUserByEmail(string email)
         {
             return new User();

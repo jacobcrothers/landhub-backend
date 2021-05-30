@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using PropertyHatchWebApi.ApplicationContext;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -47,6 +48,15 @@ namespace PropertyHatchWebApi.Controllers
         public async Task<ActionResult<UserForUi>> GetUserInformation()
         {
             var getUserQuery = new GetUserQuery { OrgId = SecurityContext.OrgId, UserId = SecurityContext.UserId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        {
+            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
         }

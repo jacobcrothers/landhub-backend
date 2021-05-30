@@ -34,5 +34,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> VerifyEmail([FromBody] VerifyCodeAndEmail command)
+        {
+            bool result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
     }
 }
