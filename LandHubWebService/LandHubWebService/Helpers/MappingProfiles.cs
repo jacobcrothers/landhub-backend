@@ -38,6 +38,10 @@ namespace LandHubWebService.Helpers
             .ForMember(d => d.Address, o => o.MapFrom(s => s.Address))
             .ForMember(d => d.CountryName, o => o.MapFrom(s => s.CountryName))
             .ForMember(d => d.DOB, o => o.MapFrom(s => s.DOB));
+
+            CreateMap<CreateListingCommand, Listing>();
+            CreateMap<UpdateListingCommand, Listing>();
+
         }
 
     }

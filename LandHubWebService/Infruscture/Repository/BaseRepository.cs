@@ -63,7 +63,7 @@ namespace Services.Repository
 
         public async Task<bool> UpdateAsync(TEntity obj)
         {
-            var result = await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.ToString()), obj);
+            var result = await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.Id), obj);
             return result.IsAcknowledged;
         }
 
