@@ -22,12 +22,11 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
         public async Task<ActionResult> GetAll(string orgId)
         {
             var getAllListingQuery = new GetAllListingQuery
             {
-                OrgId = orgId ?? "1"
+                OrgId = orgId
             };
 
             var result = await _mediator.Send(getAllListingQuery);
@@ -51,6 +50,7 @@ namespace PropertyHatchWebApi.Controllers
         [Authorize]
         public async Task<ActionResult> Add([FromBody] CreateListingCommand createListingCommand)
         {
+            createListingCommand.OrganizationId = SecurityContext.OrgId;
             await _mediator.Send(createListingCommand);
             return Ok();
         }
