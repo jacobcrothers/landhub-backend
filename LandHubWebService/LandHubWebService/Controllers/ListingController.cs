@@ -22,12 +22,11 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll(string orgId)
         {
             var getAllListingQuery = new GetAllListingQuery
             {
-                OrgId = SecurityContext.OrgId
+                OrgId = orgId
             };
 
             var result = await _mediator.Send(getAllListingQuery);
