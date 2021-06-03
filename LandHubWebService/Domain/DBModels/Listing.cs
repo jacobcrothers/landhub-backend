@@ -30,6 +30,8 @@ namespace Domains.DBModels
         public string MapInformation { get; set; }
 
         public string OrganizationId { get; set; }
+        public string Image { get; set; }
+        public string Label { get; set; }
 
     }
 }
