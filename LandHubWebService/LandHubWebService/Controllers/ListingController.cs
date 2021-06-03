@@ -4,7 +4,6 @@ using Commands.Query;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Threading.Tasks;
@@ -34,7 +33,6 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpGet("[action]")]
-        [Authorize]
         public async Task<ActionResult> GetById(string listingId)
         {
             var getListingQuery = new GetListingQuery
@@ -47,16 +45,14 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        [Authorize]
         public async Task<ActionResult> Add([FromBody] CreateListingCommand createListingCommand)
-        {
-            createListingCommand.OrganizationId = SecurityContext.OrgId;
+        {/*
+            createListingCommand.OrganizationId = SecurityContext.OrgId;*/
             await _mediator.Send(createListingCommand);
             return Ok();
         }
 
         [HttpPost("[action]")]
-        [Authorize]
         public async Task<ActionResult> Update([FromBody] UpdateListingCommand updateListingCommand)
         {
             await _mediator.Send(updateListingCommand);
