@@ -33,5 +33,12 @@ namespace Domains.DBModels
         public string Image { get; set; }
         public string Label { get; set; }
 
+        public string Description { get; set; }
+        public string ParcelSize { get; set; }
+        public bool Electricity { get; set; }
+        public bool Water { get; set; }
+        public string LegalDescription { get; set; }
+        public string Sewage { get; set; }
+
     }
 }
