@@ -18,6 +18,7 @@ steps:
   inputs:
     script: 'ls -al'
 - script: dotnet build --configuration $(buildConfiguration)
+  workingDirectory: 'LandHubWebService/'
   displayName: 'dotnet build $(buildConfiguration)'
 - script: |
     aws --version
@@ -32,7 +33,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    workingDirectory: 'LandHubWebService/LandHubWebService/'
+    workingDirectory: 'LandHubWebService/'
 
 - task: Docker@2
   displayName: Build docker image
