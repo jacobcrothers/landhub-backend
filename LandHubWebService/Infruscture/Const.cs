@@ -8,5 +8,6 @@
 
         public const string EMAIL_TEMPLATE_INVITATION_SEND = "account_creation_invitation";
         public const string EMAIL_TEMPLATE_ACCOUNT_CREATION = "account_creation";
+        public const string EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION = "account_confirmation";
     }
 }
