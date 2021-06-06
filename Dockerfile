@@ -1,19 +1,17 @@
-FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
+FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build-env
 LABEL author="Kevin"
 
 
-WORKDIR /source
+WORKDIR /app
 
 # Copy csproj and restore as distinct layers
-COPY LandHubWebService/*.sln .
-COPY LandHubWebService/LandHubWebService/*.csproj ./LandHubService/
+COPY LandHubWebService/LandHubWebService/*.csproj ./
 RUN dotnet restore
 
 # Copy everything else and build
-COPY ./LandHubWebService ./LandHubService/
+COPY ./LandHubWebService ./
 RUN ls -al
-WORKDIR /source/LandHubService/
-RUN dotnet publish -c Release -o /app --no-restore
+RUN dotnet publish -c Release -o out
 
 # Build runtime image
 FROM mcr.microsoft.com/dotnet/aspnet:5.0
@@ -25,7 +23,7 @@ RUN apt-get install -y libgdiplus
 RUN ln -s /usr/lib/libgdiplus.so /usr/lib/gdiplus.dll
 
 WORKDIR /app
-COPY --from=build /app ./
+COPY --from=build-env /app/out .
 
 EXPOSE 50574
 
