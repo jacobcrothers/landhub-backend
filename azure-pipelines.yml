@@ -31,8 +31,7 @@ steps:
   displayName: 'dotnet publish $(buildConfiguration)'
   inputs:
     command: 'publish'
-    publishWebProjects: false
-    projects: '**/*.csproj'
+    publishWebProjects: false    
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     workingDirectory: 'LandHubWebService/'
 
