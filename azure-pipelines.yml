@@ -29,7 +29,7 @@ steps:
     command: 'publish'
     publishWebProjects: false
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
-    workingDirectory: 'LandHubWebService'
+    workingDirectory: '/LandHubWebService/LandHubWebService/'
 
 - task: Docker@2
   displayName: Build docker image
