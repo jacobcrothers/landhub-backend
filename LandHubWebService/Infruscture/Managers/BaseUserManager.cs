@@ -62,8 +62,8 @@ namespace Services.Managers
 
         public async Task<bool> VerifyEmail(string code, string email)
         {
-            var result = await _userBaseRepository.GetSingleAsync(x => x.Id == code && x.Email == email);
-            if (result != null)
+            var result = await _userBaseRepository.GetSingleAsync(x => x.Email == email);
+            if (result != null && result.Id == code)
             {
                 result.EmailConfirmed = true;
                 await _userBaseRepository.UpdateAsync(result);
@@ -72,9 +72,10 @@ namespace Services.Managers
             return false;
         }
 
-        public User GetUserByEmail(string email)
+        public async Task<User> GetUserByEmail(string email)
         {
-            return new User();
+            var user = await _userBaseRepository.GetSingleAsync(x => x.Email == email);
+            return user;
         }
         public void UpdateUserRoleOrgMaps(List<UserRoleMapping> userRoleMappings)
         {
