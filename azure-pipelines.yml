@@ -32,6 +32,7 @@ steps:
   inputs:
     command: 'publish'
     publishWebProjects: false
+    projects: '**/*.csproj'
     arguments: '--configuration $(buildConfiguration) --output $(Build.ArtifactStagingDirectory)'
     workingDirectory: 'LandHubWebService/'
 
