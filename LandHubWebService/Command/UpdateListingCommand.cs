@@ -1,4 +1,6 @@
-﻿using MediatR;
+﻿using Domains.DBModels;
+
+using MediatR;
 
 using System.Collections.Generic;
 
@@ -15,7 +17,6 @@ namespace Commands
         public string Address { get; set; }
         public string Title { get; set; }
         public string Country { get; set; }
-        public string Acreage { get; set; }
         public double HOA_Fees { get; set; }
 
         public string AccessType { get; set; }
@@ -32,7 +33,8 @@ namespace Commands
 
         public string MapInformation { get; set; }
         public string OrganizationId { get; set; }
-        public string Image { get; set; }
+
+        public List<PropertyImage> Images { get; set; }
         public string Label { get; set; }
 
         public string Description { get; set; }

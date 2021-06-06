@@ -59,5 +59,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
 
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> Delete([FromBody] DeleteListingCommand deleteListingCommand)
+        {
+            await _mediator.Send(deleteListingCommand);
+            return Ok();
+        }
+
     }
 }

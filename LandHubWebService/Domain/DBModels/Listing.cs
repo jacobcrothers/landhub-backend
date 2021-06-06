@@ -12,7 +12,6 @@ namespace Domains.DBModels
         public string Address { get; set; }
         public string Title { get; set; }
         public string Country { get; set; }
-        public string Acreage { get; set; }
         public double HOA_Fees { get; set; }
 
         public string AccessType { get; set; }
@@ -26,13 +25,11 @@ namespace Domains.DBModels
         public string Zoning { get; set; }
         public List<string> Utilities { get; set; }
         public string ListingDescription { get; set; }
-
         public string MapInformation { get; set; }
-
         public string OrganizationId { get; set; }
-        public string Image { get; set; }
-        public string Label { get; set; }
+        public List<PropertyImage> Images { get; set; }
 
+        public string Label { get; set; }
         public string Description { get; set; }
         public string ParcelSize { get; set; }
         public bool Electricity { get; set; }

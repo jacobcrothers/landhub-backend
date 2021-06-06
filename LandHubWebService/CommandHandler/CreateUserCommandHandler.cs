@@ -8,6 +8,8 @@ using Infruscture;
 
 using MediatR;
 
+using Microsoft.Extensions.Configuration;
+
 using PropertyHatchCoreService.IManagers;
 
 using Services.IManagers;
@@ -30,6 +32,7 @@ namespace CommandHandler
         private IBaseRepository<EmailTemplate> _baseRepositoryEmailTemplate;
         private IBaseRepository<Organization> _baseRepositoryOrganization;
         private IMailManager _mailManager;
+        public IConfiguration _configuration { get; set; }
 
         public CreateUserCommandHandler(IBaseUserManager userManager
             , IMapper mapper
@@ -39,6 +42,7 @@ namespace CommandHandler
             , IBaseRepository<EmailTemplate> _baseRepositoryEmailTemplate
             , IMailManager _mailManager
             , IBaseRepository<Organization> _baseRepositoryOrganization
+            , IConfiguration _configuration
             )
         {
             _usermanager = userManager;
@@ -49,18 +53,19 @@ namespace CommandHandler
             this._baseRepositoryEmailTemplate = _baseRepositoryEmailTemplate;
             this._mailManager = _mailManager;
             this._baseRepositoryOrganization = _baseRepositoryOrganization;
+            this._configuration = _configuration;
         }
 
         protected override async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
         {
             bool result = false;
+            var userId = Guid.NewGuid().ToString();
             var orgId = Guid.NewGuid().ToString();
             var invitation = await _baseRepositoryInvitation.GetSingleAsync(x => x.InvitedUserEmail == request.Email);
 
             if (invitation == null)
             {
                 var user = _mapper.Map<CreateUserCommand, ApplicationUser>(request);
-                var userId = Guid.NewGuid().ToString();
                 user.Id = userId;
                 user.OrganizationId = orgId;
 
@@ -90,7 +95,6 @@ namespace CommandHandler
             else
             {
                 var user = _mapper.Map<CreateUserCommand, ApplicationUser>(request);
-                var userId = Guid.NewGuid().ToString();
                 orgId = invitation.OrgId;
                 user.Id = userId;
 
@@ -110,11 +114,15 @@ namespace CommandHandler
 
             var org = await _baseRepositoryOrganization.GetSingleAsync(x => x.Id == orgId);
 
+            var confirmationLink = _configuration["ConfirmationLink"];
+            confirmationLink = confirmationLink + "?code=" + userId + "&email=" + request.Email;
+
             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             keyValuePairs.Add("{@orgName}", org.Title);
             keyValuePairs.Add("{@senderName}", request.DisplayName);
+            keyValuePairs.Add("{@confirmationLink}", confirmationLink);
 
-            var template = await _baseRepositoryEmailTemplate.GetSingleAsync(x => x.TemplateName == Const.EMAIL_TEMPLATE_ACCOUNT_CREATION);
+            var template = await _baseRepositoryEmailTemplate.GetSingleAsync(x => x.TemplateName == Const.EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION);
             string emailTemplate = _mailManager.EmailTemplate(template.TemplateBody, keyValuePairs);
             await _mailManager.SendEmail(new string[] { request.Email }, null, null, template.Subject, emailTemplate);
 
