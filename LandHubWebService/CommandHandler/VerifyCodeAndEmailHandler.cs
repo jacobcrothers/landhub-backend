@@ -41,6 +41,7 @@ namespace CommandHandlers
 
                 Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
                 keyValuePairs.Add("{@senderName}", user.DisplayName);
+                keyValuePairs.Add("{@userName}", user.Email);
 
                 var template = await _baseRepositoryEmailTemplate.GetSingleAsync(x => x.TemplateName == Const.EMAIL_TEMPLATE_ACCOUNT_CREATION);
                 string emailTemplate = _mailManager.EmailTemplate(template.TemplateBody, keyValuePairs);

@@ -29,7 +29,6 @@ namespace Commands
         public string Survey { get; set; }
         public string Zoning { get; set; }
         public List<string> Utilities { get; set; }
-        public string ListingDescription { get; set; }
 
         public string MapInformation { get; set; }
         public string OrganizationId { get; set; }
