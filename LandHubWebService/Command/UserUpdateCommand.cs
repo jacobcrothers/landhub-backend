@@ -1,11 +1,13 @@
 ﻿using MediatR;
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace Commands
 {
     public class UserUpdateCommand : IRequest
     {
+        [JsonIgnore]
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }

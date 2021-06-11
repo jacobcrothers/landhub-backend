@@ -60,12 +60,7 @@ namespace PropertyHatchWebApi.Controllers
         }
 
        
-        [HttpPost("[action]")]
-        public ActionResult CreateRole([FromBody] CreateRoleCommand createRoleCommand)
-        {
-            _mediator.Send(createRoleCommand);
-            return Ok();
-        }
+       
 
         [HttpGet("[action]")]
         public async Task<ActionResult> GetAllPermissionAsync()

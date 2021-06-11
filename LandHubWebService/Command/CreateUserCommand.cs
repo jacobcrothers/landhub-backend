@@ -18,5 +18,6 @@ namespace Commands
         public DateTime UserCreationDate { get; set; }
         public string DisplayName { get; set; }
         public string OrganizationTitle { get; set; }
+
     }
 }

@@ -3,6 +3,7 @@
 using Commands;
 
 using Domains.DBModels;
+using Domains.Dtos;
 
 namespace LandHubWebService.Helpers
 {
@@ -31,6 +32,16 @@ namespace LandHubWebService.Helpers
                .ForMember(d => d.Description, o => o.MapFrom(s => s.RoleName))
                .ForMember(d => d.IsShownInUi, o => o.MapFrom(s => true))
                .ForMember(d => d.IsActive, o => o.MapFrom(s => true));
+
+            CreateMap<User, UserForUi>()
+            .ForMember(d => d.FirstName, o => o.MapFrom(s => s.FirstName))
+            .ForMember(d => d.Address, o => o.MapFrom(s => s.Address))
+            .ForMember(d => d.CountryName, o => o.MapFrom(s => s.CountryName))
+            .ForMember(d => d.DOB, o => o.MapFrom(s => s.DOB));
+
+            CreateMap<CreateListingCommand, Listing>();
+            CreateMap<UpdateListingCommand, Listing>();
+
         }
 
     }

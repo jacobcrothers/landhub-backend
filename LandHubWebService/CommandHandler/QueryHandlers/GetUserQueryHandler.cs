@@ -41,7 +41,8 @@ namespace CommandHandlers.QueryHandlers
                 rolesId.Add(rolePermissionMapping.Id);
             }
             user.Roles = rolesId;
-            return _mapper.Map<User, UserForUi>(user);
+            var uiUser = _mapper.Map<User, UserForUi>(user);
+            return uiUser;
         }
 
     }

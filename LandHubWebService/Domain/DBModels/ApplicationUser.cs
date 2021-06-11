@@ -39,6 +39,7 @@ namespace Domains.DBModels
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
         public string OrganizationId { get; set; }
+        public string OrganizationName { get; set; }
         public string ProfileImageUrl { get; set; }
     }
 }
