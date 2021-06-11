@@ -24,11 +24,11 @@ namespace CommandHandler
 {
     public class CreateUserCommandHandler : AsyncRequestHandler<CreateUserCommand>
     {
-        private IBaseUserManager _usermanager;
+        private readonly IBaseUserManager _usermanager;
         private readonly IMapper _mapper;
-        private IOrganizationManager _organizationManager;
-        private IMappingService _mappingService;
-        private IBaseRepository<Invitation> _baseRepositoryInvitation;
+        private readonly IOrganizationManager _organizationManager;
+        private readonly IMappingService _mappingService;
+        private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
         private IBaseRepository<EmailTemplate> _baseRepositoryEmailTemplate;
         private IBaseRepository<Organization> _baseRepositoryOrganization;
         private IMailManager _mailManager;

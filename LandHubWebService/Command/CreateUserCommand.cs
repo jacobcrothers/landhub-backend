@@ -16,7 +16,11 @@ namespace Commands
         public string CountryName { get; set; }
         public string ProfileImageUrl { get; set; }
         public DateTime UserCreationDate { get; set; }
-        public string DisplayName { get; set; }
+        public string DisplayName
+        {
+            get { return $"{FirstName} {LastName}"; }
+            set { }
+        }
         public string OrganizationTitle { get; set; }
 
     }
