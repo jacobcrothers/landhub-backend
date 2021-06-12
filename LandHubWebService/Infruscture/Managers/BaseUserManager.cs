@@ -100,5 +100,11 @@ namespace Services.Managers
             var data = await _rolePermissionMappingBaseRepository.GetAllAsync(it => (it.OrganizationId == orgId || it.OrganizationId == null) && it.RoleId == roleId);
             return data.ToList();
         }
+
+        public async Task<bool> ResetUserPasswordAsync(ApplicationUser user, string oldPassword = "", string newPassword = "")
+        {
+            var identityResult = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            return identityResult.Succeeded;
+        }
     }
 }

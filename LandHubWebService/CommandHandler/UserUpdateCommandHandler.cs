@@ -30,6 +30,7 @@ namespace CommandHandler
             user.DOB = request.DOB;
             user.Salutation = request.Salutation;
             user.DisplayName = request.DisplayName;
+            user.CountryName = request.CountryName;
             var result = await _userManager.UpdateAsync(user);
             return result;
         }

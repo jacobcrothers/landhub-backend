@@ -37,8 +37,9 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult> UpdateUserInforrmation([FromBody] UserUpdateCommand command)
+        public async Task<ActionResult> UpdateUserInformation([FromBody] UserUpdateCommand command)
         {
+            command.Id = SecurityContext.UserId;
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -99,14 +100,23 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public ActionResult InviteUser([FromBody] SendInvitationCommand command)
+        public async Task<ActionResult> InviteUserAsync([FromBody] SendInvitationCommand command)
         {
             command.UserId = SecurityContext.UserId;
             command.UserDisplayName = SecurityContext.DisplayName;
             command.OrgId = SecurityContext.OrgId;
             command.OrgName = SecurityContext.OrgName;
-            _mediator.Send(command);
+            await _mediator.Send(command);
             return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand)
+        {
+            resetPasswordCommand.Email = SecurityContext.Email;
+            var result = await _mediator.Send(resetPasswordCommand);
+            return Ok(result);
         }
     }
 }
