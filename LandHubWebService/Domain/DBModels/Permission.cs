@@ -8,5 +8,6 @@
         public string Category { get; set; }
         public bool IsActive { get; set; }
         public bool IsShownInUi { get; set; }
+        public string Group { get; set; }
     }
 }

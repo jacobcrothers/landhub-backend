@@ -15,6 +15,7 @@ namespace PropertyHatchWebApi.ApplicationContext
         public List<string> Roles { get; }
         public List<string> Permission { get; }
         public string OrgName { get; }
+        public string DisplayName { get; }
 
 
         public ClaimsIdentity claims { get; set; }
@@ -33,6 +34,7 @@ namespace PropertyHatchWebApi.ApplicationContext
             UserId = claimsIdentity.Claims.First((Claim c) => c.Type == "UserId").Value;
             OrgName = claimsIdentity.Claims.First((Claim c) => c.Type == "OrgName").Value;
             OrgId = claimsIdentity.Claims.First((Claim c) => c.Type == "OrgId").Value;
+            DisplayName = claimsIdentity.Claims.First((Claim c) => c.Type == "DisplayName").Value;
 
         }
 

@@ -9,7 +9,8 @@ namespace Services.Repository
     {
         Task<string> Create(TEntity obj);
         Task<bool> UpdateAsync(TEntity obj);
-        void Delete(string id);
+        Task Delete(string id);
+        Task DeleteAllAsync(Expression<Func<TEntity, bool>> criteria);
         Task<TEntity> GetByIdAsync(string id);
         Task<IEnumerable<TEntity>> GetAsync();
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria);

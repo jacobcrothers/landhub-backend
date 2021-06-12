@@ -60,9 +60,22 @@ namespace Services.Managers
             await _userBaseRepository.Create(user);
         }
 
-        public User GetUserByEmail(string email)
+        public async Task<bool> VerifyEmail(string code, string email)
         {
-            return new User();
+            var result = await _userBaseRepository.GetSingleAsync(x => x.Email == email);
+            if (result != null && result.Id == code)
+            {
+                result.EmailConfirmed = true;
+                await _userBaseRepository.UpdateAsync(result);
+                return true;
+            }
+            return false;
+        }
+
+        public async Task<User> GetUserByEmail(string email)
+        {
+            var user = await _userBaseRepository.GetSingleAsync(x => x.Email == email);
+            return user;
         }
         public void UpdateUserRoleOrgMaps(List<UserRoleMapping> userRoleMappings)
         {
@@ -86,6 +99,12 @@ namespace Services.Managers
         {
             var data = await _rolePermissionMappingBaseRepository.GetAllAsync(it => (it.OrganizationId == orgId || it.OrganizationId == null) && it.RoleId == roleId);
             return data.ToList();
+        }
+
+        public async Task<bool> ResetUserPasswordAsync(ApplicationUser user, string oldPassword = "", string newPassword = "")
+        {
+            var identityResult = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
+            return identityResult.Succeeded;
         }
     }
 }

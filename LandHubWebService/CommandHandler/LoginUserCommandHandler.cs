@@ -24,11 +24,16 @@ namespace CommandHandlers
         }
         public async Task<string> Handle(LoginUserCommand request, CancellationToken cancellationToken)
         {
-            var result = await _userManager.Login(request.Email, request.Password);
-            if (result)
+
+            var userExist = await _userManager.GetUserByEmail(request.Email);
+            if (userExist != null && userExist.EmailConfirmed)
             {
-                var user = await _userManager.FindByNameAsync(request.Email);
-                return await _tokenService.CreateTokenAsync(user);
+                var result = await _userManager.Login(request.Email, request.Password);
+                if (result)
+                {
+                    var user = await _userManager.FindByNameAsync(request.Email);
+                    return await _tokenService.CreateTokenAsync(user);
+                }
             }
             return string.Empty;
         }

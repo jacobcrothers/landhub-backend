@@ -1,11 +1,13 @@
 ﻿using MediatR;
 
 using System;
+using System.Text.Json.Serialization;
 
 namespace Commands
 {
     public class UserUpdateCommand : IRequest
     {
+        [JsonIgnore]
         public string Id { get; set; }
         public string FirstName { get; set; }
         public string LastName { get; set; }
@@ -14,6 +16,10 @@ namespace Commands
         public string Salutation { get; set; }
         public string CountryName { get; set; }
         public string ProfileImageUrl { get; set; }
-        public string DisplayName { get; set; }
+        public string DisplayName
+        {
+            get { return $"{FirstName} {LastName}"; }
+            set { }
+        }
     }
 }

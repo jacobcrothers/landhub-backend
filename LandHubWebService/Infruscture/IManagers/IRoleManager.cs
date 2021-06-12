@@ -1,13 +1,14 @@
 ﻿using Domains.DBModels;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PropertyHatchCoreService.IManagers
 {
     public interface IRoleManager
     {
-        void CreateRole(Role role);
-        void CreateRolePermissionMapping(RolePermissionMapping rolePermissionMapping);
+        Task CreateRole(Role role);
+        Task CreateRolePermissionMapping(RolePermissionMapping rolePermissionMapping);
         List<Role> GetRoleByUserByOrgAsync(string userId, string orgId);
     }
 }

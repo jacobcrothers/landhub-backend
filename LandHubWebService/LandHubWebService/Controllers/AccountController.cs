@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using PropertyHatchWebApi.ApplicationContext;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -36,8 +37,9 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult> UpdateUserInforrmation([FromBody] UserUpdateCommand command)
+        public async Task<ActionResult> UpdateUserInformation([FromBody] UserUpdateCommand command)
         {
+            command.Id = SecurityContext.UserId;
             var result = await _mediator.Send(command);
             return Ok(result);
         }
@@ -47,6 +49,15 @@ namespace PropertyHatchWebApi.Controllers
         public async Task<ActionResult<UserForUi>> GetUserInformation()
         {
             var getUserQuery = new GetUserQuery { OrgId = SecurityContext.OrgId, UserId = SecurityContext.UserId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        {
+            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
         }
@@ -68,13 +79,44 @@ namespace PropertyHatchWebApi.Controllers
             var response = await _mediator.Send(exchangeTokenCommand);
             return Ok(response);
         }
-
+        /*
         [HttpPut("[action]")]
         [Authorize]
         public ActionResult UpdateUserRole([FromBody] UpdateUserRoleCommand command)
         {
             _mediator.Send(command);
             return Ok();
+        }
+        */
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command)
+        {
+            command.UserName = SecurityContext.UserName;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> InviteUserAsync([FromBody] SendInvitationCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            command.UserDisplayName = SecurityContext.DisplayName;
+            command.OrgId = SecurityContext.OrgId;
+            command.OrgName = SecurityContext.OrgName;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand)
+        {
+            resetPasswordCommand.Email = SecurityContext.Email;
+            var result = await _mediator.Send(resetPasswordCommand);
+            return Ok(result);
         }
     }
 }

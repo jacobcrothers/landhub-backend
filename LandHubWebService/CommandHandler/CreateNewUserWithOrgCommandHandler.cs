@@ -4,6 +4,8 @@ using Commands;
 
 using Domains.DBModels;
 
+using Infruscture;
+
 using MediatR;
 
 using Services.IManagers;
@@ -33,9 +35,7 @@ namespace CommandHandlers
         }
         protected override async Task Handle(CreateNewUserWithOrgCommand request, CancellationToken cancellationToken)
         {
-
             var user = _mapper.Map<CreateNewUserWithOrgCommand, User>(request);
-
             var userId = Guid.NewGuid().ToString();
             var orgId = Guid.NewGuid().ToString();
             user.Id = userId;
@@ -58,6 +58,13 @@ namespace CommandHandlers
             {
                 await _mappingService.MapUserOrgRole(roleId, user.Id, organization.Id);
             }
+            var rolePermissionMappingTemplate = await _mappingService.GetRolePermissionMappingTemplateById(Const.DEFAULT_ADMIN_ROLE_ID);
+            foreach (Permission permission in rolePermissionMappingTemplate.Permissions)
+            {
+                await _mappingService.MapRolePermissionByOrg(Const.DEFAULT_ADMIN_ROLE_ID, permission, orgId);
+            }
+
+            await _mappingService.MapOrgUser(userId, orgId);
         }
     }
 }
