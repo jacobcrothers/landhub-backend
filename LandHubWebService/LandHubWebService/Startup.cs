@@ -56,7 +56,7 @@ namespace LandHubWebService
                 options.AddPolicy(name: MyAllowSpecificOrigins,
                                   builder =>
                                   {
-                                      builder.WithOrigins("http://localhost:4200")
+                                      builder.WithOrigins(Configuration.GetSection("CorsUrl").Value)
                                       .AllowAnyHeader()
                                       .AllowAnyMethod(); ;
                                   });
