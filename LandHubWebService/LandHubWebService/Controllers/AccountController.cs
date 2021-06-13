@@ -7,13 +7,12 @@ using Domains.Dtos;
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Logging;
 
 using PropertyHatchWebApi.ApplicationContext;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -22,17 +21,10 @@ namespace PropertyHatchWebApi.Controllers
     [Route("api/[controller]")]
     public class AccountController : BaseController
     {
-
-        private readonly ILogger<AccountController> _logger;
-        private readonly UserManager<ApplicationUser> _userManager;
         private readonly IMediator _mediator;
-        public AccountController(ILogger<AccountController> logger
-            , IMediator mediator
-            , UserManager<ApplicationUser> _userManager)
+        public AccountController(IMediator mediator)
         {
-            _logger = logger;
             _mediator = mediator ?? throw new ArgumentNullException(nameof(mediator));
-            this._userManager = _userManager;
         }
 
         [HttpPost("[action]")]
@@ -60,6 +52,24 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(response);
         }
 
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        {
+            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult<Organization>> GetUserOrganization()
+        {
+            var getUserQuery = new GetUserSpecificOrgQuery { UserId = SecurityContext.UserId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
         [HttpPost("[action]")]
         [Authorize]
         public async Task<ActionResult<UserForUi>> TokenExchange([FromBody] ExchangeTokenCommand exchangeTokenCommand)
@@ -68,13 +78,33 @@ namespace PropertyHatchWebApi.Controllers
             var response = await _mediator.Send(exchangeTokenCommand);
             return Ok(response);
         }
-
-
-
+        /*
         [HttpPut("[action]")]
         [Authorize]
         public ActionResult UpdateUserRole([FromBody] UpdateUserRoleCommand command)
         {
+            _mediator.Send(command);
+            return Ok();
+        }
+        */
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command)
+        {
+            command.UserName = SecurityContext.UserName;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public ActionResult InviteUser([FromBody] SendInvitationCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            command.UserDisplayName = SecurityContext.DisplayName;
+            command.OrgId = SecurityContext.OrgId;
+            command.OrgName = SecurityContext.OrgName;
             _mediator.Send(command);
             return Ok();
         }

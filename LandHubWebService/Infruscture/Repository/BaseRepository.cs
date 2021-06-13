@@ -32,7 +32,7 @@ namespace Services.Repository
         public async Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var all = await _dbCollection.FindAsync(criteria);
-            return await all.ToListAsync();
+            return all.ToList();
         }
 
         public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria)
@@ -44,7 +44,7 @@ namespace Services.Repository
         public async Task<IEnumerable<TEntity>> GetAsync()
         {
             var all = await _dbCollection.FindAsync(Builders<TEntity>.Filter.Empty);
-            return await all.ToListAsync();
+            return all.ToList();
         }
 
         public async Task<string> Create(TEntity obj)
@@ -63,14 +63,19 @@ namespace Services.Repository
 
         public async Task<bool> UpdateAsync(TEntity obj)
         {
-            var result = await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.ToString()), obj);
+            var result = await _dbCollection.ReplaceOneAsync(Builders<TEntity>.Filter.Eq("_id", obj.Id), obj);
             return result.IsAcknowledged;
         }
 
-        public void Delete(string id)
+        public async Task Delete(string id)
         {
             var filter = Builders<TEntity>.Filter.Eq(x => x.Id, id);
-            _dbCollection.DeleteOneAsync(filter);
+            await _dbCollection.DeleteOneAsync(filter);
+        }
+
+        public async Task DeleteAllAsync(Expression<Func<TEntity, bool>> criteria)
+        {
+            await _dbCollection.DeleteManyAsync(criteria);
         }
 
     }

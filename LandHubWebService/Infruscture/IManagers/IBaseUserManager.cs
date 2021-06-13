@@ -8,7 +8,8 @@ namespace Services.IManagers
     public interface IBaseUserManager
     {
         Task CreateUser(User user);
-        User GetUserByEmail(string email);
+        Task<User> GetUserByEmail(string email);
+        Task<bool> VerifyEmail(string code, string email);
         void UpdateUserRoleOrgMaps(List<UserRoleMapping> userRoleMappings);
         Task<bool> Login(string email, string password = "");
         Task<bool> RegisterUserAsync(ApplicationUser user, string password = "");

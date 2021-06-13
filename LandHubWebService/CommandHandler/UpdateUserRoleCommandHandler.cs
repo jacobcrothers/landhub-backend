@@ -20,8 +20,8 @@ namespace CommandHandler
         private IBaseUserManager _usermanager;
         private readonly IMapper _mapper;
 
-        public UpdateUserRoleCommandHandler(IBaseUserManager userManager,
-                                          IMapper mapper
+        public UpdateUserRoleCommandHandler(IBaseUserManager userManager
+            , IMapper mapper
             )
         {
             _usermanager = userManager;

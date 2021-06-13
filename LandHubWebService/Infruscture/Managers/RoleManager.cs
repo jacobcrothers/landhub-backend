@@ -5,6 +5,7 @@ using PropertyHatchCoreService.IManagers;
 using Services.Repository;
 
 using System.Collections.Generic;
+using System.Threading.Tasks;
 
 namespace PropertyHatchCoreService.Managers
 {
@@ -24,14 +25,14 @@ namespace PropertyHatchCoreService.Managers
         }
 
 
-        public void CreateRole(Role role)
+        public async Task CreateRole(Role role)
         {
-            _roleBaseRepository.Create(role);
+            await _roleBaseRepository.Create(role);
         }
 
-        public void CreateRolePermissionMapping(RolePermissionMapping rolePermissionMapping)
+        public async Task CreateRolePermissionMapping(RolePermissionMapping rolePermissionMapping)
         {
-            _rolePermissionMappingBaseRepository.Create(rolePermissionMapping);
+            await _rolePermissionMappingBaseRepository.Create(rolePermissionMapping);
         }
 
         public List<Role> GetRoleByUserByOrgAsync(string userId, string orgId)
