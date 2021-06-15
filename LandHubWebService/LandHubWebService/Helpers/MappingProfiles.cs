@@ -41,6 +41,7 @@ namespace LandHubWebService.Helpers
 
             CreateMap<CreateListingCommand, Listing>();
             CreateMap<UpdateListingCommand, Listing>();
+            CreateMap<UpdateOrgCommand, Organization>();
 
             CreateMap<User, ApplicationUser>();
             CreateMap<ApplicationUser, User>();

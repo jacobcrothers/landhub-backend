@@ -33,12 +33,31 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public ActionResult CreateOrganization([FromBody] CreateNewOrgCommand command)
+        [Authorize]
+        public async Task<ActionResult> CreateOrganizationAsync([FromBody] CreateNewOrgCommand command)
         {
             command.UserId = SecurityContext.UserId;
-            _mediator.Send(command);
+            await _mediator.Send(command);
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> UpdateOrganizationAsync([FromBody] UpdateOrgCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> DeleteOrganizationAsync([FromBody] DeleteOrgCommand command)
+        {
+            await _mediator.Send(command);
+            return Ok();
+        }
+
 
 
 
