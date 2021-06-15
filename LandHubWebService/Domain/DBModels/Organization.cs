@@ -9,5 +9,6 @@
         public string CreatedBy { get; set; }
         public string TimeZone { get; set; }
         public string Status { get; set; }
+        public string AdminName { get; set; }
     }
 }
