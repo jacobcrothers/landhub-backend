@@ -55,6 +55,15 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
+        public async Task<ActionResult<UserForUi>> GetUserInformationByUserId(string userId)
+        {
+            var getUserQuery = new GetUserQuery { UserId = userId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
         public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
         {
             var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };

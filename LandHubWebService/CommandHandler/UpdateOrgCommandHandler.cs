@@ -27,7 +27,7 @@ namespace CommandHandlers
         }
         protected override async Task Handle(UpdateOrgCommand request, CancellationToken cancellationToken)
         {
-
+            var orgInDb = await _organizationBaseRepository.GetSingleAsync(x => x.Id == request.Id);
             var organization = _mapper.Map<UpdateOrgCommand, Organization>(request);
             organization.CreatedBy = request.UserId;
             await _organizationBaseRepository.UpdateAsync(organization);
