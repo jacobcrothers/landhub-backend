@@ -9,7 +9,7 @@ WORKDIR /app
 #RUN dotnet restore
 
 # Copy csproj and restore as distinct layers
-COPY *.sln .
+COPY LandHubWebService/*.sln .
 COPY LandHubWebService/LandHubWebService/*.csproj ./LandHubWebService/
 RUN dotnet restore
 
