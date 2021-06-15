@@ -27,4 +27,4 @@ COPY --from=build-env /app/out .
 
 EXPOSE 50574
 
-ENTRYPOINT ["dotnet", "LandHubWebService.dll"]
+ENTRYPOINT ["dotnet", "PropertyHatchWebService.dll"]
