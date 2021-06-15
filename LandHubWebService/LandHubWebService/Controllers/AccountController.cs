@@ -12,6 +12,7 @@ using Microsoft.AspNetCore.Mvc;
 using PropertyHatchWebApi.ApplicationContext;
 
 using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -53,6 +54,15 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        {
+            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
         public async Task<ActionResult<Organization>> GetUserOrganization()
         {
             var getUserQuery = new GetUserSpecificOrgQuery { UserId = SecurityContext.UserId };
@@ -68,11 +78,33 @@ namespace PropertyHatchWebApi.Controllers
             var response = await _mediator.Send(exchangeTokenCommand);
             return Ok(response);
         }
-
+        /*
         [HttpPut("[action]")]
         [Authorize]
         public ActionResult UpdateUserRole([FromBody] UpdateUserRoleCommand command)
         {
+            _mediator.Send(command);
+            return Ok();
+        }
+        */
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command)
+        {
+            command.UserName = SecurityContext.UserName;
+            await _mediator.Send(command);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public ActionResult InviteUser([FromBody] SendInvitationCommand command)
+        {
+            command.UserId = SecurityContext.UserId;
+            command.UserDisplayName = SecurityContext.DisplayName;
+            command.OrgId = SecurityContext.OrgId;
+            command.OrgName = SecurityContext.OrgName;
             _mediator.Send(command);
             return Ok();
         }

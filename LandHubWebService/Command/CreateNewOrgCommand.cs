@@ -1,5 +1,7 @@
 ﻿using MediatR;
 
+using System.Text.Json.Serialization;
+
 namespace Commands
 {
     public class CreateNewOrgCommand : IRequest
@@ -9,6 +11,7 @@ namespace Commands
         public string ImageId { get; set; }
         public string Description { get; set; }
         public string Address { get; set; }
+        [JsonIgnore]
         public string UserId { get; set; }
 
     }

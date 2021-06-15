@@ -40,6 +40,7 @@ namespace LandHubWebService
 {
     public class Startup
     {
+        readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -50,6 +51,16 @@ namespace LandHubWebService
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: MyAllowSpecificOrigins,
+                                  builder =>
+                                  {
+                                      builder.WithOrigins("http://localhost:4200")
+                                      .AllowAnyHeader()
+                                      .AllowAnyMethod(); ;
+                                  });
+            });
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo { Title = "PropertyHatch.Service", Version = "v1" });
@@ -97,6 +108,7 @@ namespace LandHubWebService
             services.AddTransient<IOrganizationManager, OrganizationManager>();
             services.AddTransient<IRoleManager, RoleManager>();
             services.AddTransient<ITokenService, TokenService>();
+            services.AddTransient<IMailManager, MailManager>();
 
             var mongoDbContext = new MongoDbContext(Configuration.GetSection("Mongosettings:Connection").Value, Configuration.GetSection("Mongosettings:DatabaseName").Value);
             services.AddIdentity<ApplicationUser, ApplicationRole>()
@@ -104,6 +116,12 @@ namespace LandHubWebService
               .AddDefaultTokenProviders();
 
             services.AddMvc();
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy("AllowSpecificOrigin",
+                    builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+            });
 
             services.AddAuthentication(x =>
             {
@@ -139,8 +157,12 @@ namespace LandHubWebService
             app.UseHttpsRedirection();
 
             app.UseRouting();
+            app.UseCors(MyAllowSpecificOrigins);
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseCors();
+            app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
             {
