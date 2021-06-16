@@ -1,14 +1,12 @@
 ﻿using MediatR;
 
-using System.Text.Json.Serialization;
-
 namespace Commands
 {
     public class ResetPasswordCommand : IRequest<bool>
     {
-        [JsonIgnore]
         public string Email { get; set; }
-        public string OldPassword { get; set; }
+        public string Code { get; set; }
+        public string Slug { get; set; }
         public string NewPassword { get; set; }
     }
 }

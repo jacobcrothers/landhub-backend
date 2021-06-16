@@ -101,10 +101,20 @@ namespace Services.Managers
             return data.ToList();
         }
 
-        public async Task<bool> ResetUserPasswordAsync(ApplicationUser user, string oldPassword = "", string newPassword = "")
+        public async Task<bool> ChangeUserPasswordAsync(ApplicationUser user, string oldPassword = "", string newPassword = "")
         {
             var identityResult = await _userManager.ChangePasswordAsync(user, oldPassword, newPassword);
             return identityResult.Succeeded;
         }
+
+        public async Task<bool> ResetUserPasswordAsync(ApplicationUser user, string newPassword = "")
+        {
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var identityResult = await _userManager.ResetPasswordAsync(user, token, newPassword);
+            return identityResult.Succeeded;
+        }
+
+
+
     }
 }

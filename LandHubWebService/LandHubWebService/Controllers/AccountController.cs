@@ -121,10 +121,10 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult> ResetPasswordAsync([FromBody] ResetPasswordCommand resetPasswordCommand)
+        public async Task<ActionResult> ResetPasswordAsync([FromBody] ChangePasswordCommand changePasswordCommand)
         {
-            resetPasswordCommand.Email = SecurityContext.Email;
-            var result = await _mediator.Send(resetPasswordCommand);
+            changePasswordCommand.Email = SecurityContext.Email;
+            var result = await _mediator.Send(changePasswordCommand);
             return Ok(result);
         }
     }

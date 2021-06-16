@@ -41,6 +41,21 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ForgotPassword([FromBody] ForgotPasswordCommand command)
+        {
+            bool result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> ResetPassword([FromBody] ResetPasswordCommand command)
+        {
+            bool result = await _mediator.Send(command);
+            return Ok(result);
+        }
+
+
 
     }
 }
