@@ -32,6 +32,18 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        //[HttpGet("[action]")]
+        //public async Task<ActionResult> GetAllNoOrg()
+        //{
+        //    var getAllMailhouseQuery = new GetAllMailhouseQuery
+        //    {
+        //        OrgId = null
+        //    };
+
+        //    var result = await _mediator.Send(getAllMailhouseQuery);
+        //    return Ok(result);
+        //}
+
         [HttpGet("[action]")]
         public async Task<ActionResult> GetById(string mailhouseId)
         {
