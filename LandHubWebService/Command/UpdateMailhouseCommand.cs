@@ -16,6 +16,7 @@ namespace Commands
         public string OrganizationId { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ContactName { get; set; }
+        public string Status { get; set; }
 
         [JsonIgnore]
         public string MailhouseId { get; set; }

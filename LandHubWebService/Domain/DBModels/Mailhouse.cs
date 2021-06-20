@@ -14,5 +14,7 @@ namespace Domains.DBModels
         public string PhoneNumber { get; set; }
         public DateTime CreatedOn { get; set; }
         public string ContactName { get; set; }
+        public string Status { get; set; }
+
     }
 }
