@@ -23,12 +23,9 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<ActionResult> GetAll()
+        public async Task<ActionResult> GetAll([FromBody] GetAllTeamQuery getAllTeamQuery)
         {
-            var getAllTeamQuery = new GetAllTeamQuery
-            {
-                OrgId = SecurityContext.OrgId
-            };
+            getAllTeamQuery.OrgId = SecurityContext.OrgId;
             var result = await _mediator.Send(getAllTeamQuery);
             return Ok(result);
         }
