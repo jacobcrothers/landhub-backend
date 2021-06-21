@@ -1,5 +1,6 @@
 ﻿
 using Commands;
+using Commands.Query;
 
 using Domains.DBModels;
 using Domains.Dtos;
