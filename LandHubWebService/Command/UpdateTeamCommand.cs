@@ -14,5 +14,10 @@ namespace Commands
         public string Role { get; set; }
         public string CreatedBy { get; set; }
         public DateTime CreatedDate { get; set; }
+
+        public UpdateTeamCommand()
+        {
+            Members = new List<string>();
+        }
     }
 }

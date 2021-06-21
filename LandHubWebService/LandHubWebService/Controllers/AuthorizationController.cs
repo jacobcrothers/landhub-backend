@@ -33,12 +33,31 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public ActionResult CreateRole([FromBody] CreateRoleCommand createRoleCommand)
         {
             createRoleCommand.OrgId = SecurityContext.OrgId;
             _mediator.Send(createRoleCommand);
             return Ok();
         }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public ActionResult UpdateRole([FromBody] UpdateRoleCommand updateRoleCommand)
+        {
+            updateRoleCommand.OrganizationId = SecurityContext.OrgId;
+            _mediator.Send(updateRoleCommand);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public ActionResult DeleteRole([FromBody] DeleteRoleCommand updateRoleCommand)
+        {
+            _mediator.Send(updateRoleCommand);
+            return Ok();
+        }
+
 
         [HttpPost("[action]")]
         public ActionResult AssignUserRole([FromBody] AssignRoleCommand command)

@@ -23,18 +23,18 @@ namespace CommandHandlers.QueryHandlers
         private readonly IMappingService _mappingService;
 
 
-        public GetRoleQueryHandler(IBaseRepository<Role> _roleBaseRepository
-            , IBaseRepository<RolePermissionMapping> _rolePermissionMappingBaseRepository
-            , IBaseRepository<Permission> _permissionBaseRepository
-            , IMappingService _mappingService
-            , IBaseRepository<RolePermissionMappingTemplate> _rolePermissionMappingTemplateBaseRepository
+        public GetRoleQueryHandler(IBaseRepository<Role> roleBaseRepository
+            , IBaseRepository<RolePermissionMapping> rolePermissionMappingBaseRepository
+            , IBaseRepository<Permission> permissionBaseRepository
+            , IMappingService mappingService
+            , IBaseRepository<RolePermissionMappingTemplate> rolePermissionMappingTemplateBaseRepository
            )
         {
-            this._roleBaseRepository = _roleBaseRepository;
-            this._rolePermissionMappingBaseRepository = _rolePermissionMappingBaseRepository;
-            this._permissionBaseRepository = _permissionBaseRepository;
-            this._mappingService = _mappingService;
-            this._rolePermissionMappingTemplateBaseRepository = _rolePermissionMappingTemplateBaseRepository;
+            this._roleBaseRepository = roleBaseRepository;
+            this._rolePermissionMappingBaseRepository = rolePermissionMappingBaseRepository;
+            this._permissionBaseRepository = permissionBaseRepository;
+            this._mappingService = mappingService;
+            this._rolePermissionMappingTemplateBaseRepository = rolePermissionMappingTemplateBaseRepository;
         }
 
         public async Task<List<RolePermissionMappingTemplate>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
@@ -49,6 +49,10 @@ namespace CommandHandlers.QueryHandlers
                 {
                     Id = role.Id,
                     Title = role.Title,
+                    Category = role.Category,
+                    Description = role.Description,
+                    IsActive = role.IsActive,
+                    IsShownInUi = role.IsShownInUi,
                     Permissions = new List<Permission>()
                 };
 
