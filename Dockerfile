@@ -30,5 +30,4 @@ COPY --from=build-env /app/out .
 
 EXPOSE 50574
 
-#ENTRYPOINT ["dotnet", "PropertyHatchWebService.dll"]
-ENTRYPOINT ["/bin/bash"]
+ENTRYPOINT ["dotnet", "PropertyHatchWebApi.dll"]
