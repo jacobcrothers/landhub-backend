@@ -25,11 +25,13 @@ namespace CommandHandlers.QueryHandlers
 
         public GetAllUserByOrgQueryHandler(IBaseRepository<User> userBaseRepository
             , IBaseRepository<UserRoleMapping> userRoleMappingBaseRepository
-            , IMapper mapper)
+            , IMapper mapper
+            , IBaseRepository<UserOrganizationMapping> userOrganizationMappingBaseRepository)
         {
             _userBaseRepository = userBaseRepository;
             _userRoleMappingBaseRepository = userRoleMappingBaseRepository;
             _mapper = mapper;
+            _userOrganizationMappingBaseRepository = userOrganizationMappingBaseRepository;
         }
 
         public async Task<List<UserForUi>> Handle(GetAllUserByOrgQuery request, CancellationToken cancellationToken)
