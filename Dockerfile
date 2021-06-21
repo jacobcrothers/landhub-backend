@@ -24,6 +24,10 @@ RUN apt-get install -y apt-utils
 RUN apt-get install -y libc6-dev
 RUN apt-get install -y libgdiplus
 RUN ln -s /usr/lib/libgdiplus.so /usr/lib/gdiplus.dll
+RUN dotnet dev-certs https --check --verbose
+RUN dotnet dev-certs https --clean
+RUN dotnet dev-certs https --trust
+
 
 WORKDIR /app
 COPY --from=build-env /app/out .
