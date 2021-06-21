@@ -40,7 +40,7 @@ namespace CommandHandlers.QueryHandlers
         public async Task<List<TeamForUi>> Handle(GetAllTeamQuery request, CancellationToken cancellationToken)
         {
             var teamForList = new List<TeamForUi>();
-            var teamList = await _baseRepositoryTeam.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            var teamList = await _baseRepositoryTeam.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
             foreach (var team in teamList.ToList())
             {
                 var teamForUi = _mapper.Map<Team, TeamForUi>(team);
