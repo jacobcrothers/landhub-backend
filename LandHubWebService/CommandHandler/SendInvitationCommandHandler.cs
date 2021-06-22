@@ -33,7 +33,7 @@ namespace CommandHandlers
 
         protected override async Task Handle(SendInvitationCommand request, CancellationToken cancellationToken)
         {
-             Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
+            Dictionary<string, string> keyValuePairs = new Dictionary<string, string>();
             keyValuePairs.Add("{@orgName}", request.OrgName);
             keyValuePairs.Add("{@senderName}", request.UserDisplayName);
 
@@ -45,7 +45,10 @@ namespace CommandHandlers
                 Id = Guid.NewGuid().ToString(),
                 InvitedUserEmail = request.InvitationEmail,
                 OrgId = request.OrgId,
-                SenderId = request.UserId
+                SenderId = request.UserId,
+                Address = request.Address,
+                Phone = request.Phone,
+                TeamId = request.TeamId
             };
 
             await _baseRepositoryInvitation.Create(invitation);
