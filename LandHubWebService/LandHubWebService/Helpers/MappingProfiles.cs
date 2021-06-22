@@ -43,6 +43,8 @@ namespace LandHubWebService.Helpers
             CreateMap<CreateListingCommand, Listing>();
             CreateMap<UpdateListingCommand, Listing>();
             CreateMap<UpdateOrgCommand, Organization>();
+            CreateMap<CreateMailhouseCommand, Mailhouse>();
+            CreateMap<UpdateMailhouseCommand, Mailhouse>();
             CreateMap<Team, TeamForUi>();
             CreateMap<CreateTeamCommand, Team>();
             CreateMap<UpdateTeamCommand, Team>();
