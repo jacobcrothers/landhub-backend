@@ -22,8 +22,16 @@ namespace CommandHandlers.QueryHandlers
         }
         public async Task<List<Mailhouse>> Handle(GetAllMailhouseQuery request, CancellationToken cancellationToken)
         {
-            var mailhouses = await _mailhouseBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
-            return mailhouses.ToList();
+            IEnumerable<Mailhouse> mailHouses;
+            if (request.OrgId == null)
+            {
+                mailHouses = await _mailhouseBaseRepository.GetAllAsync(x => true);
+            }
+            else
+            {
+                mailHouses = await _mailhouseBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            }
+            return mailHouses?.ToList();
         }
     }
 }
