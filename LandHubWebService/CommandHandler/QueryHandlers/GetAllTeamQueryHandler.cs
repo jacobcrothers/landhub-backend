@@ -44,6 +44,8 @@ namespace CommandHandlers.QueryHandlers
             foreach (var team in teamList.ToList())
             {
                 var teamForUi = _mapper.Map<Team, TeamForUi>(team);
+                var createdUser = await _baseRepositoryUser.GetByIdAsync(team.CreatedBy);
+                teamForUi.CreatedBy = createdUser.DisplayName;
                 teamForUi.Users = new List<UserForUi>();
                 var teamUsers = await _baseRepositoryTeamUserMapping.GetAllAsync(x => x.TeamId == team.Id);
                 foreach (var teamUserMapping in teamUsers.ToList())
