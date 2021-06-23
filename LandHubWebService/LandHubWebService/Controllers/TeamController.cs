@@ -2,6 +2,8 @@
 using Commands;
 using Commands.Query;
 
+using Domains.DBModels;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
@@ -32,6 +34,19 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
+        public async Task<ActionResult> GetTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(Team)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
         public async Task<ActionResult> GetById(string teamId)
         {
             var getTeamQuery = new GetTeamQuery
@@ -43,6 +58,8 @@ namespace PropertyHatchWebApi.Controllers
             var result = await _mediator.Send(getTeamQuery);
             return Ok(result);
         }
+
+
 
         [HttpPost("[action]")]
         [Authorize]

@@ -16,5 +16,6 @@ namespace Services.Repository
         Task<IEnumerable<TEntity>> GetAllAsync(Expression<Func<TEntity, bool>> criteria);
         Task<IEnumerable<TEntity>> GetAllWithPagingAsync(Expression<Func<TEntity, bool>> criteria, int pageNumber, int pageSize);
         Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria);
+        long GetTotalCount(Expression<Func<TEntity, bool>> criteria);
     }
 }

@@ -84,5 +84,11 @@ namespace Services.Repository
             await _dbCollection.DeleteManyAsync(criteria);
         }
 
+        public long GetTotalCount(Expression<Func<TEntity, bool>> criteria)
+        {
+            var result = _dbCollection.Find(criteria);
+            return result.CountDocuments();
+        }
+
     }
 }
