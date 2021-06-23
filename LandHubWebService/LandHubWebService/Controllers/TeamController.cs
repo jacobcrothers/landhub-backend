@@ -23,7 +23,7 @@ namespace PropertyHatchWebApi.Controllers
             this._mediator = _mediator;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
         public async Task<ActionResult> GetAll([FromBody] GetAllTeamQuery getAllTeamQuery)
         {
