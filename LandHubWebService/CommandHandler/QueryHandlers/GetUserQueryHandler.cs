@@ -34,13 +34,19 @@ namespace CommandHandlers.QueryHandlers
         public async Task<UserForUi> Handle(GetUserQuery request, CancellationToken cancellationToken)
         {
             var user = await _userBaseRepository.GetByIdAsync(request.UserId);
-            var rolesMapping = await _userRoleMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.UserId == request.UserId);
-            List<string> rolesId = new List<string>();
-            foreach (UserRoleMapping rolePermissionMapping in rolesMapping)
+            if (request.OrgId != null)
             {
-                rolesId.Add(rolePermissionMapping.Id);
+                var rolesMapping = await _userRoleMappingBaseRepository.GetAllAsync(x =>
+                    x.OrganizationId == request.OrgId && x.UserId == request.UserId);
+                List<string> rolesId = new List<string>();
+                foreach (UserRoleMapping rolePermissionMapping in rolesMapping)
+                {
+                    rolesId.Add(rolePermissionMapping.Id);
+                }
+
+                user.Roles = rolesId;
             }
-            user.Roles = rolesId;
+
             var uiUser = _mapper.Map<User, UserForUi>(user);
             return uiUser;
         }

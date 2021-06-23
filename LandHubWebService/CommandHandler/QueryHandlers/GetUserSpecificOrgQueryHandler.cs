@@ -15,25 +15,33 @@ namespace CommandHandlers.QueryHandlers
 {
     public class GetUserSpecificOrgQueryHandler : IRequestHandler<GetUserSpecificOrgQuery, List<Organization>>
     {
-        private readonly IBaseRepository<UserOrganizationMapping> userOrganizationMappingRepository;
-        private readonly IBaseRepository<Organization> organizationRepository;
+        private readonly IBaseRepository<UserOrganizationMapping> _userOrganizationMappingRepository;
+        private readonly IBaseRepository<Organization> _organizationRepository;
+        private readonly IBaseRepository<User> _userRepository;
 
         public GetUserSpecificOrgQueryHandler(IBaseRepository<Organization> organizationRepository
             , IBaseRepository<UserOrganizationMapping> userOrganizationMappingRepository
+            , IBaseRepository<User> userRepository
            )
         {
-            this.organizationRepository = organizationRepository;
-            this.userOrganizationMappingRepository = userOrganizationMappingRepository;
+            _organizationRepository = organizationRepository;
+            _userOrganizationMappingRepository = userOrganizationMappingRepository;
+            _userRepository = userRepository;
         }
 
         public async Task<List<Organization>> Handle(GetUserSpecificOrgQuery request, CancellationToken cancellationToken)
         {
-            var userOrganizationMappingList = await userOrganizationMappingRepository.GetAllAsync(x => x.UserId == request.UserId);
+            var userOrganizationMappingList = await _userOrganizationMappingRepository.GetAllAsync(x => x.UserId == request.UserId);
             List<Organization> orgLIst = new List<Organization>();
 
             foreach (UserOrganizationMapping userOrganization in userOrganizationMappingList)
             {
-                var org = await organizationRepository.GetByIdAsync(userOrganization.OrganizationId);
+                var org = await _organizationRepository.GetByIdAsync(userOrganization.OrganizationId);
+                var user = await _userRepository.GetByIdAsync(org.CreatedBy);
+                if (user != null)
+                {
+                    org.AdminName = user.DisplayName;
+                }
                 orgLIst.Add(org);
             }
             return orgLIst;

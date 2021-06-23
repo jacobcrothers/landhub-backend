@@ -35,6 +35,12 @@ namespace Services.Repository
             return all.ToList();
         }
 
+        public async Task<IEnumerable<TEntity>> GetAllWithPagingAsync(Expression<Func<TEntity, bool>> criteria, int pageNumber = 1, int pageSize = 10)
+        {
+            var all = await _dbCollection.Find(criteria).Skip((pageNumber - 1) * pageSize).Limit(pageSize).ToListAsync();
+            return all;
+        }
+
         public async Task<TEntity> GetSingleAsync(Expression<Func<TEntity, bool>> criteria)
         {
             var all = await _dbCollection.FindAsync(criteria);
@@ -76,6 +82,12 @@ namespace Services.Repository
         public async Task DeleteAllAsync(Expression<Func<TEntity, bool>> criteria)
         {
             await _dbCollection.DeleteManyAsync(criteria);
+        }
+
+        public long GetTotalCount(Expression<Func<TEntity, bool>> criteria)
+        {
+            var result = _dbCollection.Find(criteria);
+            return result.CountDocuments();
         }
 
     }

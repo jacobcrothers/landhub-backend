@@ -26,17 +26,23 @@ namespace Services.Services
         private readonly IBaseUserManager userManager;
         private readonly IOrganizationManager organizationManager;
         private readonly IBaseRepository<UserOrganizationMapping> _userOrganizationMappingBaseRepository;
+        private readonly IBaseRepository<TeamUserMapping> _baseRepositoryTeamUserMapping;
+        private readonly IBaseRepository<Team> _baseRepositoryTeam;
 
         public TokenService(IConfiguration configuration
             , IBaseUserManager userManager
             , IOrganizationManager organizationManager
-            , IBaseRepository<UserOrganizationMapping> _userOrganizationMappingBaseRepository)
+            , IBaseRepository<UserOrganizationMapping> _userOrganizationMappingBaseRepository
+            , IBaseRepository<TeamUserMapping> baseRepositoryTeamUserMapping
+            , IBaseRepository<Team> baseRepositoryTeam)
         {
             _config = configuration;
             _key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Token:key"]));
             this.userManager = userManager;
             this.organizationManager = organizationManager;
             this._userOrganizationMappingBaseRepository = _userOrganizationMappingBaseRepository;
+            this._baseRepositoryTeamUserMapping = baseRepositoryTeamUserMapping;
+            _baseRepositoryTeam = baseRepositoryTeam;
         }
 
         public async Task<string> CreateTokenAsync(ApplicationUser appicationUser)
@@ -48,8 +54,30 @@ namespace Services.Services
                 org = await organizationManager.GetSingleOrganizationByIdAsync(userOrganizationMapping.OrganizationId);
             }
 
-            var userRoleMapping = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, org.Id);
-            List<Claim> claims = await PrepareClaimsAsync(appicationUser, org, userRoleMapping);
+            var userTeamMappings = await _baseRepositoryTeamUserMapping.GetAllAsync(x =>
+                    x.UserId == appicationUser.Id && x.OrganizationId == org.Id);
+
+            List<UserRoleMapping> userRoleMappings = new List<UserRoleMapping>();
+            if (userTeamMappings == null || userTeamMappings.ToList().Count == 0)
+            {
+                userRoleMappings = await userManager.FindRolesByUserIdByOrgIdAsync(appicationUser.Id, org.Id);
+            }
+            else
+            {
+                foreach (var userTeamMapping in userTeamMappings.ToList())
+                {
+                    var team = await _baseRepositoryTeam.GetByIdAsync(userTeamMapping.TeamId);
+                    var userRoleMapping = new UserRoleMapping()
+                    {
+                        OrganizationId = org.Id,
+                        RoleId = team.Role,
+                        UserId = appicationUser.Id
+                    };
+                    userRoleMappings.Add(userRoleMapping);
+                }
+            }
+
+            List<Claim> claims = await PrepareClaimsAsync(appicationUser, org, userRoleMappings);
             var token = GenerateToken(claims);
             return token;
         }

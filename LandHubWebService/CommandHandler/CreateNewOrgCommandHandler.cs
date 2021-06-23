@@ -37,8 +37,9 @@ namespace CommandHandlers
                 Title = request.OrgTitle,
                 Address = request.Address,
                 Description = request.Description,
-                ImageId = request.ImageId
-
+                ImageId = request.ImageId,
+                Status = request.Status,
+                TimeZone = request.TimeZone
             };
             await _organizationManager.CreateOrganizationAsync(organization);
             await _mappingService.MapUserOrgRole(Const.DEFAULT_ADMIN_ROLE_ID, request.UserId, organization.Id);

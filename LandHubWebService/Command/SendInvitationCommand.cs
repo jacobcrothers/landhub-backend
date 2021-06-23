@@ -16,5 +16,9 @@ namespace Commands
         public string OrgName { get; set; }
 
         public string InvitationEmail { get; set; }
+        public string Name { get; set; }
+        public string TeamId { get; set; }
+        public string Phone { get; set; }
+        public string Address { get; set; }
     }
 }

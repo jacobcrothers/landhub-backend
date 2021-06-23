@@ -41,6 +41,19 @@ namespace LandHubWebService.Helpers
 
             CreateMap<CreateListingCommand, Listing>();
             CreateMap<UpdateListingCommand, Listing>();
+            CreateMap<UpdateOrgCommand, Organization>();
+            CreateMap<Team, TeamForUi>();
+            CreateMap<CreateTeamCommand, Team>();
+            CreateMap<UpdateTeamCommand, Team>();
+            CreateMap<UpdateRoleCommand, Role>()
+                .ForMember(d => d.Title, o => o.MapFrom(s => s.Title))
+                .ForMember(d => d.Description, o => o.MapFrom(s => s.Title))
+                .ForMember(d => d.IsShownInUi, o => o.MapFrom(s => true))
+                .ForMember(d => d.IsActive, o => o.MapFrom(s => true));
+
+
+            CreateMap<User, ApplicationUser>();
+            CreateMap<ApplicationUser, User>();
 
         }
 

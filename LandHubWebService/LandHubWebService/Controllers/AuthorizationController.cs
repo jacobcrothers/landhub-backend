@@ -33,18 +33,37 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
-        public ActionResult CreateRole([FromBody] CreateRoleCommand createRoleCommand)
+        [Authorize]
+        public async Task<ActionResult> CreateRoleAsync([FromBody] CreateRoleCommand createRoleCommand)
         {
             createRoleCommand.OrgId = SecurityContext.OrgId;
-            _mediator.Send(createRoleCommand);
+            await _mediator.Send(createRoleCommand);
             return Ok();
         }
 
         [HttpPost("[action]")]
-        public ActionResult AssignUserRole([FromBody] AssignRoleCommand command)
+        [Authorize]
+        public async Task<ActionResult> UpdateRoleAsync([FromBody] UpdateRoleCommand updateRoleCommand)
+        {
+            updateRoleCommand.OrganizationId = SecurityContext.OrgId;
+            await _mediator.Send(updateRoleCommand);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> DeleteRoleAsync([FromBody] DeleteRoleCommand updateRoleCommand)
+        {
+            bool result = await _mediator.Send(updateRoleCommand);
+            return Ok(result);
+        }
+
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> AssignUserRoleAsync([FromBody] AssignRoleCommand command)
         {
             command.OrgId = SecurityContext.OrgId;
-            _mediator.Send(command);
+            await _mediator.Send(command);
             return Ok();
         }
 
