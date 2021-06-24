@@ -1,6 +1,5 @@
 ﻿using MediatR;
 
-using System;
 using System.Collections.Generic;
 
 namespace Commands
@@ -12,8 +11,6 @@ namespace Commands
         public string OrganizationId { get; set; }
         public List<string> Members { get; set; }
         public string Role { get; set; }
-        public string CreatedBy { get; set; }
-        public DateTime CreatedDate { get; set; }
 
         public UpdateTeamCommand()
         {
