@@ -36,6 +36,7 @@ namespace CommandHandlers
                 Id = orgId,
                 Title = request.OrgTitle,
                 Address = request.Address,
+                Image = request.Image,
                 Description = request.Description,
                 ImageId = request.ImageId,
                 Status = request.Status,

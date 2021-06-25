@@ -7,6 +7,7 @@
         public string Description { get; set; }
         public string Address { get; set; }
         public string CreatedBy { get; set; }
+        public string Image { get; set; }
         public string TimeZone { get; set; }
         public string Status { get; set; }
         public string AdminName { get; set; }

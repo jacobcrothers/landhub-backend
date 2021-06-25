@@ -28,6 +28,8 @@ namespace Domains.DBModels
 
         public string PassportNumber { get; set; }
         public string UserName { get; set; }
+        public string Occupation { get; set; }
+        public string ProfileImage { get; set; }
 
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
