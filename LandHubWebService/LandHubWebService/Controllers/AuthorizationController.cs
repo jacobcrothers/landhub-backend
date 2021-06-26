@@ -1,6 +1,8 @@
 ﻿using Commands;
 using Commands.Query;
 
+using Domains.DBModels;
+
 using MediatR;
 
 using Microsoft.AspNetCore.Authorization;
@@ -18,6 +20,20 @@ namespace PropertyHatchWebApi.Controllers
         public AuthorizationController(IMediator _mediator)
         {
             this._mediator = _mediator;
+        }
+
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(Role)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
         }
 
         [HttpPost("[action]")]

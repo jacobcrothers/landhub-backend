@@ -21,6 +21,7 @@ namespace CommandHandlers.QueryHandlers
 
         private readonly IBaseRepository<Team> _baseRepositoryTeam;
         private readonly IBaseRepository<User> _baseRepositoryUser;
+        private readonly IBaseRepository<Role> _baseRepositoryRole;
         private readonly IBaseRepository<TeamUserMapping> _baseRepositoryTeamUserMapping;
         private readonly IMapper _mapper;
 
@@ -29,12 +30,14 @@ namespace CommandHandlers.QueryHandlers
              , IBaseRepository<Team> baseRepositoryTeam
              , IBaseRepository<TeamUserMapping> baseRepositoryTeamUserMapping
              , IBaseRepository<User> baseRepositoryUser
+             , IBaseRepository<Role> baseRepositoryRole
            )
         {
             _mapper = mapper;
             _baseRepositoryTeamUserMapping = baseRepositoryTeamUserMapping;
             _baseRepositoryTeam = baseRepositoryTeam;
             _baseRepositoryUser = baseRepositoryUser;
+            _baseRepositoryRole = baseRepositoryRole;
         }
 
         public async Task<List<TeamForUi>> Handle(GetAllTeamQuery request, CancellationToken cancellationToken)
@@ -45,6 +48,14 @@ namespace CommandHandlers.QueryHandlers
             {
                 var teamForUi = _mapper.Map<Team, TeamForUi>(team);
                 var createdUser = await _baseRepositoryUser.GetByIdAsync(team.CreatedBy);
+                if (team.Role != null)
+                {
+                    var role = await _baseRepositoryRole.GetByIdAsync(team.Role);
+                    if (role != null)
+                    {
+                        teamForUi.Role = role.Title;
+                    }
+                }
                 teamForUi.CreatedBy = createdUser?.DisplayName;
                 teamForUi.Users = new List<UserForUi>();
                 var teamUsers = await _baseRepositoryTeamUserMapping.GetAllAsync(x => x.TeamId == team.Id);
