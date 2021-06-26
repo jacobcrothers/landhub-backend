@@ -18,7 +18,6 @@ namespace Domains.DBModels
             get { return $"{FirstName} {LastName}"; }
             set { }
         }
-
         public string Address { get; set; }
         public string Email { get; set; }
         public List<string> Roles { get; set; }
@@ -28,6 +27,8 @@ namespace Domains.DBModels
 
         public string PassportNumber { get; set; }
         public string UserName { get; set; }
+        public string Occupation { get; set; }
+        public string ProfileImage { get; set; }
 
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }

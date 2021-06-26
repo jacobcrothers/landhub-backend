@@ -31,6 +31,7 @@ namespace CommandHandler
         private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
         private IBaseRepository<EmailTemplate> _baseRepositoryEmailTemplate;
         private IBaseRepository<Organization> _baseRepositoryOrganization;
+        private IBaseRepository<TeamUserMapping> _baseRepositoryTeamUserMapping;
         private IMailManager _mailManager;
         public IConfiguration _configuration { get; set; }
 
@@ -43,6 +44,7 @@ namespace CommandHandler
             , IMailManager _mailManager
             , IBaseRepository<Organization> _baseRepositoryOrganization
             , IConfiguration _configuration
+            , IBaseRepository<TeamUserMapping> baseRepositoryTeamUserMapping
             )
         {
             _usermanager = userManager;
@@ -54,6 +56,7 @@ namespace CommandHandler
             this._mailManager = _mailManager;
             this._baseRepositoryOrganization = _baseRepositoryOrganization;
             this._configuration = _configuration;
+            this._baseRepositoryTeamUserMapping = baseRepositoryTeamUserMapping;
         }
 
         protected override async Task<bool> Handle(CreateUserCommand request, CancellationToken cancellationToken)
@@ -102,6 +105,14 @@ namespace CommandHandler
                 if (result)
                 {
                     await _mappingService.MapUserOrgRole(Const.DEFAULT_USER_ROLE_ID, user.Id, orgId);
+                    var teamUserMapping = new TeamUserMapping()
+                    {
+                        Id = Guid.NewGuid().ToString(),
+                        OrganizationId = orgId,
+                        TeamId = invitation.TeamId,
+                        UserId = userId
+                    };
+                    await _baseRepositoryTeamUserMapping.Create(teamUserMapping);
 
                     var rolePermissionMappingTemplate = await _mappingService.GetRolePermissionMappingTemplateById(Const.DEFAULT_USER_ROLE_ID);
                     foreach (Permission permission in rolePermissionMappingTemplate.Permissions)

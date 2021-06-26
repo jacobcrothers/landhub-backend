@@ -25,6 +25,8 @@ namespace Domains.DBModels
         public string LastName { get; set; }
         public string MiddleName { get; set; }
         public string PassportNumber { get; set; }
+        public string Occupation { get; set; }
+        public string ProfileImage { get; set; }
         public string DisplayName
         {
             get { return $"{FirstName} {LastName}"; }

@@ -3,13 +3,14 @@
 using MediatR;
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Commands.Query
 {
-    public class GetAllTeamQuery : IRequest<List<TeamForUi>>
+    public class GetAllTeamQuery : Pagination, IRequest<List<TeamForUi>>
     {
+        [JsonIgnore]
         public string OrgId { get; set; }
-        public int PageNumber { get; set; }
-        public int PageSize { get; set; }
+
     }
 }

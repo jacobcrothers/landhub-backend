@@ -34,16 +34,23 @@ namespace CommandHandlers
         {
             await _baseRepositoryTeamUserMapping.DeleteAllAsync(it => it.TeamId == request.Id);
 
-            var team = _mapper.Map<UpdateTeamCommand, Team>(request);
-            await _baseRepositoryTeam.UpdateAsync(team);
+            var teamDb = await _baseRepositoryTeam.GetByIdAsync(request.Id);
+
+            if (teamDb == null)
+                return;
+
+            teamDb.TeamName = request.TeamName;
+            teamDb.Role = request.Role;
+            await _baseRepositoryTeam.UpdateAsync(teamDb);
+
             foreach (var requestMember in request.Members)
             {
                 var teamUserMapping = new TeamUserMapping()
                 {
                     Id = Guid.NewGuid().ToString(),
                     UserId = requestMember,
-                    OrganizationId = request.OrganizationId,
-                    TeamId = team.Id
+                    OrganizationId = teamDb.OrganizationId,
+                    TeamId = teamDb.Id
                 };
                 await _baseRepositoryTeamUserMapping.Create(teamUserMapping);
             }
