@@ -29,8 +29,14 @@ namespace CommandHandlers
         {
             var orgInDb = await _organizationBaseRepository.GetSingleAsync(x => x.Id == request.Id);
             var organization = _mapper.Map<UpdateOrgCommand, Organization>(request);
-            organization.CreatedBy = request.UserId;
-            await _organizationBaseRepository.UpdateAsync(organization);
+
+            orgInDb.Address = organization.Address;
+            orgInDb.TimeZone = organization.TimeZone;
+            orgInDb.Description = organization.Description;
+            orgInDb.Status = organization.Status;
+            orgInDb.Image = organization.Image;
+
+            await _organizationBaseRepository.UpdateAsync(orgInDb);
 
         }
     }

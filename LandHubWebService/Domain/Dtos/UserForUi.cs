@@ -22,7 +22,8 @@ namespace Domains.Dtos
         public string OrganizationId { get; set; }
         public string OrganizationName { get; set; }
         public string CountryName { get; set; }
-
+        public string Occupation { get; set; }
+        public string ProfileImage { get; set; }
         public string PassportNumber { get; set; }
         public string UserName { get; set; }
 

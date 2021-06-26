@@ -9,6 +9,7 @@ using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
+using System;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -66,6 +67,8 @@ namespace PropertyHatchWebApi.Controllers
         public async Task<ActionResult> Add([FromBody] CreateTeamCommand createTeamCommand)
         {
             createTeamCommand.OrganizationId = SecurityContext.OrgId;
+            createTeamCommand.CreatedBy = SecurityContext.UserId;
+            createTeamCommand.CreatedDate = DateTime.UtcNow;
             await _mediator.Send(createTeamCommand);
             return Ok();
         }

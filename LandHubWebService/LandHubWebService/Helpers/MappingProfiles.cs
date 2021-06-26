@@ -39,9 +39,14 @@ namespace LandHubWebService.Helpers
             .ForMember(d => d.CountryName, o => o.MapFrom(s => s.CountryName))
             .ForMember(d => d.DOB, o => o.MapFrom(s => s.DOB));
 
+         
             CreateMap<CreateListingCommand, Listing>();
             CreateMap<UpdateListingCommand, Listing>();
             CreateMap<UpdateOrgCommand, Organization>();
+            CreateMap<CreateMailhouseCommand, Mailhouse>();
+            CreateMap<UpdateMailhouseCommand, Mailhouse>();
+            CreateMap<UpdateSalesWebsiteCommand, SalesWebsite>();
+            CreateMap<CreateSalesWebsiteCommand, SalesWebsite>();
             CreateMap<Team, TeamForUi>();
             CreateMap<CreateTeamCommand, Team>();
             CreateMap<UpdateTeamCommand, Team>();

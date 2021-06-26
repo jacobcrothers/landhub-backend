@@ -15,6 +15,8 @@ namespace Commands
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
         public string CountryName { get; set; }
+        public string Occupation { get; set; }
+        public string ProfileImage { get; set; }
         public string ProfileImageUrl { get; set; }
         public string DisplayName
         {
