@@ -37,7 +37,7 @@ namespace CommandHandlers.QueryHandlers
         public async Task<List<UserForUi>> Handle(GetAllUserByOrgQuery request, CancellationToken cancellationToken)
         {
             List<UserForUi> userForUis = new List<UserForUi>();
-            var userOrgList = await _userOrganizationMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            var userOrgList = await _userOrganizationMappingBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
 
             foreach (UserOrganizationMapping userOrganizationMapping in userOrgList)
             {

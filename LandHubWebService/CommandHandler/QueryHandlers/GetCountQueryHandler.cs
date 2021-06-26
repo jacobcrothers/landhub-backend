@@ -41,6 +41,7 @@ namespace CommandHandlers.QueryHandlers
                     break;
                 case "Role":
                     count = _baseRepositoryRole.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
+                    count += 3;
                     break;
                 case "User":
                     count = _baseRepositoryUser.GetTotalCount(x => x.OrganizationId == request.OrganizationId);

@@ -63,11 +63,11 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg([FromBody] GetAllUserByOrgQuery getUserQuery)
         {
-            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
+            getUserQuery.OrgId = SecurityContext.OrgId;
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
         }
@@ -79,6 +79,19 @@ namespace PropertyHatchWebApi.Controllers
             var getUserQuery = new GetUserSpecificOrgQuery { UserId = SecurityContext.UserId };
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
+        }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetUserTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(User)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
         }
 
         [HttpPost("[action]")]

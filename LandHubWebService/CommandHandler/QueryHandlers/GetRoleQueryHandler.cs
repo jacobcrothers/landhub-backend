@@ -39,10 +39,15 @@ namespace CommandHandlers.QueryHandlers
 
         public async Task<List<RolePermissionMappingTemplate>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
-            var roles = await _roleBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            var defaultRolePermissionMappingList = new List<RolePermissionMappingTemplate>();
+            var roles = await _roleBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
             var permissions = await _permissionBaseRepository.GetAsync();
-            var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
-            var defaultRolePermissionMappingList = defaultRolePermissionMapping.ToList();
+            if (request.PageNumber == 1)
+            {
+                var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
+                defaultRolePermissionMappingList = defaultRolePermissionMapping.ToList();
+            }
+
             foreach (Role role in roles)
             {
                 var defaultRoleTemplate = new RolePermissionMappingTemplate

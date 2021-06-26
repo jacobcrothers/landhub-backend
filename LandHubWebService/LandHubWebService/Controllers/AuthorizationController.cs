@@ -25,7 +25,7 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<ActionResult> GetTotalCount()
+        public async Task<ActionResult> GetRoleTotalCount()
         {
             var getCountQuery = new GetCountQuery()
             {
@@ -38,12 +38,9 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult> GetRole()
+        public async Task<ActionResult> GetRole(GetRoleQuery query)
         {
-            var query = new GetRoleQuery
-            {
-                OrgId = SecurityContext.OrgId
-            };
+            query.OrgId = SecurityContext.OrgId;
             var result = await _mediator.Send(query);
             return Ok(result);
         }
