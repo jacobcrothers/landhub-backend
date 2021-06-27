@@ -24,12 +24,14 @@ namespace Domains.Dtos
         public string CountryName { get; set; }
         public string Occupation { get; set; }
         public string ProfileImage { get; set; }
+        public string TeamName { get; set; }
+        public string RoleName { get; set; }
         public string PassportNumber { get; set; }
         public string UserName { get; set; }
 
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
-
+        public string Status { get; set; }
 
         public string PhoneNumber { get; set; }
         public string ConcurrencyStamp { get; set; }

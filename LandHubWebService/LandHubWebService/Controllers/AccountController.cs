@@ -114,6 +114,21 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
+        public async Task<ActionResult<UserForUi>> RemoveUserFromOrganization([FromBody] RemoveUserCommand removeUserCommand)
+        {
+            removeUserCommand.OrgId = SecurityContext.OrgId;
+            if (removeUserCommand.UserId != SecurityContext.UserId)
+            {
+                await _mediator.Send(removeUserCommand);
+            }
+
+            return Ok();
+        }
+
+
+
+        [HttpPost("[action]")]
+        [Authorize]
         public async Task<ActionResult> AcceptInvitation([FromBody] AcceptInvitationCommand command)
         {
             command.UserName = SecurityContext.UserName;
