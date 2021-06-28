@@ -10,5 +10,10 @@ namespace Domains.DBModels
         public bool IsActive { get; set; }
         public bool IsShownInUi { get; set; }
         public List<Permission> Permissions { get; set; }
+
+        public RolePermissionMappingTemplate()
+        {
+            Permissions = new List<Permission>();
+        }
     }
 }
