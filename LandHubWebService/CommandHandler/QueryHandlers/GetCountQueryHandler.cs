@@ -51,6 +51,9 @@ namespace CommandHandlers.QueryHandlers
                 case "Invitation":
                     count = _baseRepositoryInvitation.GetTotalCount(x => x.OrgId == request.OrganizationId);
                     break;
+                case "Organization":
+                    count = _baseRepositoryUser.GetTotalCount(x => x.UserId == request.UserId);
+                    break;
                 default:
                     break;
             }

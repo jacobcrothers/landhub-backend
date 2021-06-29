@@ -4,11 +4,13 @@ using Domains.Dtos;
 using MediatR;
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Commands
 {
-    public class GetUserSpecificOrgQuery : IRequest<List<Organization>>
+    public class GetUserSpecificOrgQuery : Pagination, IRequest<List<Organization>>
     {
+        [JsonIgnore]
         public string UserId { get; set; }
 
     }

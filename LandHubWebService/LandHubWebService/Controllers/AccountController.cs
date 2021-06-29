@@ -72,14 +72,29 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult<Organization>> GetUserOrganization()
+        public async Task<ActionResult<Organization>> GetUserOrganization([FromBody] GetUserSpecificOrgQuery getUserQuery)
         {
-            var getUserQuery = new GetUserSpecificOrgQuery { UserId = SecurityContext.UserId };
+            getUserQuery.UserId = SecurityContext.UserId;
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
         }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetUserOrganizationTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                UserId = SecurityContext.OrgId,
+                EntityName = typeof(Organization)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
 
         [HttpGet("[action]")]
         [Authorize]
