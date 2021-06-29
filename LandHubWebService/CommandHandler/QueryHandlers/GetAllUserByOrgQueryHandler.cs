@@ -58,7 +58,7 @@ namespace CommandHandlers.QueryHandlers
                 List<string> rolesId = new List<string>();
                 foreach (UserRoleMapping rolePermissionMapping in rolesMapping)
                 {
-                    rolesId.Add(rolePermissionMapping.Id);
+                    rolesId.Add(rolePermissionMapping.RoleId);
                 }
                 user.Roles = rolesId;
                 var uiUser = _mapper.Map<User, UserForUi>(user);
@@ -74,11 +74,17 @@ namespace CommandHandlers.QueryHandlers
 
                 var teamUsersMapping = await _teamUserRoleBaseRepository.GetAllAsync(x =>
                     x.OrganizationId == request.OrgId && x.UserId == userOrganizationMapping.UserId);
-
-                var team = await _teamBaseRepository.GetSingleAsync(x => x.Id == teamUsersMapping.FirstOrDefault().TeamId);
-                if (team != null)
+                if (teamUsersMapping != null)
                 {
-                    uiUser.TeamName = team.TeamName;
+                    var team = await _teamBaseRepository.GetSingleAsync(x => x.Id == teamUsersMapping.FirstOrDefault().TeamId);
+                    if (team != null)
+                    {
+                        uiUser.TeamName = team.TeamName;
+                    }
+                }
+                else
+                {
+                    uiUser.TeamName = "N/A";
                 }
 
                 uiUser.Status = user.Status ?? "Active";
