@@ -62,9 +62,15 @@ namespace CommandHandlers.QueryHandlers
                 }
                 user.Roles = rolesId;
                 var uiUser = _mapper.Map<User, UserForUi>(user);
-
-                var role = await _roleBaseRepository.GetByIdAsync(rolesId.First());
-                uiUser.RoleName = (role == null) ? "N/A" : role.Title;
+                if (rolesId.Count > 0)
+                {
+                    var role = await _roleBaseRepository.GetByIdAsync(rolesId.First());
+                    uiUser.RoleName = (role == null) ? "N/A" : role.Title;
+                }
+                else
+                {
+                    uiUser.RoleName = "N/A";
+                }
 
                 var teamUsersMapping = await _teamUserRoleBaseRepository.GetAllAsync(x =>
                     x.OrganizationId == request.OrgId && x.UserId == userOrganizationMapping.UserId);
