@@ -88,7 +88,7 @@ namespace PropertyHatchWebApi.Controllers
             var getCountQuery = new GetCountQuery()
             {
                 OrganizationId = SecurityContext.OrgId,
-                UserId = SecurityContext.OrgId,
+                UserId = SecurityContext.UserId,
                 EntityName = typeof(Organization)
             };
             var result = await _mediator.Send(getCountQuery);
