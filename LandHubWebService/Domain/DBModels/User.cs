@@ -51,6 +51,7 @@ namespace Domains.DBModels
         public bool LockoutEnabled { get; set; }
         public int AccessFailedCount { get; set; }
         public string ProfileImageUrl { get; set; }
+        public string Status { get; set; }
 
 
 

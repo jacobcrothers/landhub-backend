@@ -40,6 +40,7 @@ namespace CommandHandlers
             var orgId = Guid.NewGuid().ToString();
             user.Id = userId;
             user.OrganizationId = orgId;
+            user.Status = "Active";
 
             var organization = new Organization
             {

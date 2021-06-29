@@ -39,29 +39,42 @@ namespace CommandHandlers.QueryHandlers
 
         public async Task<List<RolePermissionMappingTemplate>> Handle(GetRoleQuery request, CancellationToken cancellationToken)
         {
-            var roles = await _roleBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            var defaultRolePermissionMappingList = new List<RolePermissionMappingTemplate>();
+            var roles = await _roleBaseRepository.GetAllWithPagingAsync(x => (x.OrganizationId == request.OrgId || x.OrganizationId == null), request.PageNumber, request.PageSize);
             var permissions = await _permissionBaseRepository.GetAsync();
-            var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
-            var defaultRolePermissionMappingList = defaultRolePermissionMapping.ToList();
+
             foreach (Role role in roles)
             {
-                var defaultRoleTemplate = new RolePermissionMappingTemplate
-                {
-                    Id = role.Id,
-                    Title = role.Title,
-                    Category = role.Category,
-                    Description = role.Description,
-                    IsActive = role.IsActive,
-                    IsShownInUi = role.IsShownInUi,
-                    Permissions = new List<Permission>()
-                };
+                RolePermissionMappingTemplate defaultRoleTemplate = new RolePermissionMappingTemplate();
 
-                var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
-                foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                if (role.OrganizationId == null)
                 {
-                    defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                    var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
+                    var defaultRole = defaultRolePermissionMapping.ToList().FirstOrDefault(x => x.Id == role.Id);
+                    defaultRolePermissionMappingList.Add(defaultRole);
                 }
-                defaultRolePermissionMappingList.Add(defaultRoleTemplate);
+                else
+                {
+                    defaultRoleTemplate = new RolePermissionMappingTemplate
+                    {
+                        Id = role.Id,
+                        Title = role.Title,
+                        Category = role.Category,
+                        Description = role.Description,
+                        IsActive = role.IsActive,
+                        IsShownInUi = role.IsShownInUi,
+                        Permissions = new List<Permission>()
+                    };
+                    var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
+                    foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                    {
+                        defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                    }
+
+                    defaultRolePermissionMappingList.Add(defaultRoleTemplate);
+                }
+
+
             }
             return defaultRolePermissionMappingList;
         }

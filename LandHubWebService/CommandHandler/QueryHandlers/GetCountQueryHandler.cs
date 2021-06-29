@@ -16,18 +16,21 @@ namespace CommandHandlers.QueryHandlers
     {
 
         private readonly IBaseRepository<Team> _baseRepositoryTeam;
-        private readonly IBaseRepository<User> _baseRepositoryUser;
+        private readonly IBaseRepository<UserOrganizationMapping> _baseRepositoryUser;
         private readonly IBaseRepository<Role> _baseRepositoryRole;
+        private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
 
 
         public GetCountQueryHandler(IBaseRepository<Team> baseRepositoryTeam
              , IBaseRepository<Role> baseRepositoryRole
-             , IBaseRepository<User> baseRepositoryUser
+             , IBaseRepository<UserOrganizationMapping> baseRepositoryUser
+             , IBaseRepository<Invitation> baseRepositoryInvitation
            )
         {
             _baseRepositoryRole = baseRepositoryRole;
             _baseRepositoryTeam = baseRepositoryTeam;
             _baseRepositoryUser = baseRepositoryUser;
+            _baseRepositoryInvitation = baseRepositoryInvitation;
         }
 
 
@@ -40,10 +43,16 @@ namespace CommandHandlers.QueryHandlers
                     count = _baseRepositoryTeam.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
                     break;
                 case "Role":
-                    count = _baseRepositoryRole.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
+                    count = _baseRepositoryRole.GetTotalCount(x => x.OrganizationId == request.OrganizationId || x.OrganizationId == null);
                     break;
                 case "User":
                     count = _baseRepositoryUser.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
+                    break;
+                case "Invitation":
+                    count = _baseRepositoryInvitation.GetTotalCount(x => x.OrgId == request.OrganizationId);
+                    break;
+                case "Organization":
+                    count = _baseRepositoryUser.GetTotalCount(x => x.UserId == request.UserId);
                     break;
                 default:
                     break;

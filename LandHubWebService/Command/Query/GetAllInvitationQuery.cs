@@ -6,12 +6,11 @@ using MediatR;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
 
-namespace Commands
+namespace Commands.Query
 {
-    public class GetUserSpecificOrgQuery : Pagination, IRequest<List<Organization>>
+    public class GetAllInvitationQuery : Pagination, IRequest<List<Invitation>>
     {
         [JsonIgnore]
-        public string UserId { get; set; }
-
+        public string OrgId { get; set; }
     }
 }

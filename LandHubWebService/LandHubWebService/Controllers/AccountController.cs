@@ -63,22 +63,50 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(response);
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg()
+        public async Task<ActionResult<List<UserForUi>>> GetUsersInformationByOrg([FromBody] GetAllUserByOrgQuery getUserQuery)
         {
-            var getUserQuery = new GetAllUserByOrgQuery { OrgId = SecurityContext.OrgId };
+            getUserQuery.OrgId = SecurityContext.OrgId;
+            var response = await _mediator.Send(getUserQuery);
+            return Ok(response);
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult<Organization>> GetUserOrganization([FromBody] GetUserSpecificOrgQuery getUserQuery)
+        {
+            getUserQuery.UserId = SecurityContext.UserId;
             var response = await _mediator.Send(getUserQuery);
             return Ok(response);
         }
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<ActionResult<Organization>> GetUserOrganization()
+        public async Task<ActionResult> GetUserOrganizationTotalCount()
         {
-            var getUserQuery = new GetUserSpecificOrgQuery { UserId = SecurityContext.UserId };
-            var response = await _mediator.Send(getUserQuery);
-            return Ok(response);
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                UserId = SecurityContext.UserId,
+                EntityName = typeof(Organization)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetUserTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(User)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
         }
 
         [HttpPost("[action]")]
@@ -98,6 +126,21 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
         */
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult<UserForUi>> RemoveUserFromOrganization([FromBody] RemoveUserCommand removeUserCommand)
+        {
+            removeUserCommand.OrgId = SecurityContext.OrgId;
+            if (removeUserCommand.UserId != SecurityContext.UserId)
+            {
+                await _mediator.Send(removeUserCommand);
+            }
+
+            return Ok();
+        }
+
+
 
         [HttpPost("[action]")]
         [Authorize]

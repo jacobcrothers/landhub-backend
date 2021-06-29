@@ -55,6 +55,14 @@ namespace CommandHandlers.QueryHandlers
                     {
                         teamForUi.Role = role.Title;
                     }
+                    else
+                    {
+                        teamForUi.Role = "N/A";
+                    }
+                }
+                else
+                {
+                    teamForUi.Role = "N/A";
                 }
                 teamForUi.CreatedBy = createdUser?.DisplayName;
                 teamForUi.Users = new List<UserForUi>();

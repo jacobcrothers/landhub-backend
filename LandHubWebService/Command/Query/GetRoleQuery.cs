@@ -1,14 +1,17 @@
 ﻿
 using Domains.DBModels;
+using Domains.Dtos;
 
 using MediatR;
 
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Commands.Query
 {
-    public class GetRoleQuery : IRequest<List<RolePermissionMappingTemplate>>
+    public class GetRoleQuery : Pagination, IRequest<List<RolePermissionMappingTemplate>>
     {
+        [JsonIgnore]
         public string OrgId { get; set; }
     }
 }
