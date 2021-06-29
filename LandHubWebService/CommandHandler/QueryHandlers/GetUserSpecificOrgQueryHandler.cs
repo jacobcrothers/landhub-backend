@@ -31,7 +31,7 @@ namespace CommandHandlers.QueryHandlers
 
         public async Task<List<Organization>> Handle(GetUserSpecificOrgQuery request, CancellationToken cancellationToken)
         {
-            var userOrganizationMappingList = await _userOrganizationMappingRepository.GetAllAsync(x => x.UserId == request.UserId);
+            var userOrganizationMappingList = await _userOrganizationMappingRepository.GetAllWithPagingAsync(x => x.UserId == request.UserId, request.PageNumber, request.PageSize);
             List<Organization> orgLIst = new List<Organization>();
 
             foreach (UserOrganizationMapping userOrganization in userOrganizationMappingList)
