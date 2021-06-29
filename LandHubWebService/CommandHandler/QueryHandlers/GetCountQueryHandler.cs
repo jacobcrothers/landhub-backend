@@ -16,14 +16,14 @@ namespace CommandHandlers.QueryHandlers
     {
 
         private readonly IBaseRepository<Team> _baseRepositoryTeam;
-        private readonly IBaseRepository<User> _baseRepositoryUser;
+        private readonly IBaseRepository<UserOrganizationMapping> _baseRepositoryUser;
         private readonly IBaseRepository<Role> _baseRepositoryRole;
         private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
 
 
         public GetCountQueryHandler(IBaseRepository<Team> baseRepositoryTeam
              , IBaseRepository<Role> baseRepositoryRole
-             , IBaseRepository<User> baseRepositoryUser
+             , IBaseRepository<UserOrganizationMapping> baseRepositoryUser
              , IBaseRepository<Invitation> baseRepositoryInvitation
            )
         {
