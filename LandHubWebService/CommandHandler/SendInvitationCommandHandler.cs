@@ -48,7 +48,8 @@ namespace CommandHandlers
                 SenderId = request.UserId,
                 Address = request.Address,
                 Phone = request.Phone,
-                TeamId = request.TeamId
+                TeamId = request.TeamId,
+                Name = request.Name
             };
 
             await _baseRepositoryInvitation.Create(invitation);
