@@ -121,6 +121,7 @@ namespace CommandHandler
                     }
                     await _mappingService.MapOrgUser(userId, orgId);
                 }
+                await _baseRepositoryInvitation.Delete(invitation.Id);
             }
 
             var org = await _baseRepositoryOrganization.GetSingleAsync(x => x.Id == orgId);
