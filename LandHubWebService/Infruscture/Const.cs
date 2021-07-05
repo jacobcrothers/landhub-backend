@@ -10,5 +10,10 @@
         public const string EMAIL_TEMPLATE_ACCOUNT_CREATION = "account_creation";
         public const string EMAIL_TEMPLATE_ACCOUNT_CONFIRMATION = "account_confirmation";
         public const string EMAIL_TEMPLATE_PASSWORD_FORGOT = "forgot_password";
+
+        public const string PROPERTY_LIST_PROVIDER_AGENT_PRO = "agent_pro";
+
+        public const string PROPERTY_LIST_IMPORT_FILE_TYPE = "csv";
+
     }
 }
