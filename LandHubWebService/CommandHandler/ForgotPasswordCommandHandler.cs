@@ -3,7 +3,7 @@ using Commands;
 
 using Domains.DBModels;
 
-using Infruscture;
+using Infrastructure;
 
 using MediatR;
 

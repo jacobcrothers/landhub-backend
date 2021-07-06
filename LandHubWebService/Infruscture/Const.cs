@@ -1,4 +1,4 @@
-﻿namespace Infruscture
+﻿namespace Infrastructure
 {
     public class Const
     {

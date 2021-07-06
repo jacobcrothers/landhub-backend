@@ -2,12 +2,11 @@
 
 using MediatR;
 
-using System.Collections.Generic;
-
 namespace Commands
 {
-    public class MapPropertiesColumnCommand : IRequest<List<ColumnMapResult>>
+    public class MapPropertiesColumnCommand : IRequest<ColumnMapResult>
     {
+        public string FileId { get; set; }
         public string FileExtension { get; set; }
         public string ListProvider { get; set; }
         public string PropertyType { get; set; }

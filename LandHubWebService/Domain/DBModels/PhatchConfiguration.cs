@@ -1,6 +1,6 @@
 ﻿namespace Domains.DBModels
 {
-    public class PropertyhatchConfiguration : BaseEntity
+    public class PhatchConfiguration : BaseEntity
     {
         public string ConfigKey { get; set; }
         public object ConfigValue { get; set; }

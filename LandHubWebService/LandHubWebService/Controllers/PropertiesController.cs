@@ -19,12 +19,40 @@ namespace PropertyHatchWebApi.Controllers
             this._mediator = _mediator;
         }
 
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ImportFile([FromBody] ImportFileCommand importFileCommand)
+        {
+            importFileCommand.UserId = "e38beaef-bc04-4167-bb9f-a93a189c4bea";
+            importFileCommand.UserName = "Rokon";
+            importFileCommand.OrgId = "acaa3492-b6d9-414d-b4a2-dfe950799f87";
+            var result = await _mediator.Send(importFileCommand);
+            return Ok(result);
+        }
+
         [HttpPost("[action]")]
         public async Task<IActionResult> MapImportHeader([FromBody] MapPropertiesColumnCommand mapPropertiesColumnCommand)
         {
             var result = await _mediator.Send(mapPropertiesColumnCommand);
             return Ok(result);
         }
+
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> MapProperty([FromBody] CustomColumnMapperCommand customColumnMapper)
+        {
+            var result = await _mediator.Send(customColumnMapper);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        public async Task<IActionResult> InitiateImport([FromBody] InitiateFileImportCommand initiateFileImport)
+        {
+            var result = await _mediator.Send(initiateFileImport);
+            return Ok(result);
+        }
+
+
 
         /* [HttpGet("[action]")]
          public async Task<ActionResult> GetAll(string orgId)
