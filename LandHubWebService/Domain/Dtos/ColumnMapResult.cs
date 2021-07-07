@@ -4,7 +4,7 @@ namespace Domains.Dtos
 {
     public class ColumnMapResult
     {
-        public List<DbColumnStatus> DdColumnsStatus { get; set; }
+        public List<DbColumnStatus> DbColumnsStatus { get; set; }
         public string[] CollumnsInCsv { get; set; }
     }
 

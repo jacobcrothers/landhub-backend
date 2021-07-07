@@ -13,7 +13,7 @@
 
         public const string PROPERTY_LIST_PROVIDER_AGENT_PRO = "agent_pro";
 
-        public const string PROPERTY_LIST_IMPORT_FILE_TYPE = "csv";
+        public const string PROPERTY_LIST_IMPORT_FILE_TYPE_CSV = "csv";
 
     }
 }

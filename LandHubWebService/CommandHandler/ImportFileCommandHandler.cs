@@ -7,7 +7,6 @@ using MediatR;
 using Services.Repository;
 
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -26,11 +25,11 @@ namespace CommandHandlers
             {
                 FileContent = request.FileContent,
                 FileName = request.FileName,
+                Extension = request.Extension,
                 OrgId = request.OrgId,
                 UploadDate = DateTime.UtcNow,
                 UserId = request.UserId,
                 UserName = request.UserName,
-                ColumnMapping = new KeyValuePair<string, string>(),
                 Id = Guid.NewGuid().ToString(),
                 Status = "imported"
             };

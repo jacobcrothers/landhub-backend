@@ -8,6 +8,6 @@ namespace Commands
     {
         public string FileId { get; set; }
 
-        public KeyValuePair<string, string> ColumnMaps { get; set; }
+        public Dictionary<string, string> ColumnMaps { get; set; }
     }
 }

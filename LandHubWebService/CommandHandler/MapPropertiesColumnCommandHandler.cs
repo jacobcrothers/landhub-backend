@@ -24,21 +24,33 @@ namespace CommandHandler
     {
 
         private IBaseRepository<PhatchConfiguration> _baseRepositoryPropertyHatchConfiguration;
+        private IBaseRepository<PropertiesFileImport> _baseRepositoryPropertiesFileImport;
 
-        public MapPropertiesColumnCommandHandler(IBaseRepository<PhatchConfiguration> baseRepositoryPropertyHatchConfiguration)
+        public MapPropertiesColumnCommandHandler(IBaseRepository<PhatchConfiguration> baseRepositoryPropertyHatchConfiguration
+            , IBaseRepository<PropertiesFileImport> baseRepositoryPropertiesFileImport)
         {
             _baseRepositoryPropertyHatchConfiguration = baseRepositoryPropertyHatchConfiguration;
+            _baseRepositoryPropertiesFileImport = baseRepositoryPropertiesFileImport;
         }
 
         public async Task<ColumnMapResult> Handle(MapPropertiesColumnCommand request, CancellationToken cancellationToken)
         {
+            var propertiesFileImport = await _baseRepositoryPropertiesFileImport.GetSingleAsync(x => x.Id == request.FileId);
+
             var dbColumnStatus = new List<DbColumnStatus>();
             var columnDisplayNames = File.ReadLines(@"E:\Kingsville20TX20.csv").First().Split(',');
-            if (request.FileExtension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE)
+
+            if (propertiesFileImport.Extension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV)
             {
+                var fileContent = System.Text.Encoding.UTF8.GetString(propertiesFileImport.FileContent).Split(
+                    new[] { "\r\n", "\r", "\n" },
+                    StringSplitOptions.None
+                );
+
                 if (request.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
                 {
-                    var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_LIST_PROVIDER_AGENT_PRO}_{Const.PROPERTY_LIST_IMPORT_FILE_TYPE}");
+                    columnDisplayNames = fileContent.First().Split(',');
+                    var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_LIST_PROVIDER_AGENT_PRO}_{Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV}");
 
                     var propertyList = (IList)propertyConfig.ConfigValue;
                     foreach (dynamic data in propertyList)
@@ -57,7 +69,7 @@ namespace CommandHandler
             var columnMapResult = new ColumnMapResult
             {
                 CollumnsInCsv = columnDisplayNames,
-                DdColumnsStatus = dbColumnStatus
+                DbColumnsStatus = dbColumnStatus
             };
 
             return columnMapResult;

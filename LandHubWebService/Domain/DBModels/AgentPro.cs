@@ -1,6 +1,8 @@
-﻿namespace Domains.DBModels
+﻿using System;
+
+namespace Domains.DBModels
 {
-    public class AgentPro
+    public class AgentPro : BaseEntity
     {
         public string APN { get; set; }
         public string PropertyAddress { get; set; }
@@ -70,5 +72,12 @@
         public string TBMapPage { get; set; }
         public string LandUse { get; set; }
         public string Longitude { get; set; }
+        public bool IsMigrated { get; set; }
+        public string Error { get; set; }
+        public string OrgId { get; set; }
+        public DateTime ImportedTime { get; set; }
+        public string UserId { get; set; }
+        public string ImportFileId { get; set; }
+
     }
 }
