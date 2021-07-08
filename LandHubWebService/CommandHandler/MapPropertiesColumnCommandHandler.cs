@@ -13,7 +13,6 @@ using Services.Repository;
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -38,7 +37,7 @@ namespace CommandHandler
             var propertiesFileImport = await _baseRepositoryPropertiesFileImport.GetSingleAsync(x => x.Id == request.FileId);
 
             var dbColumnStatus = new List<DbColumnStatus>();
-            var columnDisplayNames = File.ReadLines(@"E:\Kingsville20TX20.csv").First().Split(',');
+            var columnDisplayNames = new List<string>();
 
             if (propertiesFileImport.Extension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV)
             {
@@ -49,7 +48,7 @@ namespace CommandHandler
 
                 if (request.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
                 {
-                    columnDisplayNames = fileContent.First().Split(',');
+                    columnDisplayNames = fileContent.First().Split(',').ToList();
                     var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_LIST_PROVIDER_AGENT_PRO}_{Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV}");
 
                     var propertyList = (IList)propertyConfig.ConfigValue;
