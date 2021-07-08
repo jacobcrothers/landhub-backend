@@ -23,9 +23,9 @@ namespace PropertyHatchWebApi.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> ImportFile([FromBody] ImportFileCommand importFileCommand)
         {
-            importFileCommand.UserId = "e38beaef-bc04-4167-bb9f-a93a189c4bea";
-            importFileCommand.UserName = "Rokon";
-            importFileCommand.OrgId = "acaa3492-b6d9-414d-b4a2-dfe950799f87";
+            importFileCommand.UserId = SecurityContext.UserId;
+            importFileCommand.UserName = SecurityContext.UserName;
+            importFileCommand.OrgId = SecurityContext.OrgId;
             var result = await _mediator.Send(importFileCommand);
             return Ok(result);
         }

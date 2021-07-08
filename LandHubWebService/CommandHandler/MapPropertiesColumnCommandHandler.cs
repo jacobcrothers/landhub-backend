@@ -35,6 +35,9 @@ namespace CommandHandler
         public async Task<ColumnMapResult> Handle(MapPropertiesColumnCommand request, CancellationToken cancellationToken)
         {
             var propertiesFileImport = await _baseRepositoryPropertiesFileImport.GetSingleAsync(x => x.Id == request.FileId);
+            propertiesFileImport.ListProvider = request.ListProvider;
+            propertiesFileImport.PropertyType = request.PropertyType;
+            await _baseRepositoryPropertiesFileImport.UpdateAsync(propertiesFileImport);
 
             var dbColumnStatus = new List<DbColumnStatus>();
             var columnDisplayNames = new List<string>();
