@@ -3,6 +3,7 @@ using Commands;
 
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Threading.Tasks;
@@ -21,6 +22,7 @@ namespace PropertyHatchWebApi.Controllers
 
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<IActionResult> ImportFile([FromBody] ImportFileCommand importFileCommand)
         {
             importFileCommand.UserId = SecurityContext.UserId;
@@ -31,6 +33,7 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<IActionResult> MapImportHeader([FromBody] MapPropertiesColumnCommand mapPropertiesColumnCommand)
         {
             var result = await _mediator.Send(mapPropertiesColumnCommand);
@@ -39,6 +42,7 @@ namespace PropertyHatchWebApi.Controllers
 
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<IActionResult> MapProperty([FromBody] CustomColumnMapperCommand customColumnMapper)
         {
             var result = await _mediator.Send(customColumnMapper);
@@ -46,6 +50,7 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<IActionResult> InitiateImport([FromBody] InitiateFileImportCommand initiateFileImport)
         {
             var result = await _mediator.Send(initiateFileImport);
