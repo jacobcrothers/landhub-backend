@@ -57,6 +57,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("[action]")]
+        public async Task<IActionResult> MigrateData([FromBody] MigrateDataCommand initiateFileImport)
+        {
+            var result = await _mediator.Send(initiateFileImport);
+            return Ok(result);
+        }
+
 
 
         /* [HttpGet("[action]")]
