@@ -77,5 +77,6 @@ namespace Domains.DBModels
         public DateTime ImportedTime { get; set; }
         public string UserId { get; set; }
         public string ImportFileId { get; set; }
+        public string CampaignStatus { get; set; }
     }
 }

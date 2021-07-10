@@ -19,18 +19,21 @@ namespace CommandHandlers.QueryHandlers
         private readonly IBaseRepository<UserOrganizationMapping> _baseRepositoryUser;
         private readonly IBaseRepository<Role> _baseRepositoryRole;
         private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
+        private readonly IBaseRepository<Properties> _baseRepositoryProperties;
 
 
         public GetCountQueryHandler(IBaseRepository<Team> baseRepositoryTeam
              , IBaseRepository<Role> baseRepositoryRole
              , IBaseRepository<UserOrganizationMapping> baseRepositoryUser
              , IBaseRepository<Invitation> baseRepositoryInvitation
+            , IBaseRepository<Properties> baseRepositoryProperties
            )
         {
             _baseRepositoryRole = baseRepositoryRole;
             _baseRepositoryTeam = baseRepositoryTeam;
             _baseRepositoryUser = baseRepositoryUser;
             _baseRepositoryInvitation = baseRepositoryInvitation;
+            _baseRepositoryProperties = baseRepositoryProperties;
         }
 
 
@@ -53,6 +56,9 @@ namespace CommandHandlers.QueryHandlers
                     break;
                 case "Organization":
                     count = _baseRepositoryUser.GetTotalCount(x => x.UserId == request.UserId);
+                    break;
+                case "Properties":
+                    count = _baseRepositoryUser.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
                     break;
                 default:
                     break;

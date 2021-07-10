@@ -1,5 +1,8 @@
 ﻿
 using Commands;
+using Commands.Query;
+
+using Domains.DBModels;
 
 using MediatR;
 
@@ -20,6 +23,27 @@ namespace PropertyHatchWebApi.Controllers
             this._mediator = _mediator;
         }
 
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(Properties)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetAll([FromBody] GetAllPropertiesQuery getAllPropertiesQuery)
+        {
+            getAllPropertiesQuery.OrgId = SecurityContext.OrgId;
+            var result = await _mediator.Send(getAllPropertiesQuery);
+            return Ok(result);
+        }
 
         [HttpPost("[action]")]
         [Authorize]

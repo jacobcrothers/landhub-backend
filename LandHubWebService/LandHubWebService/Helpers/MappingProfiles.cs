@@ -61,6 +61,7 @@ namespace LandHubWebService.Helpers
             CreateMap<ApplicationUser, User>();
             CreateMap<AgentPro, Properties>()
                 .ForMember(d => d.OwnerName, o => o.MapFrom(s => s.OwnerNames));
+            CreateMap<Properties, PropertyForList>();
 
         }
 
