@@ -58,7 +58,7 @@ namespace CommandHandlers.QueryHandlers
                     count = _baseRepositoryUser.GetTotalCount(x => x.UserId == request.UserId);
                     break;
                 case "Properties":
-                    count = _baseRepositoryUser.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
+                    count = _baseRepositoryProperties.GetTotalCount(x => x.OrgId == request.OrganizationId);
                     break;
                 default:
                     break;

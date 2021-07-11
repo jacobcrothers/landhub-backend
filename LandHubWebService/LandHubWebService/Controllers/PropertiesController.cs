@@ -45,6 +45,20 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetProperties(string propertiesId)
+        {
+            var getPropertiesQuery = new GetPropertiesQuery
+            {
+                OrgId = SecurityContext.OrgId,
+                PropertiesId = propertiesId
+            };
+            var result = await _mediator.Send(getPropertiesQuery);
+            return Ok(result);
+        }
+
         [HttpPost("[action]")]
         [Authorize]
         public async Task<IActionResult> ImportFile([FromBody] ImportFileCommand importFileCommand)
