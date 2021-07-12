@@ -12,6 +12,7 @@
         public const string EMAIL_TEMPLATE_PASSWORD_FORGOT = "forgot_password";
 
         public const string PROPERTY_LIST_PROVIDER_AGENT_PRO = "agent_pro";
+        public const string PROPERTY_LIST_PROVIDER_PRYCD = "prycd";
 
         public const string PROPERTY_LIST_IMPORT_FILE_TYPE_CSV = "csv";
 

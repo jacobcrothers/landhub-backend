@@ -1,16 +1,17 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
 
-  <PropertyGroup>
-    <TargetFramework>net5.0</TargetFramework>
-  </PropertyGroup>
+	<PropertyGroup>
+		<TargetFramework>net5.0</TargetFramework>
+	</PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="MediatR" Version="9.0.0" />
-  </ItemGroup>
+	<ItemGroup>
+		<PackageReference Include="MediatR" Version="9.0.0" />
+		<PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
+	</ItemGroup>
 
-  <ItemGroup>
-    <ProjectReference Include="..\Command\Commands.csproj" />
-    <ProjectReference Include="..\Infruscture\PropertyHatchCoreService.csproj" />
-  </ItemGroup>
+	<ItemGroup>
+		<ProjectReference Include="..\Command\Commands.csproj" />
+		<ProjectReference Include="..\Infruscture\PropertyHatchCoreService.csproj" />
+	</ItemGroup>
 
 </Project>
