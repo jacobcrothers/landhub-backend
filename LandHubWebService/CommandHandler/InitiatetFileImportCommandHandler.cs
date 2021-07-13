@@ -26,14 +26,17 @@ namespace CommandHandlers
     {
         private IBaseRepository<PropertiesFileImport> _baseRepositoryPropertiesFileImport;
         private IBaseRepository<AgentPro> _baseRepositoryPropertiesAgentPro;
+        private IBaseRepository<Prycd> _baseRepositoryPropertiesPrycd;
         private readonly ILogger<InitiatetFileImportCommandHandler> _logger;
         public InitiatetFileImportCommandHandler(IBaseRepository<PropertiesFileImport> baseRepositoryPropertiesFileImport
             , IBaseRepository<AgentPro> baseRepositoryPropertiesAgentPro
-            , ILogger<InitiatetFileImportCommandHandler> logger)
+            , ILogger<InitiatetFileImportCommandHandler> logger
+            , IBaseRepository<Prycd> baseRepositoryPropertiesPrycd)
         {
             _baseRepositoryPropertiesFileImport = baseRepositoryPropertiesFileImport;
             _baseRepositoryPropertiesAgentPro = baseRepositoryPropertiesAgentPro;
             _logger = logger;
+            _baseRepositoryPropertiesPrycd = baseRepositoryPropertiesPrycd;
         }
         public async Task<string> Handle(InitiateFileImportCommand request, CancellationToken cancellationToken)
         {
@@ -104,7 +107,55 @@ namespace CommandHandlers
             }
             else if (propertiesFileImport.ListProvider == Const.PROPERTY_LIST_PROVIDER_PRYCD)
             {
+                var prycdList = new List<Prycd>();
+                if (propertiesFileImport.Status == "ColumnMapped")
+                {
+                    try
+                    {
+                        for (int i = 1; i < fileContent.Length; i++)
+                        {
+                            try
+                            {
+                                var record = fileContent[i].Split(',');
+                                var prycd = new Prycd()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    UserId = propertiesFileImport.UserId,
+                                    OrgId = propertiesFileImport.OrgId,
+                                    ImportFileId = propertiesFileImport.Id
+                                };
 
+                                if (record.Count() > 1)
+                                {
+                                    totalRecordCount++;
+                                    for (int j = 0; j < fileColumns.Length; j++)
+                                    {
+                                        if (propertiesFileImport.ColumnMapping.ContainsValue(fileColumns[j]))
+                                        {
+                                            var propertyName = propertiesFileImport.ColumnMapping.FirstOrDefault(x => x.Value == fileColumns[j]).Key;
+                                            if (prycd.HasProperty(propertyName))
+                                            {
+                                                var data = record[j]?.ToString().Trim();
+                                                prycd.GetType().GetProperty(propertyName).SetValue(prycd, data ?? string.Empty);
+                                            }
+                                        }
+                                    }
+                                    await _baseRepositoryPropertiesPrycd.Create(prycd);
+                                    successRecordCount++;
+                                }
+                            }
+                            catch (Exception ex)
+                            {
+                                _logger.LogError(ex.Message);
+                                failedRecordCount++;
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+
+                    }
+                }
             }
             propertiesFileImport.Message = $"Total record: {totalRecordCount}. Success import: {successRecordCount}. Filed to import: {failedRecordCount}";
             await _baseRepositoryPropertiesFileImport.UpdateAsync(propertiesFileImport);

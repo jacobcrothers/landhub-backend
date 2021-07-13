@@ -1,4 +1,6 @@
-﻿namespace Domains.DBModels
+﻿using System;
+
+namespace Domains.DBModels
 {
     public class Prycd : BaseEntity
     {
@@ -238,5 +240,11 @@
         public string LMSPriorDocBookPage { get; set; }
         public string Reference { get; set; }
         public string Filtered_Out { get; set; }
+
+        public string OrgId { get; set; }
+        public DateTime ImportedTime { get; set; }
+        public string UserId { get; set; }
+        public string ImportFileId { get; set; }
+        public string CampaignStatus { get; set; }
     }
 }

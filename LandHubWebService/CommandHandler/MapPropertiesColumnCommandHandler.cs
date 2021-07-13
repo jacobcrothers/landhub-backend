@@ -42,7 +42,7 @@ namespace CommandHandler
             var dbColumnStatus = new List<DbColumnStatus>();
             var columnDisplayNames = new List<string>();
 
-            if (propertiesFileImport.Extension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV)
+            if (propertiesFileImport.Extension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV && propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
             {
                 var fileContent = System.Text.Encoding.UTF8.GetString(propertiesFileImport.FileContent).Split(
                     new[] { "\r\n", "\r", "\n" },
@@ -53,6 +53,31 @@ namespace CommandHandler
                 {
                     columnDisplayNames = fileContent.First().Split(',').ToList();
                     var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_LIST_PROVIDER_AGENT_PRO}_{Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV}");
+
+                    var propertyList = (IList)propertyConfig.ConfigValue;
+                    foreach (dynamic data in propertyList)
+                    {
+                        IDictionary<string, object> propertyValues = data;
+                        dbColumnStatus.Add(new DbColumnStatus
+                        {
+                            ColumnName = propertyValues["ColumnName"].ToString(),
+                            DisplayName = propertyValues["DisplayName"].ToString(),
+                            IsMapped = columnDisplayNames.Contains(propertyValues["DisplayName"].ToString())
+                        });
+                    }
+                }
+            }
+            else if (propertiesFileImport.Extension.ToLower() == Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV && propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
+            {
+                var fileContent = System.Text.Encoding.UTF8.GetString(propertiesFileImport.FileContent).Split(
+                    new[] { "\r\n", "\r", "\n" },
+                    StringSplitOptions.None
+                );
+
+                if (request.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
+                {
+                    columnDisplayNames = fileContent.First().Split(',').ToList();
+                    var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_LIST_PROVIDER_PRYCD}_{Const.PROPERTY_LIST_IMPORT_FILE_TYPE_CSV}");
 
                     var propertyList = (IList)propertyConfig.ConfigValue;
                     foreach (dynamic data in propertyList)

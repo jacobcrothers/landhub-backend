@@ -62,6 +62,33 @@ namespace LandHubWebService.Helpers
             CreateMap<AgentPro, Properties>()
                 .ForMember(d => d.OwnerName, o => o.MapFrom(s => s.OwnerNames));
             CreateMap<Properties, PropertyForList>();
+            CreateMap<Prycd, Properties>()
+               .ForMember(d => d.APN, o => o.MapFrom(s => s.APNFormatted))
+               .ForMember(d => d.CountyName, o => o.MapFrom(s => s.County))
+               .ForMember(d => d.LandUse, o => o.MapFrom(s => s.LandUse))
+               .ForMember(d => d.Longitude, o => o.MapFrom(s => s.Longitude))
+               .ForMember(d => d.LotArea, o => o.MapFrom(s => s.ACRES))
+               .ForMember(d => d.LotAreaUnits, o => o.MapFrom(s => s.ACRES))
+               .ForMember(d => d.LotNumber, o => o.MapFrom(s => s.LegalLot))
+               .ForMember(d => d.MailAddress, o => o.MapFrom(s => s.MailingStreetAddress))
+               .ForMember(d => d.MCity, o => o.MapFrom(s => s.MailCity))
+               .ForMember(d => d.MState, o => o.MapFrom(s => s.MailState))
+               .ForMember(d => d.MUnitNumber, o => o.MapFrom(s => s.MailUnitNumber))
+               .ForMember(d => d.MZip, o => o.MapFrom(s => s.MailZZIP9))
+               .ForMember(d => d.MZip4, o => o.MapFrom(s => s.MailZZIP9))
+               .ForMember(d => d.Owner1FName, o => o.MapFrom(s => s.Owner1FirstName))
+               .ForMember(d => d.Owner1LName, o => o.MapFrom(s => s.OwnerLastname1))
+               .ForMember(d => d.Owner2FName, o => o.MapFrom(s => s.Owner2FirstName))
+               .ForMember(d => d.Owner2LName, o => o.MapFrom(s => s.OwnerLastname2))
+               .ForMember(d => d.OwnerNameFormatted, o => o.MapFrom(s => s.OwnerMailingName))
+               .ForMember(d => d.OwnerName, o => o.MapFrom(s => s.OwnersAll))
+               .ForMember(d => d.PropertyAddress, o => o.MapFrom(s => s.SitusStreetAddress))
+               .ForMember(d => d.PState, o => o.MapFrom(s => s.SitusStreetAddress))
+               .ForMember(d => d.PStreetName, o => o.MapFrom(s => s.SitusStreetName))
+               .ForMember(d => d.PStreetSuffix, o => o.MapFrom(s => s.SitusMode))
+               .ForMember(d => d.PZip, o => o.MapFrom(s => s.SitusZipCode))
+               .ForMember(d => d.PZip4, o => o.MapFrom(s => s.SitusZip9))
+               ;
 
         }
 

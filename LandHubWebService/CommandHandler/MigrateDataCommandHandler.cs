@@ -4,6 +4,8 @@ using Commands;
 
 using Domains.DBModels;
 
+using Infrastructure;
+
 using MediatR;
 
 using Services.Repository;
@@ -18,17 +20,20 @@ namespace CommandHandlers
     {
         private IBaseRepository<PropertiesFileImport> _baseRepositoryPropertiesFileImport;
         private IBaseRepository<AgentPro> _baseRepositoryPropertiesAgentPro;
+        private IBaseRepository<Prycd> _baseRepositoryPropertiesPrycd;
         private IBaseRepository<Properties> _baseRepositoryProperties;
         private IMapper _mapper;
         public MigrateDataCommandHandler(IBaseRepository<PropertiesFileImport> baseRepositoryPropertiesFileImport
             , IBaseRepository<AgentPro> baseRepositoryPropertiesAgentPro
             , IMapper mapper
-            , IBaseRepository<Properties> baseRepositoryProperties)
+            , IBaseRepository<Properties> baseRepositoryProperties
+            , IBaseRepository<Prycd> baseRepositoryPropertiesPrycd)
         {
             _baseRepositoryPropertiesFileImport = baseRepositoryPropertiesFileImport;
             _baseRepositoryPropertiesAgentPro = baseRepositoryPropertiesAgentPro;
             _mapper = mapper;
             _baseRepositoryProperties = baseRepositoryProperties;
+            _baseRepositoryPropertiesPrycd = baseRepositoryPropertiesPrycd;
         }
         public async Task<string> Handle(MigrateDataCommand request, CancellationToken cancellationToken)
         {
@@ -37,21 +42,41 @@ namespace CommandHandlers
             int failedRecordCount = 0;
             int totalRecordCount = 0;
 
-            var agentProData = await _baseRepositoryPropertiesAgentPro.GetAllAsync(x => x.ImportFileId == request.FileId);
-
-            foreach (AgentPro agentPro in agentProData)
+            if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
             {
-                try
+                var agentProData = await _baseRepositoryPropertiesAgentPro.GetAllAsync(x => x.ImportFileId == request.FileId);
+                foreach (AgentPro agentPro in agentProData)
                 {
-                    var properties = _mapper.Map<AgentPro, Properties>(agentPro);
-                    await _baseRepositoryProperties.Create(properties);
-                    successRecordCount++;
+                    try
+                    {
+                        var properties = _mapper.Map<AgentPro, Properties>(agentPro);
+                        await _baseRepositoryProperties.Create(properties);
+                        successRecordCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        failedRecordCount++;
+                    }
+                    totalRecordCount++;
                 }
-                catch (Exception ex)
+            }
+            else if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
+            {
+                var prycdList = await _baseRepositoryPropertiesPrycd.GetAllAsync(x => x.ImportFileId == request.FileId);
+                foreach (Prycd prycd in prycdList)
                 {
-                    failedRecordCount++;
+                    try
+                    {
+                        var properties = _mapper.Map<Prycd, Properties>(prycd);
+                        await _baseRepositoryProperties.Create(properties);
+                        successRecordCount++;
+                    }
+                    catch (Exception ex)
+                    {
+                        failedRecordCount++;
+                    }
+                    totalRecordCount++;
                 }
-                totalRecordCount++;
             }
             propertiesFileImport.Status = "File Migrated";
             propertiesFileImport.Message = $"Total record: {totalRecordCount}. Successfully migrated: {successRecordCount}. Filed to migrate: {failedRecordCount}";
