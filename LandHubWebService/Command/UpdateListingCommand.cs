@@ -42,6 +42,7 @@ namespace Commands
         public bool Water { get; set; }
         public string LegalDescription { get; set; }
         public string Sewage { get; set; }
+        public bool IsFeaturedListing { get; set; }
 
     }
 }
