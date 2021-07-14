@@ -1,11 +1,12 @@
 ﻿
 using Commands;
 using Commands.Query;
-
+using Domains.DBModels;
 using MediatR;
 
 using Microsoft.AspNetCore.Mvc;
-
+using MongoDB.Driver;
+using Services.Repository;
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -15,9 +16,17 @@ namespace PropertyHatchWebApi.Controllers
     public class ListingController : BaseController
     {
         private readonly IMediator _mediator;
-        public ListingController(IMediator _mediator)
+        private readonly IMongoLandHubDBContext _mongoContext;
+        private readonly IMongoCollection<Listing> _dbCollection;
+        public ListingController(IMediator _mediator, IMongoLandHubDBContext context)
         {
             this._mediator = _mediator;
+            //_mongoContext = context;
+
+
+        //_dbCollection = _mongoContext.GetCollection<Listing>("Listing");
+        //    //_dbCollection.UpdateMany<Listing>(x => true, Builders<Listing>.Update.Set(x => x.OrganizationId, "6bdc1f5c-482e-4ee9-95d8-24d4011025ce"));
+        //    _dbCollection.DeleteManyAsync(x=>true);
         }
 
         [HttpGet("[action]")]
