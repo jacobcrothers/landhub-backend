@@ -17,6 +17,7 @@ namespace Domains.Dtos
     {
         public string ColumnName { get; set; }
         public string DisplayName { get; set; }
+        public bool IsDefault { get; set; }
         public bool IsMapped { get; set; }
     }
 

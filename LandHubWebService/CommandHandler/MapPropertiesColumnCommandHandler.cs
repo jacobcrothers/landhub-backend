@@ -58,10 +58,12 @@ namespace CommandHandler
                     foreach (dynamic data in propertyList)
                     {
                         IDictionary<string, object> propertyValues = data;
+                        var colName = propertyValues["ColumnName"].ToString();
                         dbColumnStatus.Add(new DbColumnStatus
                         {
                             ColumnName = propertyValues["ColumnName"].ToString(),
                             DisplayName = propertyValues["DisplayName"].ToString(),
+                            IsDefault = Const.DEFAULT_COLUMNS.Contains(colName, StringComparer.OrdinalIgnoreCase),
                             IsMapped = columnDisplayNames.Contains(propertyValues["DisplayName"].ToString())
                         });
                     }
@@ -83,12 +85,14 @@ namespace CommandHandler
                     foreach (dynamic data in propertyList)
                     {
                         IDictionary<string, object> propertyValues = data;
+                        var colName = propertyValues["ColumnName"].ToString();
                         dbColumnStatus.Add(new DbColumnStatus
                         {
                             ColumnName = propertyValues["ColumnName"].ToString(),
                             DisplayName = propertyValues["DisplayName"].ToString(),
+                            IsDefault = Const.DEFAULT_COLUMNS.Contains(colName, StringComparer.OrdinalIgnoreCase),
                             IsMapped = columnDisplayNames.Contains(propertyValues["DisplayName"].ToString())
-                        });
+                        }); ;
                     }
                 }
             }
