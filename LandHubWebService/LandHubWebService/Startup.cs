@@ -120,7 +120,7 @@ namespace LandHubWebService
             services.AddCors(options =>
             {
                 options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200").AllowAnyHeader().AllowAnyMethod());
+                    builder => builder.WithOrigins("http://localhost:4200", "https://ph-saas-ui.propertyhatch.com").AllowAnyHeader().AllowAnyMethod());
             });
 
             services.AddAuthentication(x =>
