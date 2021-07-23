@@ -4,6 +4,8 @@ LABEL author="Kevin"
 
 WORKDIR /app
 
+ENV ASPNETCORE_URLS=http://+:5001
+
 # Copy csproj and restore as distinct layers
 COPY LandHubWebService/LandHubWebService/*.csproj ./
 RUN dotnet restore
