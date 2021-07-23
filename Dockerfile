@@ -34,6 +34,6 @@ RUN dotnet dev-certs https --trust
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-EXPOSE 5001
+EXPOSE 5001 443
 
 ENTRYPOINT ["dotnet", "PropertyHatchWebApi.dll"]
