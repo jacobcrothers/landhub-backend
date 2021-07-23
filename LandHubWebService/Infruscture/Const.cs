@@ -18,7 +18,7 @@ namespace Infrastructure
 
         public const string PROPERTY_LIST_IMPORT_FILE_TYPE_CSV = "csv";
 
-        public static List<string> DEFAULT_COLUMNS = new List<string> { "LandUse","LandUse","Longitude","Longitude","LotArea","ACRES","LotAreaUnits","acres","LotNumber",
+        public static List<string> DEFAULT_COLUMNS = new List<string> { "APN","APNFormatted","LandUse","LandUse","Longitude","Longitude","LotArea","ACRES","LotAreaUnits","acres","LotNumber",
         "LegalLot","MailAddress","MailingStreetAddress","MCity","MailCity","MState","MailState","MUnitNumber","MailUnitNumber","MZip","MailZZIP9","MZip4","MailZZIP9","Owner1FName",
         "Owner1FirstName","Owner1LName","OwnerLastname1","Owner2FName","Owner2FirstName","Owner2LName","OwnerLastname2","OwnerNameFormatted","OwnerMailingName","OwnerNames",
         "OwnersAll","PropertyAddress","SitusStreetAddress","PState","SitusState","PStreetName","SitusStreetName","PStreetSuffix","SitusMode","PZip","SitusZipCode","PZip4",
