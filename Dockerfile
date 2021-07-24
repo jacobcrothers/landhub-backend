@@ -4,6 +4,8 @@ LABEL author="Kevin"
 
 WORKDIR /app
 
+ENV ASPNETCORE_URLS=http://+:5001
+
 # Copy csproj and restore as distinct layers
 COPY LandHubWebService/LandHubWebService/*.csproj ./
 RUN dotnet restore
@@ -32,6 +34,6 @@ RUN dotnet dev-certs https --trust
 WORKDIR /app
 COPY --from=build-env /app/out .
 
-EXPOSE 5001
+EXPOSE 5001 443
 
 ENTRYPOINT ["dotnet", "PropertyHatchWebApi.dll"]
