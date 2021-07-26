@@ -11,6 +11,7 @@ using MediatR;
 using Services.Repository;
 
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -23,17 +24,20 @@ namespace CommandHandlers
         private IBaseRepository<Prycd> _baseRepositoryPropertiesPrycd;
         private IBaseRepository<Properties> _baseRepositoryProperties;
         private IMapper _mapper;
+        private IBaseRepository<PhatchConfiguration> _baseRepositoryPropertyHatchConfiguration;
         public MigrateDataCommandHandler(IBaseRepository<PropertiesFileImport> baseRepositoryPropertiesFileImport
             , IBaseRepository<AgentPro> baseRepositoryPropertiesAgentPro
             , IMapper mapper
             , IBaseRepository<Properties> baseRepositoryProperties
-            , IBaseRepository<Prycd> baseRepositoryPropertiesPrycd)
+            , IBaseRepository<Prycd> baseRepositoryPropertiesPrycd
+            , IBaseRepository<PhatchConfiguration> baseRepositoryPropertyHatchConfiguration)
         {
             _baseRepositoryPropertiesFileImport = baseRepositoryPropertiesFileImport;
             _baseRepositoryPropertiesAgentPro = baseRepositoryPropertiesAgentPro;
             _mapper = mapper;
             _baseRepositoryProperties = baseRepositoryProperties;
             _baseRepositoryPropertiesPrycd = baseRepositoryPropertiesPrycd;
+            _baseRepositoryPropertyHatchConfiguration = baseRepositoryPropertyHatchConfiguration;
         }
         public async Task<string> Handle(MigrateDataCommand request, CancellationToken cancellationToken)
         {
@@ -41,47 +45,103 @@ namespace CommandHandlers
             int successRecordCount = 0;
             int failedRecordCount = 0;
             int totalRecordCount = 0;
+            int alreadyExistCount = 0;
+
+            var propertyConfig = await _baseRepositoryPropertyHatchConfiguration.GetSingleAsync(x => x.ConfigKey == $"{Const.PROPERTY_SEQUENCE_NUMBER}");
+            if (propertyConfig == null)
+            {
+                propertyConfig = new PhatchConfiguration()
+                {
+                    Id = Guid.NewGuid().ToString(),
+                    ConfigKey = Const.PROPERTY_SEQUENCE_NUMBER,
+                    ConfigValue = 1000000
+                };
+                await _baseRepositoryPropertyHatchConfiguration.Create(propertyConfig);
+            }
 
             if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
             {
                 var agentProData = await _baseRepositoryPropertiesAgentPro.GetAllAsync(x => x.ImportFileId == request.FileId);
+                int phatchNumber = Convert.ToInt32(propertyConfig.ConfigValue);
+
+                if (agentProData.Count() > 0)
+                {
+                    propertyConfig.ConfigValue = (phatchNumber + agentProData.Count() + 100);
+                    await _baseRepositoryPropertyHatchConfiguration.UpdateAsync(propertyConfig);
+                }
+
                 foreach (AgentPro agentPro in agentProData)
                 {
                     try
                     {
                         var properties = _mapper.Map<AgentPro, Properties>(agentPro);
-                        await _baseRepositoryProperties.Create(properties);
-                        successRecordCount++;
+                        properties.PhatchNumber = phatchNumber;
+
+                        if (await IsPropertyNotAvaliable(properties.APN))
+                        {
+                            await _baseRepositoryProperties.Create(properties);
+                            successRecordCount++;
+                        }
+                        else
+                        {
+                            alreadyExistCount++;
+                        }
                     }
                     catch (Exception ex)
                     {
                         failedRecordCount++;
                     }
                     totalRecordCount++;
+                    phatchNumber++;
                 }
             }
             else if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
             {
                 var prycdList = await _baseRepositoryPropertiesPrycd.GetAllAsync(x => x.ImportFileId == request.FileId);
+                int phatchNumber = Convert.ToInt32(propertyConfig.ConfigValue);
+
+                if (prycdList.Count() > 0)
+                {
+                    propertyConfig.ConfigValue = (phatchNumber + prycdList.Count() + 100);
+                    await _baseRepositoryPropertyHatchConfiguration.UpdateAsync(propertyConfig);
+                }
+
                 foreach (Prycd prycd in prycdList)
                 {
                     try
                     {
                         var properties = _mapper.Map<Prycd, Properties>(prycd);
+                        properties.PhatchNumber = phatchNumber;
+
                         await _baseRepositoryProperties.Create(properties);
-                        successRecordCount++;
+                        if (await IsPropertyNotAvaliable(properties.APN))
+                        {
+                            await _baseRepositoryProperties.Create(properties);
+                            successRecordCount++;
+                        }
+                        else
+                        {
+                            alreadyExistCount++;
+                        }
                     }
                     catch (Exception ex)
                     {
                         failedRecordCount++;
                     }
                     totalRecordCount++;
+                    phatchNumber++;
                 }
             }
             propertiesFileImport.Status = "File Migrated";
-            propertiesFileImport.Message = $"Total record: {totalRecordCount}. Successfully migrated: {successRecordCount}. Filed to migrate: {failedRecordCount}";
+            propertiesFileImport.Message = $"Total record: {totalRecordCount}. Successfully migrated: {successRecordCount}. Existed properties: {alreadyExistCount}. Filed to migrate: {failedRecordCount}.";
             await _baseRepositoryPropertiesFileImport.UpdateAsync(propertiesFileImport);
             return propertiesFileImport.Message;
+        }
+
+        private async Task<bool> IsPropertyNotAvaliable(string apn)
+        {
+            var property = await _baseRepositoryProperties.GetSingleAsync(it => it.APN == apn);
+            return property == null;
         }
     }
 }

@@ -4,7 +4,7 @@ namespace Domains.DBModels
 {
     public class Properties : BaseEntity
     {
-
+        public int PhatchNumber { get; set; }
         public string APN { get; set; }
         public string PropertyAddress { get; set; }
         public string PCity { get; set; }
