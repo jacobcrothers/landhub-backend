@@ -53,7 +53,7 @@ namespace CommandHandlers
 
             var fileColumns = fileContent.First().Split(',');
 
-            if (propertiesFileImport.ListProvider == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
+            if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
             {
 
                 var agentProList = new List<AgentPro>();
@@ -113,7 +113,7 @@ namespace CommandHandlers
                     }
                 }
             }
-            else if (propertiesFileImport.ListProvider == Const.PROPERTY_LIST_PROVIDER_PRYCD)
+            else if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
             {
                 var prycdList = new List<Prycd>();
                 if (propertiesFileImport.Status == "ColumnMapped")
