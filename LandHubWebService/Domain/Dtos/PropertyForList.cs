@@ -2,6 +2,7 @@
 {
     public class PropertyForList
     {
+        public int PhatchNumber { get; set; }
         public string Id { get; set; }
         public string APN { get; set; }
         public string PropertyAddress { get; set; }

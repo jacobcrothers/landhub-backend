@@ -15,6 +15,7 @@ namespace Infrastructure
 
         public const string PROPERTY_LIST_PROVIDER_AGENT_PRO = "agent_pro";
         public const string PROPERTY_LIST_PROVIDER_PRYCD = "prycd";
+        public const string PROPERTY_SEQUENCE_NUMBER = "property_sequence_number";
 
         public const string PROPERTY_LIST_IMPORT_FILE_TYPE_CSV = "csv";
 

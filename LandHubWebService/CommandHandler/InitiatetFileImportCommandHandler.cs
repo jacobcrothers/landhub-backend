@@ -44,6 +44,7 @@ namespace CommandHandlers
             int successRecordCount = 0;
             int failedRecordCount = 0;
             int totalRecordCount = 0;
+            int alreadyExistCount = 0;
 
             var fileContent = System.Text.Encoding.UTF8.GetString(propertiesFileImport.FileContent).Split(
                        new[] { "\r\n", "\r", "\n" },
@@ -52,7 +53,7 @@ namespace CommandHandlers
 
             var fileColumns = fileContent.First().Split(',');
 
-            if (propertiesFileImport.ListProvider == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
+            if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_AGENT_PRO)
             {
 
                 var agentProList = new List<AgentPro>();
@@ -88,8 +89,15 @@ namespace CommandHandlers
                                             }
                                         }
                                     }
-                                    await _baseRepositoryPropertiesAgentPro.Create(agentPro);
-                                    successRecordCount++;
+                                    if (await IsPropertyNotAvaliableInAgentPro(agentPro.APN))
+                                    {
+                                        await _baseRepositoryPropertiesAgentPro.Create(agentPro);
+                                        successRecordCount++;
+                                    }
+                                    else
+                                    {
+                                        alreadyExistCount++;
+                                    }
                                 }
                             }
                             catch (Exception ex)
@@ -105,7 +113,7 @@ namespace CommandHandlers
                     }
                 }
             }
-            else if (propertiesFileImport.ListProvider == Const.PROPERTY_LIST_PROVIDER_PRYCD)
+            else if (propertiesFileImport.ListProvider.ToLower() == Const.PROPERTY_LIST_PROVIDER_PRYCD)
             {
                 var prycdList = new List<Prycd>();
                 if (propertiesFileImport.Status == "ColumnMapped")
@@ -140,8 +148,16 @@ namespace CommandHandlers
                                             }
                                         }
                                     }
-                                    await _baseRepositoryPropertiesPrycd.Create(prycd);
-                                    successRecordCount++;
+
+                                    if (await IsPropertyNotAvaliableInPrycd(prycd.APNFormatted))
+                                    {
+                                        await _baseRepositoryPropertiesPrycd.Create(prycd);
+                                        successRecordCount++;
+                                    }
+                                    else
+                                    {
+                                        alreadyExistCount++;
+                                    }
                                 }
                             }
                             catch (Exception ex)
@@ -157,9 +173,20 @@ namespace CommandHandlers
                     }
                 }
             }
-            propertiesFileImport.Message = $"Total record: {totalRecordCount}. Success import: {successRecordCount}. Filed to import: {failedRecordCount}";
+            propertiesFileImport.Message = $"Total record: {totalRecordCount}. Success import: {successRecordCount}. Existed properties: {alreadyExistCount}. Filed to import: {failedRecordCount}";
             await _baseRepositoryPropertiesFileImport.UpdateAsync(propertiesFileImport);
             return propertiesFileImport.Message;
+        }
+
+        private async Task<bool> IsPropertyNotAvaliableInAgentPro(string apn)
+        {
+            var property = await _baseRepositoryPropertiesAgentPro.GetSingleAsync(it => it.APN == apn);
+            return property == null;
+        }
+        private async Task<bool> IsPropertyNotAvaliableInPrycd(string apn)
+        {
+            var property = await _baseRepositoryPropertiesPrycd.GetSingleAsync(it => it.APNFormatted == apn);
+            return property == null;
         }
     }
 }
