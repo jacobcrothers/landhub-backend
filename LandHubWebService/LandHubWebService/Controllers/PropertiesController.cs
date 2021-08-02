@@ -72,6 +72,17 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
+        public async Task<IActionResult> UpdatePropertiesResource([FromBody] PropertiesResourceUpdateCommand propertiesResourceUpdate)
+        {
+            propertiesResourceUpdate.OrgId = SecurityContext.OrgId;
+            var result = await _mediator.Send(propertiesResourceUpdate);
+            return Ok(result);
+        }
+
+
+
+        [HttpPost("[action]")]
+        [Authorize]
         public async Task<IActionResult> MapImportHeader([FromBody] MapPropertiesColumnCommand mapPropertiesColumnCommand)
         {
             var result = await _mediator.Send(mapPropertiesColumnCommand);
@@ -91,6 +102,7 @@ namespace PropertyHatchWebApi.Controllers
         [Authorize]
         public async Task<IActionResult> InitiateImport([FromBody] InitiateFileImportCommand initiateFileImport)
         {
+            initiateFileImport.OrgId = SecurityContext.OrgId;
             var result = await _mediator.Send(initiateFileImport);
             return Ok(result);
         }
@@ -98,6 +110,7 @@ namespace PropertyHatchWebApi.Controllers
         [HttpPost("[action]")]
         public async Task<IActionResult> MigrateData([FromBody] MigrateDataCommand initiateFileImport)
         {
+            initiateFileImport.OrgId = SecurityContext.OrgId;
             var result = await _mediator.Send(initiateFileImport);
             return Ok(result);
         }

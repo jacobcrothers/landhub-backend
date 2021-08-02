@@ -286,20 +286,8 @@ namespace Domains.DBModels
         public string Filtered_Out { get; set; }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+        public string[] Images { get; set; }
+        public string[] Documents { get; set; }
 
         public string OrgId { get; set; }
         public DateTime ImportedTime { get; set; }

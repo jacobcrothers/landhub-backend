@@ -1,4 +1,6 @@
-﻿namespace Domains.DBModels
+﻿using System;
+
+namespace Domains.DBModels
 {
     public class PhFile : BaseEntity
     {
@@ -8,5 +10,8 @@
         public string Extension { get; set; }
         public double FileSize { get; set; }
         public string Url { get; set; }
+        public string FileKey { get; set; }
+        public string OrgId { get; set; }
+        public DateTime UploadDate { get; set; }
     }
 }

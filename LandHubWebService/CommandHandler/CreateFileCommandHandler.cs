@@ -8,7 +8,6 @@ using MediatR;
 
 using Services.Repository;
 
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -30,7 +29,8 @@ namespace CommandHandlers
         protected override async Task<string> Handle(CreateFileCommand request, CancellationToken cancellationToken)
         {
             var file = _mapper.Map<CreateFileCommand, PhFile>(request);
-            file.Id = Guid.NewGuid().ToString();
+            file.Id = file.FileKey;
+            file.UploadDate = System.DateTime.UtcNow;
             await _baseRepositoryPhFiles.Create(file);
 
             return file.Id;
