@@ -77,7 +77,7 @@ namespace CommandHandlers
                         var properties = _mapper.Map<AgentPro, Properties>(agentPro);
                         properties.PhatchNumber = phatchNumber;
 
-                        if (await IsPropertyNotAvaliable(properties.APN))
+                        if (await IsPropertyNotAvaliable(properties.APN, request.OrgId))
                         {
                             await _baseRepositoryProperties.Create(properties);
                             successRecordCount++;
@@ -114,7 +114,7 @@ namespace CommandHandlers
                         properties.PhatchNumber = phatchNumber;
 
                         await _baseRepositoryProperties.Create(properties);
-                        if (await IsPropertyNotAvaliable(properties.APN))
+                        if (await IsPropertyNotAvaliable(properties.APN, request.OrgId))
                         {
                             await _baseRepositoryProperties.Create(properties);
                             successRecordCount++;
@@ -138,9 +138,9 @@ namespace CommandHandlers
             return propertiesFileImport.Message;
         }
 
-        private async Task<bool> IsPropertyNotAvaliable(string apn)
+        private async Task<bool> IsPropertyNotAvaliable(string apn, string orgId)
         {
-            var property = await _baseRepositoryProperties.GetSingleAsync(it => it.APN == apn);
+            var property = await _baseRepositoryProperties.GetSingleAsync(it => it.APN == apn && it.OrgId == orgId);
             return property == null;
         }
     }

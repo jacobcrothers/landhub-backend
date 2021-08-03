@@ -89,7 +89,7 @@ namespace CommandHandlers
                                             }
                                         }
                                     }
-                                    if (await IsPropertyNotAvaliableInAgentPro(agentPro.APN))
+                                    if (await IsPropertyNotAvaliableInAgentPro(agentPro.APN, request.OrgId))
                                     {
                                         await _baseRepositoryPropertiesAgentPro.Create(agentPro);
                                         successRecordCount++;
@@ -149,7 +149,7 @@ namespace CommandHandlers
                                         }
                                     }
 
-                                    if (await IsPropertyNotAvaliableInPrycd(prycd.APNFormatted))
+                                    if (await IsPropertyNotAvaliableInPrycd(prycd.APNFormatted, request.OrgId))
                                     {
                                         await _baseRepositoryPropertiesPrycd.Create(prycd);
                                         successRecordCount++;
@@ -178,14 +178,14 @@ namespace CommandHandlers
             return propertiesFileImport.Message;
         }
 
-        private async Task<bool> IsPropertyNotAvaliableInAgentPro(string apn)
+        private async Task<bool> IsPropertyNotAvaliableInAgentPro(string apn, string orgId)
         {
-            var property = await _baseRepositoryPropertiesAgentPro.GetSingleAsync(it => it.APN == apn);
+            var property = await _baseRepositoryPropertiesAgentPro.GetSingleAsync(it => it.APN == apn && it.OrgId == orgId);
             return property == null;
         }
-        private async Task<bool> IsPropertyNotAvaliableInPrycd(string apn)
+        private async Task<bool> IsPropertyNotAvaliableInPrycd(string apn, string orgId)
         {
-            var property = await _baseRepositoryPropertiesPrycd.GetSingleAsync(it => it.APNFormatted == apn);
+            var property = await _baseRepositoryPropertiesPrycd.GetSingleAsync(it => it.APNFormatted == apn && it.OrgId == orgId);
             return property == null;
         }
     }
