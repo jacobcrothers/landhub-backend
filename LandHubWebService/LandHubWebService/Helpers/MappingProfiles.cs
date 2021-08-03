@@ -90,6 +90,7 @@ namespace LandHubWebService.Helpers
                .ForMember(d => d.PZip4, o => o.MapFrom(s => s.SitusZip9))
                ;
 
+            CreateMap<CreateFileCommand, PhFile>();
         }
 
     }
