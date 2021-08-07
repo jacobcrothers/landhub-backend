@@ -284,6 +284,8 @@ namespace Domains.DBModels
         public string LMSPriorDocBookPage { get; set; }
         public string Reference { get; set; }
         public string Filtered_Out { get; set; }
+        public string ListingId { get; set; }
+
 
 
         public string[] Images { get; set; }

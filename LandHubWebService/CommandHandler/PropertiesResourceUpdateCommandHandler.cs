@@ -33,6 +33,10 @@ namespace CommandHandlers
                 {
                     property.Documents = request.Keys;
                 }
+                else if (request.ResourceType.ToLower() == "listing")
+                {
+                    property.ListingId = request.Keys[0];
+                }
 
                 await _baseRepositoryProperties.UpdateAsync(property);
                 return true;
