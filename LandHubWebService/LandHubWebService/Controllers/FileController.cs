@@ -21,7 +21,7 @@ namespace PropertyHatchWebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
         public async Task<ActionResult> GetFiles([FromBody] GetFilesQuery filesQuery)
         {
