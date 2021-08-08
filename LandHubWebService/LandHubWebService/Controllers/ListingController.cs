@@ -1,12 +1,18 @@
 ﻿
 using Commands;
 using Commands.Query;
+
 using Domains.DBModels;
+
 using MediatR;
 
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+
 using MongoDB.Driver;
+
 using Services.Repository;
+
 using System.Threading.Tasks;
 
 namespace PropertyHatchWebApi.Controllers
@@ -24,9 +30,9 @@ namespace PropertyHatchWebApi.Controllers
             //_mongoContext = context;
 
 
-        //_dbCollection = _mongoContext.GetCollection<Listing>("Listing");
-        //    //_dbCollection.UpdateMany<Listing>(x => true, Builders<Listing>.Update.Set(x => x.OrganizationId, "6bdc1f5c-482e-4ee9-95d8-24d4011025ce"));
-        //    _dbCollection.DeleteManyAsync(x=>true);
+            //_dbCollection = _mongoContext.GetCollection<Listing>("Listing");
+            //    //_dbCollection.UpdateMany<Listing>(x => true, Builders<Listing>.Update.Set(x => x.OrganizationId, "6bdc1f5c-482e-4ee9-95d8-24d4011025ce"));
+            //    _dbCollection.DeleteManyAsync(x=>true);
         }
 
         [HttpGet("[action]")]
@@ -54,14 +60,16 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<ActionResult> Add([FromBody] CreateListingCommand createListingCommand)
-        {/*
-            createListingCommand.OrganizationId = SecurityContext.OrgId;*/
-            await _mediator.Send(createListingCommand);
-            return Ok();
+        {
+            createListingCommand.OrganizationId = SecurityContext.OrgId;
+            var id = await _mediator.Send(createListingCommand);
+            return Ok(id);
         }
 
         [HttpPost("[action]")]
+        [Authorize]
         public async Task<ActionResult> Update([FromBody] UpdateListingCommand updateListingCommand)
         {
             await _mediator.Send(updateListingCommand);

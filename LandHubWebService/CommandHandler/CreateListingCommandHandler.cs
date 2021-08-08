@@ -14,7 +14,7 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers
 {
-    public class CreateListingCommandHandler : AsyncRequestHandler<CreateListingCommand>
+    public class CreateListingCommandHandler : IRequestHandler<CreateListingCommand, string>
     {
         private readonly IMapper _mapper;
         private IBaseRepository<Listing> _baseRepositoryListing;
@@ -27,11 +27,12 @@ namespace CommandHandlers
             this._baseRepositoryListing = _baseRepositoryListing;
         }
 
-        protected override async Task Handle(CreateListingCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateListingCommand request, CancellationToken cancellationToken)
         {
             var listing = _mapper.Map<CreateListingCommand, Listing>(request);
             listing.Id = Guid.NewGuid().ToString();
             await _baseRepositoryListing.Create(listing);
+            return listing.Id;
         }
 
     }
