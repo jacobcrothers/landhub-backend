@@ -296,5 +296,7 @@ namespace Domains.DBModels
         public string UserId { get; set; }
         public string ImportFileId { get; set; }
         public string CampaignStatus { get; set; }
+
+        public string PropertyStatus { get; set; }
     }
 }

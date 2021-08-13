@@ -36,5 +36,7 @@ namespace Domains.DBModels
         public string LegalDescription { get; set; }
         public string Sewage { get; set; }
         public bool IsFeaturedListing { get; set; }
+
+        public bool IsMarketingSelected { get; set; }
     }
 }
