@@ -16,6 +16,8 @@ namespace Commands
         public string Address { get; set; }
         public string Title { get; set; }
         public string Country { get; set; }
+        public string City { get; set; }
+        public string State { get; set; }
         public double HOA_Fees { get; set; }
 
         public string AccessType { get; set; }
@@ -40,5 +42,6 @@ namespace Commands
         public string LegalDescription { get; set; }
         public string Sewage { get; set; }
         public bool IsFeaturedListing { get; set; }
+        public string PropertyType { get; set; }
     }
 }
