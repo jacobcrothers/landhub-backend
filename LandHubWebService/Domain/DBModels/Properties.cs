@@ -284,6 +284,8 @@ namespace Domains.DBModels
         public string LMSPriorDocBookPage { get; set; }
         public string Reference { get; set; }
         public string Filtered_Out { get; set; }
+        public string ListingId { get; set; }
+
 
 
         public string[] Images { get; set; }
@@ -294,5 +296,7 @@ namespace Domains.DBModels
         public string UserId { get; set; }
         public string ImportFileId { get; set; }
         public string CampaignStatus { get; set; }
+
+        public string PropertyStatus { get; set; }
     }
 }

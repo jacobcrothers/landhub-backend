@@ -21,7 +21,7 @@ namespace PropertyHatchWebApi.Controllers
             _mediator = mediator;
         }
 
-        [HttpGet("[action]")]
+        [HttpPost("[action]")]
         [Authorize]
         public async Task<ActionResult> GetFiles([FromBody] GetFilesQuery filesQuery)
         {
@@ -38,8 +38,8 @@ namespace PropertyHatchWebApi.Controllers
         {
             createFileCommand.OrgId = SecurityContext.OrgId;
             createFileCommand.UploadedBy = SecurityContext.UserId;
-            await _mediator.Send(createFileCommand);
-            return Ok();
+            var id = await _mediator.Send(createFileCommand);
+            return Ok(id);
         }
 
 

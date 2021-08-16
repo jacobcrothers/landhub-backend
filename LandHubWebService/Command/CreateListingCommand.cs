@@ -6,7 +6,7 @@ using System.Collections.Generic;
 
 namespace Commands
 {
-    public class CreateListingCommand : IRequest
+    public class CreateListingCommand : IRequest<string>
     {
         public double ListingPrice { get; set; }
         public double MarketValue { get; set; }

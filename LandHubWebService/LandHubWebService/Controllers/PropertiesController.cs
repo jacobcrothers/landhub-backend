@@ -79,6 +79,15 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> UpdatePropertiesStatus([FromBody] PropertiesStatusUpdateCommand propertiesResourceUpdate)
+        {
+            propertiesResourceUpdate.OrgId = SecurityContext.OrgId;
+            var result = await _mediator.Send(propertiesResourceUpdate);
+            return Ok(result);
+        }
+
 
 
         [HttpPost("[action]")]

@@ -5,7 +5,7 @@ using System.Text.Json.Serialization;
 
 namespace Commands
 {
-    public class CreateFileCommand : IRequest
+    public class CreateFileCommand : IRequest<string>
     {
         public string FileKey { get; set; }
         public string Name { get; set; }

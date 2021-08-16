@@ -12,7 +12,7 @@ namespace Domains.DBModels
         public string Address { get; set; }
         public string City { get; set; }
         public string State { get; set; }
-        
+
 
         public string Title { get; set; }
         public string Country { get; set; }
@@ -40,6 +40,8 @@ namespace Domains.DBModels
         public string LegalDescription { get; set; }
         public string Sewage { get; set; }
         public bool IsFeaturedListing { get; set; }
+
+        public bool IsMarketingSelected { get; set; }
         public string PropertyType { get; set; }
     }
 }

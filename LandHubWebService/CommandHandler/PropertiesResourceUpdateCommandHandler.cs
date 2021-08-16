@@ -11,29 +11,40 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers
 {
-    public class PropertiesResourceUpdateCommandHandler : IRequestHandler<PropertiesResourceUpdateCommand, bool>
+    public class PropertiesStatusUpdateCommandHandler : IRequestHandler<PropertiesStatusUpdateCommand, bool>
     {
         private readonly IBaseRepository<Properties> _baseRepositoryProperties;
-        public PropertiesResourceUpdateCommandHandler(IBaseRepository<Properties> baseRepositoryProperties)
+        private readonly IBaseRepository<Listing> _baseRepositoryListing;
+        public PropertiesStatusUpdateCommandHandler(IBaseRepository<Properties> baseRepositoryProperties, IBaseRepository<Listing> baseRepositoryListing)
         {
             _baseRepositoryProperties = baseRepositoryProperties;
+            _baseRepositoryListing = baseRepositoryListing;
         }
 
-        public async Task<bool> Handle(PropertiesResourceUpdateCommand request, CancellationToken cancellationToken)
+        public async Task<bool> Handle(PropertiesStatusUpdateCommand request, CancellationToken cancellationToken)
         {
             var property = await _baseRepositoryProperties.GetByIdAsync(request.PropertiesId);
 
             if (property != null)
             {
-                if (request.ResourceType.ToLower() == "images")
+                var listing = await _baseRepositoryListing.GetByIdAsync(property.ListingId);
+                property.PropertyStatus = request.ResourceStatus.ToLower();
+                if (request.ResourceStatus.ToLower() == "marketing")
                 {
-                    property.Images = request.Keys;
+                    if (listing != null)
+                    {
+                        listing.IsMarketingSelected = true;
+                        await _baseRepositoryListing.UpdateAsync(listing);
+                    }
                 }
-                else if (request.ResourceType.ToLower() == "documents")
+                else
                 {
-                    property.Documents = request.Keys;
+                    if (listing is { IsMarketingSelected: true })
+                    {
+                        listing.IsMarketingSelected = false;
+                        await _baseRepositoryListing.UpdateAsync(listing);
+                    }
                 }
-
                 await _baseRepositoryProperties.UpdateAsync(property);
                 return true;
             }

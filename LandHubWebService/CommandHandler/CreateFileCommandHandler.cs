@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers
 {
-    public class CreateFileCommandHandler : AsyncRequestHandler<CreateFileCommand>
+    public class CreateFileCommandHandler : IRequestHandler<CreateFileCommand, string>
     {
         private readonly IMapper _mapper;
         private readonly IBaseRepository<PhFile> _baseRepositoryPhFiles;
@@ -26,7 +26,7 @@ namespace CommandHandlers
             _baseRepositoryPhFiles = baseRepositoryPhFiles;
         }
 
-        protected override async Task<string> Handle(CreateFileCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateFileCommand request, CancellationToken cancellationToken)
         {
             var file = _mapper.Map<CreateFileCommand, PhFile>(request);
             file.Id = file.FileKey;
@@ -35,5 +35,6 @@ namespace CommandHandlers
 
             return file.Id;
         }
+
     }
 }
