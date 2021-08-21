@@ -76,5 +76,12 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UpdatePropertiesResource([FromBody] ListingResourceUpdateCommand listingResourceUpdateCommand)
+        {
+            await _mediator.Send(listingResourceUpdateCommand);
+            return Ok();
+        }
+
     }
 }
