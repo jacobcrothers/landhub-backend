@@ -13,7 +13,7 @@ namespace PropertyHatchWebApi.Controllers
     public class DocumentTemplateController : BaseController
     {
 
-        [HttpGet("[action]")]
+        [HttpGet]
         public async Task<ActionResult> GetTemplate(int TemplateId)
         {
             string body = string.Empty;
