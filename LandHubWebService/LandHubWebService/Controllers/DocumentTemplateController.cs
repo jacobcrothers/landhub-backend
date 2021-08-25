@@ -9,7 +9,6 @@ using System.Threading.Tasks;
 namespace PropertyHatchWebApi.Controllers
 {
     [ApiController]
-    [EnableCors("AllowSpecificOrigin")]
     [Route("api/[controller]")]
     public class DocumentTemplateController : ControllerBase
     {
