@@ -10,10 +10,10 @@ namespace PropertyHatchWebApi.Controllers
 {
     [ApiController]
     [Route("api/[controller]")]
-    public class DocumentTemplateController : ControllerBase
+    public class DocumentTemplateController : BaseController
     {
-        
-        [HttpGet]
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetTemplate(int TemplateId)
         {
             string body = string.Empty;
