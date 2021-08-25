@@ -12,6 +12,11 @@
   <ItemGroup>
     <Folder Include="FluentValidation\" />
   </ItemGroup>
+  <ItemGroup>
+    <None Include="wwwroot\**">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+  </ItemGroup>
 
   <ItemGroup>
     <PackageReference Include="FluentValidation.DependencyInjectionExtensions" Version="10.2.3" />
