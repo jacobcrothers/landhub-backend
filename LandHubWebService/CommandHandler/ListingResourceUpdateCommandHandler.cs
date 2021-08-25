@@ -12,7 +12,7 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers
 {
-    public class ListingResourceUpdateCommandHandler : IRequestHandler<ListingResourceUpdateCommand,bool>
+    public class ListingResourceUpdateCommandHandler : IRequestHandler<ListingResourceUpdateCommand, bool>
     {
         private readonly IMapper _mapper;
         private IBaseRepository<Listing> _baseRepositoryListing;
@@ -34,10 +34,19 @@ namespace CommandHandlers
             {
                 if (request.ResourceType.ToLower() == "images")
                 {
-                    int i = 0;
-                    foreach(var item in request.Keys)
+                    var findNewImages = new List<string>();
+                    if (property.Images.Count > 0)
                     {
-                        property.Images.Add(new PropertyImage() { Image = item , IsPrimary = i==0 ? true : false });
+                        findNewImages = request.Keys.Where(m => !property.Images.Select(x => x.Image).ToList().Contains(m)).ToList();
+                    }
+                    else
+                    {
+                        findNewImages.AddRange(request.Keys);
+                    }
+                    int i = 0;
+                    foreach (var item in findNewImages)
+                    {
+                        property.Images.Add(new PropertyImage() { Image = item , IsPrimary = i == 0 ? true : false });
                         i = 1;
                     }
                 }
