@@ -11,6 +11,8 @@
 
   <ItemGroup>
     <Folder Include="FluentValidation\" />
+    <Folder Include="Template\"/>
+    <Content Include="Template\**\*" CopyToPublishDirectory="Always" />
   </ItemGroup>
 
   <ItemGroup>
