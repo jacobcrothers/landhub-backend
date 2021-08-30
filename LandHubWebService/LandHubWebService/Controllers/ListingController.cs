@@ -83,5 +83,18 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> DeleteImage([FromBody] DeleteListingImageCommand DeleteListingImageCommand)
+        {
+            await _mediator.Send(DeleteListingImageCommand);
+            return Ok();
+        }
+
+        [HttpPost("[action]")]
+        public async Task<ActionResult> MainImage([FromBody] MainImageCommand MainImageCommand)
+        {
+            await _mediator.Send(MainImageCommand);
+            return Ok();
+        }
     }
 }
