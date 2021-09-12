@@ -21,7 +21,7 @@ namespace Commands
         public string HomeHeaderPhoto { get; set; }
         public string HomeFooterText { get; set; }
         public string InventoryHeaderPhoto { get; set; }
-        public string IboutPagePhoto { get; set; }
+        public string AboutPagePhoto { get; set; }
         public string AboutPageDescription { get; set; }
         public string ContactPageAddress { get; set; }
         public string ContactPageTel1 { get; set; }

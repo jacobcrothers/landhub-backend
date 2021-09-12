@@ -30,7 +30,7 @@ namespace PropertyHatchWebApi.Controllers
 
             var result = await _mediator.Send(getAllSalesWebsiteQuery);
             return Ok(result);
-        }       
+        }
 
         [HttpGet("[action]")]
         public async Task<ActionResult> GetById(string saleswebsiteId)
@@ -48,8 +48,8 @@ namespace PropertyHatchWebApi.Controllers
         public async Task<ActionResult> Add([FromBody] CreateSalesWebsiteCommand createSalesWebsiteCommand)
         {/*
             createListingCommand.OrganizationId = SecurityContext.OrgId;*/
-            await _mediator.Send(createSalesWebsiteCommand);
-            return Ok();
+            var result = await _mediator.Send(createSalesWebsiteCommand);
+            return Ok(new JsonResult(result));
         }
 
         [HttpPost("[action]")]
@@ -67,5 +67,11 @@ namespace PropertyHatchWebApi.Controllers
             return Ok();
         }
 
+        [HttpPost("[action]")]
+        public async Task<ActionResult> UploadImage([FromBody] UploadImageCommand uploadImageCommand)
+        {
+            await _mediator.Send(uploadImageCommand);
+            return Ok();
+        }
     }
 }

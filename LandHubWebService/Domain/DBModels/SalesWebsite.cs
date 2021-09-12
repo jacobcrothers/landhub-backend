@@ -4,6 +4,7 @@ namespace Domains.DBModels
 {
     public class SalesWebsite : BaseEntity
     {
+        public string WebsiteLogo { get; set; }
         public string WebsiteName { get; set; }
         public string WebAddress { get; set; }
         public string Type { get; set; }
@@ -17,7 +18,7 @@ namespace Domains.DBModels
         public string HomeHeaderPhoto { get; set; }
         public string HomeFooterText { get; set; }
         public string InventoryHeaderPhoto { get; set; }
-        public string IboutPagePhoto { get; set; }
+        public string AboutPagePhoto { get; set; }
         public string AboutPageDescription { get; set; }
         public string ContactPageAddress { get; set; }
         public string ContactPageTel1 { get; set; }
