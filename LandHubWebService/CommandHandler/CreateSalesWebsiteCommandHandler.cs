@@ -11,6 +11,7 @@ using Services.Repository;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static Domains.Enum.Enums;
 
 namespace CommandHandlers
 {
@@ -31,6 +32,9 @@ namespace CommandHandlers
         {
             var saleswebsite = _mapper.Map<CreateSalesWebsiteCommand, SalesWebsite>(request);
             saleswebsite.Id = Guid.NewGuid().ToString();
+            saleswebsite.Status = request.Status;
+            saleswebsite.CreatedOn = DateTime.Now;
+            saleswebsite.CreatedBy = request.CreatedBy;
             await _baseRepositorySalesWebsite.Create(saleswebsite);
             return saleswebsite.Id;
         }

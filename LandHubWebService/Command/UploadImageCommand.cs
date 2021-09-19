@@ -10,6 +10,7 @@ namespace Commands
 {
     public class UploadImageCommand : BaseEntity,IRequest
     {
-        public string WebsiteLogo { get; set; }
+        public string Property { get; set; }
+        public string ImageKey { get; set; }
     }
 }

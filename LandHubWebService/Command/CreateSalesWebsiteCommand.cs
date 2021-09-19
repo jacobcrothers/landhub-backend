@@ -1,6 +1,8 @@
 ﻿using MediatR;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
 using System.Text.Json.Serialization;
+using static Domains.Enum.Enums;
 
 namespace Commands
 {
@@ -28,8 +30,9 @@ namespace Commands
         public string TermsDescription { get; set; }
         public string OrganizationId { get; set; }
         public DateTime CreatedOn { get; set; }
+        [BsonId]
         public string CreatedBy { get; set; }
-        public string Status { get; set; }
+        public WebsiteStatus Status { get; set; }
 
         [JsonIgnore]
         public string SaleswebsiteId { get; set; }

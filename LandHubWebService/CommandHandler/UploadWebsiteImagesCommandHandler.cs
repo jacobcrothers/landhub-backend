@@ -29,7 +29,14 @@ namespace CommandHandlers
         protected override async Task Handle(UploadImageCommand request, CancellationToken cancellationToken)
         {
             var salesWebsite = await _baseRepositoryRole.GetSingleAsync(m => m.Id == request.Id);
-            salesWebsite.WebsiteLogo = request.WebsiteLogo;
+
+            if (request.Property == "WebsiteLogo")
+                salesWebsite.WebsiteLogo = request.ImageKey;
+            else if (request.Property == "InventoryHeaderPhoto")
+                salesWebsite.InventoryHeaderPhoto = request.ImageKey;
+            else if (request.Property == "AboutPagePhoto")
+                salesWebsite.AboutPagePhoto = request.ImageKey;
+
             await _baseRepositoryRole.UpdateAsync(salesWebsite);
         }
     }

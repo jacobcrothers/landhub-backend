@@ -35,6 +35,7 @@ using Services.Repository;
 using Services.Services;
 
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LandHubWebService
 {
@@ -94,7 +95,11 @@ namespace LandHubWebService
             services.Configure<Mongosettings>(Configuration.GetSection("Mongosettings"));
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); 
+
             services.AddSwaggerGen();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
