@@ -30,7 +30,6 @@ namespace Commands
         public string TermsDescription { get; set; }
         public string OrganizationId { get; set; }
         public DateTime CreatedOn { get; set; }
-        [BsonId]
         public string CreatedBy { get; set; }
         public WebsiteStatus Status { get; set; }
 
