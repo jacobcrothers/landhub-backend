@@ -10,6 +10,7 @@ namespace Domains.DBModels
         public string WebsiteName { get; set; }
         public string WebAddress { get; set; }
         public string Type { get; set; }
+        public string RecordValue { get; set; }
         public string PhoneNumber { get; set; }
         public string HomeNavColor { get; set; }
         public string HomeHeaderText1 { get; set; }
