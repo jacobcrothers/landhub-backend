@@ -23,9 +23,7 @@ namespace Commands
         public string Status { get; set; }
         public DateTime AddedDate { get; set; }
         public string OrganizationId { get; set; }
-
-        [JsonIgnore]
-        public string CampaignId { get; set; }
+        public string Id { get; set; }
 
     }
 }
