@@ -59,6 +59,15 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetPropertyStatus()
+        {
+            var getPropertiesStatusQuery = new GetPropertyStatusQuery();
+            var result = await _mediator.Send(getPropertiesStatusQuery);
+            return Ok(result);
+        }
+
         [HttpPost("[action]")]
         [Authorize]
         public async Task<IActionResult> ImportFile([FromBody] ImportFileCommand importFileCommand)

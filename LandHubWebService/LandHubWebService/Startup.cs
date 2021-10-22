@@ -30,7 +30,7 @@ using MongoDbGenericRepository;
 using PropertyHatchCoreService.IManagers;
 using PropertyHatchCoreService.Managers;
 using PropertyHatchCoreService.Services;
-
+using PropertyHatchWebApi.Cron;
 using Services.IManagers;
 using Services.IServices;
 using Services.Managers;
@@ -46,6 +46,7 @@ namespace LandHubWebService
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
+            SchedulerTask.StartAsync().GetAwaiter().GetResult();
             Configuration = configuration;
         }
 

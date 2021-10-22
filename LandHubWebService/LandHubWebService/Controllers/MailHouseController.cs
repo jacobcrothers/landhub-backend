@@ -45,6 +45,14 @@ namespace PropertyHatchWebApi.Controllers
         //}
 
         [HttpGet("[action]")]
+        public async Task<ActionResult> GetPricing()
+        {
+            var getMailHousePricingQuery = new GetMailHousePricingQuery();
+            var result = await _mediator.Send(getMailHousePricingQuery);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetById(string mailhouseId)
         {
             var getMailhouseQuery = new GetMailhouseQuery
