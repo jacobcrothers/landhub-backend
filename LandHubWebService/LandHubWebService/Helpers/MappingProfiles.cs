@@ -45,6 +45,8 @@ namespace LandHubWebService.Helpers
             CreateMap<UpdateOrgCommand, Organization>();
             CreateMap<CreateCampaignCommand, Campaign>();
             CreateMap<UpdateCampaignCommand, Campaign>();
+            CreateMap<CreatePropertyDocumentCommand, PropertyDocument>();
+            CreateMap<UpdatePropertyDocumentCommand, PropertyDocument>();
             CreateMap<CreateMailhouseCommand, Mailhouse>();
             CreateMap<UpdateMailhouseCommand, Mailhouse>();
             CreateMap<UpdateSalesWebsiteCommand, SalesWebsite>();
