@@ -1,5 +1,7 @@
-﻿using MongoDB.Bson.Serialization.Attributes;
+﻿using Domains.Dtos;
+using MongoDB.Bson.Serialization.Attributes;
 using System;
+using System.Collections.Generic;
 using static Domains.Enum.Enums;
 
 namespace Domains.DBModels
@@ -32,5 +34,6 @@ namespace Domains.DBModels
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public WebsiteStatus Status { get; set; }   
+        public List<FaqList> FaqList { get; set; }
     }
 }

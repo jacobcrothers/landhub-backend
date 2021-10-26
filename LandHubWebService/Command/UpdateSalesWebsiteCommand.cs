@@ -1,7 +1,8 @@
-﻿using MediatR;
+﻿using Domains.Dtos;
+using MediatR;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
-
+using System.Collections.Generic;
 using System.Text.Json.Serialization;
 using static Domains.Enum.Enums;
 
@@ -34,6 +35,7 @@ namespace Commands
         public DateTime CreatedOn { get; set; }
         public string CreatedBy { get; set; }
         public WebsiteStatus Status { get; set; }
+        public List<FaqList> FaqList { get; set; }
 
         [JsonIgnore]
         public string SaleswebsiteId { get; set; }
