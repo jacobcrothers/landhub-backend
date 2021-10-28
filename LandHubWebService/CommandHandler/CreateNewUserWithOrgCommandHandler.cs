@@ -41,7 +41,7 @@ namespace CommandHandlers
             user.Id = userId;
             user.OrganizationId = orgId;
             user.Status = "Active";
-
+            user.Signature = string.Empty;
             var organization = new Organization
             {
                 CreatedBy = userId,

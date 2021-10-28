@@ -40,7 +40,10 @@ namespace CommandHandlers
                 Description = request.Description,
                 ImageId = request.ImageId,
                 Status = request.Status,
-                TimeZone = request.TimeZone
+                TimeZone = request.TimeZone,
+                Email = request.Email,
+                Phone = request.Phone,
+                Fax = request.Fax,
             };
             await _organizationManager.CreateOrganizationAsync(organization);
             await _mappingService.MapUserOrgRole(Const.DEFAULT_ADMIN_ROLE_ID, request.UserId, organization.Id);
