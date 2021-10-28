@@ -31,6 +31,9 @@ namespace CommandHandlers
             var organization = _mapper.Map<UpdateOrgCommand, Organization>(request);
 
             orgInDb.Address = organization.Address;
+            orgInDb.Email = organization.Email;
+            orgInDb.Phone = organization.Phone;
+            orgInDb.Fax = organization.Fax;
             orgInDb.TimeZone = organization.TimeZone;
             orgInDb.Description = organization.Description;
             orgInDb.Status = organization.Status;

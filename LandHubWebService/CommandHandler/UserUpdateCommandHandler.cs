@@ -33,6 +33,7 @@ namespace CommandHandler
             user.Occupation = request.Occupation;
             user.DisplayName = request.DisplayName;
             user.CountryName = request.CountryName;
+            user.Signature = request.Signature;
             var result = await _userManager.UpdateAsync(user);
             return result;
         }

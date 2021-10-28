@@ -17,6 +17,7 @@ namespace Commands
         public string Occupation { get; set; }
         public string ProfileImage { get; set; }
         public string ProfileImageUrl { get; set; }
+        public string Signature { get; set; }
         public DateTime UserCreationDate { get; set; }
         public string DisplayName
         {

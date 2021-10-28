@@ -52,8 +52,7 @@ namespace Domains.DBModels
         public int AccessFailedCount { get; set; }
         public string ProfileImageUrl { get; set; }
         public string Status { get; set; }
-
-
+        public string Signature { get; set; }
 
         public User()
         {
