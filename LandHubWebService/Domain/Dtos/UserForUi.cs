@@ -15,7 +15,6 @@ namespace Domains.Dtos
             get { return $"{FirstName} {LastName}"; }
             set { }
         }
-
         public string Address { get; set; }
         public string Email { get; set; }
         public List<string> Roles { get; set; }
@@ -28,14 +27,12 @@ namespace Domains.Dtos
         public string RoleName { get; set; }
         public string PassportNumber { get; set; }
         public string UserName { get; set; }
-
         public DateTime DOB { get; set; }
         public string Salutation { get; set; }
         public string Status { get; set; }
-
         public string PhoneNumber { get; set; }
         public string ConcurrencyStamp { get; set; }
-
+        public string Signature { get; set; }
         public string ProfileImageUrl { get; set; }
     }
 }
