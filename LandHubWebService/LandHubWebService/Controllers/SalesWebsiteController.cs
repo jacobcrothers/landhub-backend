@@ -1,9 +1,9 @@
 ﻿
 using Commands;
 using Commands.Query;
-
+using Domains.DBModels;
 using MediatR;
-
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using System.Threading.Tasks;
@@ -20,15 +20,11 @@ namespace PropertyHatchWebApi.Controllers
             this._mediator = _mediator;
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> GetAll(string orgId)
+        [HttpPost("[action]")]
+        public async Task<ActionResult> GetAll(GetAllSalesWebsiteQuery query)
         {
-            var getAllSalesWebsiteQuery = new GetAllSalesWebsiteQuery
-            {
-                OrgId = orgId
-            };
-
-            var result = await _mediator.Send(getAllSalesWebsiteQuery);
+            query.OrgId = SecurityContext.OrgId;
+            var result = await _mediator.Send(query);
             return Ok(result);
         }
 
@@ -73,5 +69,19 @@ namespace PropertyHatchWebApi.Controllers
             await _mediator.Send(uploadImageCommand);
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(SalesWebsite)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
     }
 }

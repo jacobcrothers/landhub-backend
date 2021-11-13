@@ -22,7 +22,7 @@ namespace CommandHandlers.QueryHandlers
         }
         public async Task<List<SalesWebsite>> Handle(GetAllSalesWebsiteQuery request, CancellationToken cancellationToken)
         {
-            var saleswebsites = await _saleswebsiteBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
+            var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId , request.PageNumber,request.PageSize);
             return saleswebsites.ToList();
         }
     }
