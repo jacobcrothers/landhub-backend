@@ -91,6 +91,13 @@ namespace LandHubWebService.Helpers
                ;
 
             CreateMap<CreateFileCommand, PhFile>();
+            CreateMap<UpdateSalesWebsiteCommand, SalesWebsite>()
+                .ForMember(dest => dest.AboutPagePhoto, act => act.Ignore())
+                .ForMember(dest => dest.InventoryHeaderPhoto, act => act.Ignore())
+                .ForMember(dest => dest.WebsiteLogo, act => act.Ignore())
+                .ForMember(dest => dest.CreatedBy, act => act.Ignore())
+                .ForMember(dest => dest.CreatedOn, act => act.Ignore())
+                ;
         }
 
     }

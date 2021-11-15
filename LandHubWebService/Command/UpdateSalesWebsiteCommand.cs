@@ -1,4 +1,5 @@
-﻿using Domains.Dtos;
+﻿using Domains.DBModels;
+using Domains.Dtos;
 using MediatR;
 using MongoDB.Bson.Serialization.Attributes;
 using System;
@@ -8,7 +9,7 @@ using static Domains.Enum.Enums;
 
 namespace Commands
 {
-    public class UpdateSalesWebsiteCommand : IRequest
+    public class UpdateSalesWebsiteCommand : BaseEntity, IRequest 
     {
         public string WebsiteName { get; set; }
         public string WebAddress { get; set; }

@@ -122,11 +122,11 @@ namespace LandHubWebService
 
             services.AddMvc();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://ph-saas-ui.propertyhatch.com").AllowAnyHeader().AllowAnyMethod());
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowSpecificOrigin",
+            //        builder => builder.WithOrigins("http://localhost:4200", "https://ph-saas-ui.propertyhatch.com").AllowAnyHeader().AllowAnyMethod());
+            //});
 
             services.AddAuthentication(x =>
             {
@@ -166,7 +166,7 @@ namespace LandHubWebService
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors();
+            //app.UseCors();
             app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>
