@@ -45,5 +45,6 @@ namespace Domains.DBModels
         public string OrganizationId { get; set; }
         public string OrganizationName { get; set; }
         public string ProfileImageUrl { get; set; }
+        public string Signature { get; set; }
     }
 }
