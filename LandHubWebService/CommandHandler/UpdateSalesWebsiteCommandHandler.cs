@@ -28,7 +28,8 @@ namespace CommandHandlers
 
         protected override async Task Handle(UpdateSalesWebsiteCommand request, CancellationToken cancellationToken)
         {
-            var saleswebsite = _mapper.Map<UpdateSalesWebsiteCommand, SalesWebsite>(request);
+            var salesWebsiteObject = await _baseRepositorySalesWebsite.GetByIdAsync(request.Id);
+            var saleswebsite = _mapper.Map<UpdateSalesWebsiteCommand, SalesWebsite>(request, salesWebsiteObject);
             await _baseRepositorySalesWebsite.UpdateAsync(saleswebsite);
         }
 

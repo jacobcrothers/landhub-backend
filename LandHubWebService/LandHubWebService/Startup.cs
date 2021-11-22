@@ -38,6 +38,7 @@ using Services.Repository;
 using Services.Services;
 
 using System.Text;
+using System.Text.Json.Serialization;
 
 namespace LandHubWebService
 {
@@ -100,7 +101,11 @@ namespace LandHubWebService
             services.Configure<Mongosettings>(Configuration.GetSection("Mongosettings"));
             services.AddAutoMapper(typeof(MappingProfiles));
 
-            services.AddControllers();
+            services.AddControllers().AddJsonOptions(opt =>
+            {
+                opt.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+            }); 
+
             services.AddSwaggerGen();
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(ValidationBehaviour<,>));
             services.AddTransient(typeof(IPipelineBehavior<,>), typeof(LoggingBehaviour<,>));
@@ -124,11 +129,11 @@ namespace LandHubWebService
 
             services.AddMvc();
 
-            services.AddCors(options =>
-            {
-                options.AddPolicy("AllowSpecificOrigin",
-                    builder => builder.WithOrigins("http://localhost:4200", "https://ph-saas-ui.propertyhatch.com").AllowAnyHeader().AllowAnyMethod());
-            });
+            //services.AddCors(options =>
+            //{
+            //    options.AddPolicy("AllowSpecificOrigin",
+            //        builder => builder.WithOrigins("http://localhost:4200", "https://ph-saas-ui.propertyhatch.com").AllowAnyHeader().AllowAnyMethod());
+            //});
 
             services.AddAuthentication(x =>
             {
@@ -168,7 +173,7 @@ namespace LandHubWebService
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors();
+            //app.UseCors();
             app.UseStaticFiles();
 
             app.UseEndpoints(endpoints =>

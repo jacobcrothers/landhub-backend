@@ -21,6 +21,7 @@ namespace CommandHandlers.QueryHandlers
         private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
         private readonly IBaseRepository<Properties> _baseRepositoryProperties;
         private readonly IBaseRepository<DocumentTemplate> _baseRepositoryDocument;
+        private readonly IBaseRepository<SalesWebsite> _baseRepositorySalesWebsite;
 
 
         public GetCountQueryHandler(IBaseRepository<Team> baseRepositoryTeam
@@ -29,6 +30,7 @@ namespace CommandHandlers.QueryHandlers
              , IBaseRepository<Invitation> baseRepositoryInvitation
              , IBaseRepository<Properties> baseRepositoryProperties
              , IBaseRepository<DocumentTemplate> baseRepositoryDocument
+            , IBaseRepository<SalesWebsite> baseRepositorySalesWebsite
            )
         {
             _baseRepositoryRole = baseRepositoryRole;
@@ -37,6 +39,7 @@ namespace CommandHandlers.QueryHandlers
             _baseRepositoryInvitation = baseRepositoryInvitation;
             _baseRepositoryProperties = baseRepositoryProperties;
             _baseRepositoryDocument = baseRepositoryDocument;
+            _baseRepositorySalesWebsite = baseRepositorySalesWebsite;
         }
 
 
@@ -65,6 +68,9 @@ namespace CommandHandlers.QueryHandlers
                     break;
                 case "DocumentTemplate":
                     count = _baseRepositoryDocument.GetTotalCount(x => x.OrgId == request.OrganizationId);
+                    break;
+                case "SalesWebsite":
+                    count = _baseRepositorySalesWebsite.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
                     break;
                 default:
                     break;

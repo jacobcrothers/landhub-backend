@@ -11,10 +11,11 @@ using Services.Repository;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using static Domains.Enum.Enums;
 
 namespace CommandHandlers
 {
-    public class CreateSalesWebsiteCommandHandler : AsyncRequestHandler<CreateSalesWebsiteCommand>
+    public class CreateSalesWebsiteCommandHandler : IRequestHandler<CreateSalesWebsiteCommand,string>
     {
         private readonly IMapper _mapper;
         private IBaseRepository<SalesWebsite> _baseRepositorySalesWebsite;
@@ -27,11 +28,15 @@ namespace CommandHandlers
             this._baseRepositorySalesWebsite = _baseRepositorySalesWebsite;
         }
 
-        protected override async Task Handle(CreateSalesWebsiteCommand request, CancellationToken cancellationToken)
+        public async Task<string> Handle(CreateSalesWebsiteCommand request, CancellationToken cancellationToken)
         {
             var saleswebsite = _mapper.Map<CreateSalesWebsiteCommand, SalesWebsite>(request);
             saleswebsite.Id = Guid.NewGuid().ToString();
+            saleswebsite.Status = request.Status;
+            saleswebsite.CreatedOn = DateTime.Now;
+            saleswebsite.CreatedBy = request.CreatedBy;
             await _baseRepositorySalesWebsite.Create(saleswebsite);
+            return saleswebsite.Id;
         }
 
     }
