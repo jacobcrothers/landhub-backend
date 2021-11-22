@@ -1,14 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+﻿using AutoMapper;
+
+using Commands;
+
+using Domains.DBModels;
+
+using MediatR;
+
+using Services.Repository;
+
+using System;
 using System.Threading;
 using System.Threading.Tasks;
-using AutoMapper;
-using Commands;
-using Domains.DBModels;
-using MediatR;
-using Services.Repository;
 
 namespace CommandHandlers
 {
@@ -29,15 +31,14 @@ namespace CommandHandlers
 
             try
             {
-
                 var data = new DocumentTemplate();
                 data.TemplateData = request.TemplateData;
-                data.Id = Guid.NewGuid().ToString();
                 data.TemplateName = request.TemplateName;
                 data.TemplateType = request.TemplateType;
                 data.Status = request.Status;
-                data.CreatedBy= request.CreatedBy;
-                data.CreatedAt = new DateTime();
+                data.CreatedBy = request.CreatedBy;
+                data.CreatedAt = DateTime.Now;
+                data.OrgId = request.OrganizationId;
 
                 await _baseRepositoryTemplate.Create(data);
             }

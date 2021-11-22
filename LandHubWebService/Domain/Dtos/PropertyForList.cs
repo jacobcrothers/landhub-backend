@@ -16,5 +16,7 @@
         public string MZip { get; set; }
         public string Owner1LName { get; set; }
         public string CampaignStatus { get; set; }
+        public string PropertyStatus { get; set; }
+        public string CountyName { get; set; }
     }
 }

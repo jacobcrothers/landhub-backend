@@ -74,7 +74,7 @@ namespace CommandHandlers.QueryHandlers
 
                 var teamUsersMapping = await _teamUserRoleBaseRepository.GetAllAsync(x =>
                     x.OrganizationId == request.OrgId && x.UserId == userOrganizationMapping.UserId);
-                if (teamUsersMapping != null)
+                if (teamUsersMapping != null && teamUsersMapping.Any())
                 {
                     var team = await _teamBaseRepository.GetSingleAsync(x => x.Id == teamUsersMapping.FirstOrDefault().TeamId);
                     if (team != null)

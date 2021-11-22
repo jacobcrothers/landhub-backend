@@ -1,14 +1,14 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using Domains.DBModels;
+﻿using Domains.DBModels;
+using Domains.Dtos;
+
 using MediatR;
+
+using System.Collections.Generic;
 
 namespace Commands.Query
 {
-    public class GetAllTemplateQuery : IRequest<List<DocumentTemplate>>
+    public class GetAllTemplateQuery : Pagination, IRequest<List<DocumentTemplate>>
     {
+        public string OrganizationId { get; set; }
     }
 }

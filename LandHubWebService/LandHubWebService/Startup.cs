@@ -3,6 +3,8 @@ using CommandHandler;
 
 using Commands;
 
+using Domains.ConfigSetting;
+using Domains.ConstModels;
 using Domains.DBModels;
 
 using FluentValidation;
@@ -27,7 +29,8 @@ using MongoDbGenericRepository;
 
 using PropertyHatchCoreService.IManagers;
 using PropertyHatchCoreService.Managers;
-
+using PropertyHatchCoreService.Services;
+using PropertyHatchWebApi.Cron;
 using Services.IManagers;
 using Services.IServices;
 using Services.Managers;
@@ -44,6 +47,7 @@ namespace LandHubWebService
         readonly string MyAllowSpecificOrigins = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration)
         {
+            SchedulerTask.StartAsync().GetAwaiter().GetResult();
             Configuration = configuration;
         }
 
@@ -91,6 +95,8 @@ namespace LandHubWebService
                 });
 
             });
+            services.Configure<PostCardManiaSetting>(Configuration.GetSection("PostCardManiaCredential"));
+            services.Configure<PostCardManiaUrl>(Configuration.GetSection("PostCardManiaUrl"));
 
             services.Configure<Mongosettings>(Configuration.GetSection("Mongosettings"));
             services.AddAutoMapper(typeof(MappingProfiles));
@@ -114,6 +120,7 @@ namespace LandHubWebService
             services.AddTransient<IRoleManager, RoleManager>();
             services.AddTransient<ITokenService, TokenService>();
             services.AddTransient<IMailManager, MailManager>();
+            services.AddSingleton<PostCardManiaService>();
 
             var mongoDbContext = new MongoDbContext(Configuration.GetSection("Mongosettings:Connection").Value, Configuration.GetSection("Mongosettings:DatabaseName").Value);
             services.AddIdentity<ApplicationUser, ApplicationRole>()
