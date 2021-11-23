@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PropertyHatchWebApi.ApplicationContext;
-
+using System;
 using System.Threading.Tasks;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -62,22 +62,49 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<ActionResult> CreateTemplate([FromBody] CreateTemplateCommand createTemplateCommand)
+        public async Task<ActionResult> Transact([FromBody] CreateTemplateCommand createTemplateCommand)
         {
-            createTemplateCommand.OrganizationId = SecurityContext.OrgId;
-            createTemplateCommand.CreatedBy = SecurityContext.UserId;
-            var result = await _mediator.Send(createTemplateCommand);
-            return Ok(result);
+            try
+            {
+                createTemplateCommand.OrganizationId = SecurityContext.OrgId;
+                createTemplateCommand.CreatedBy = SecurityContext.UserId;
+                await _mediator.Send(createTemplateCommand);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
-        [HttpPost("[action]")]
+        [HttpPut("[action]")]
         [Authorize]
-        public async Task<ActionResult> UpdateTemplate([FromBody] UpdateTemplateCommand updateTemplateCommand)
+        public async Task<ActionResult> Transact([FromBody] UpdateTemplateCommand updateTemplateCommand)
         {
-            updateTemplateCommand.OrganizationId = SecurityContext.OrgId;
-            var result = await _mediator.Send(updateTemplateCommand);
-            return Ok(result);
+            try
+            {
+                await _mediator.Send(updateTemplateCommand);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
         }
 
+        [HttpDelete("[action]")]
+        [Authorize]
+        public async Task<ActionResult> Transact([FromQuery] DeleteTemplateCommand deleteTemplateCommand)
+        {
+            try
+            {
+                await _mediator.Send(deleteTemplateCommand);
+                return NoContent();
+            }
+            catch
+            {
+                return StatusCode(500);
+            }
+        }
     }
 }
