@@ -59,9 +59,7 @@ namespace PropertyHatchWebApi.Controllers
             var result = await _mediator.Send(getIncomeQuery);
             return Ok(result);
         }
-
-
-
+        
         [HttpPost("[action]")]
         [Authorize]
         public async Task<ActionResult> Add([FromBody] CreateIncomeCommand createIncomeCommand)

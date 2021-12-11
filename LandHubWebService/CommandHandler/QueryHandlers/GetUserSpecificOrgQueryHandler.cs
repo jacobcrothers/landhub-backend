@@ -34,15 +34,33 @@ namespace CommandHandlers.QueryHandlers
             var userOrganizationMappingList = await _userOrganizationMappingRepository.GetAllWithPagingAsync(x => x.UserId == request.UserId, request.PageNumber, request.PageSize);
             List<Organization> orgLIst = new List<Organization>();
 
-            foreach (UserOrganizationMapping userOrganization in userOrganizationMappingList)
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var org = await _organizationRepository.GetByIdAsync(userOrganization.OrganizationId);
-                var user = await _userRepository.GetByIdAsync(org.CreatedBy);
-                if (user != null)
+                foreach (UserOrganizationMapping userOrganization in userOrganizationMappingList)
                 {
-                    org.AdminName = user.DisplayName;
+                    var org = await _organizationRepository.GetByIdAsync(userOrganization.OrganizationId);
+                    var user = await _userRepository.GetByIdAsync(org.CreatedBy);
+                    if (user != null)
+                    {
+                        org.AdminName = user.DisplayName;
+                    }
+                    orgLIst.Add(org);
                 }
-                orgLIst.Add(org);
+            } else
+            {
+                foreach (UserOrganizationMapping userOrganization in userOrganizationMappingList)
+                {
+                    var org = await _organizationRepository.GetByIdAsync(userOrganization.OrganizationId);
+                    if (org.Title.Contains(request.SearchKey))
+                    {
+                        var user = await _userRepository.GetByIdAsync(org.CreatedBy);
+                        if (user != null)
+                        {
+                            org.AdminName = user.DisplayName;
+                        }
+                        orgLIst.Add(org);
+                    }
+                }
             }
             return orgLIst;
         }

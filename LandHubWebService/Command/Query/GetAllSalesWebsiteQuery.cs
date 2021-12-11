@@ -9,5 +9,6 @@ namespace Commands.Query
     public class GetAllSalesWebsiteQuery : Pagination , IRequest<List<SalesWebsite>>
     {
         public string OrgId { get; set; }
+        public string SearchKey { get; set; }
     }
 }

@@ -22,8 +22,22 @@ namespace CommandHandlers.QueryHandlers
         }
         public async Task<List<SalesWebsite>> Handle(GetAllSalesWebsiteQuery request, CancellationToken cancellationToken)
         {
-            var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId , request.PageNumber,request.PageSize);
-            return saleswebsites.ToList();
+            var saleswebsitesForList = new List<SalesWebsite>();
+            if (request.SearchKey == null || request.SearchKey == "") {
+                var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
+                return saleswebsites.ToList();
+            } else
+            {
+                var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
+                foreach (var saleswebsite in saleswebsites)
+                {
+                    if (saleswebsite.WebAddress.Contains(request.SearchKey))
+                    {
+                        saleswebsitesForList.Add(saleswebsite);
+                    }
+                }
+                return saleswebsitesForList;
+            }
         }
     }
 }

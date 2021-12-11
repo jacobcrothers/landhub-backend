@@ -33,24 +33,46 @@ namespace CommandHandlers.QueryHandlers
         {
             var expenditureForList = new List<ExpenditureForUi>();
             var expenditureList = await _baseRepositoryExpenditure.GetAllWithPagingAsync(x => x.OrgId == request.OrgId, request.PageNumber, request.PageSize);
-            foreach (var expenditure in expenditureList.ToList())
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var expenditureForUi = new ExpenditureForUi()
+                foreach (var expenditure in expenditureList.ToList())
                 {
-                    Id = expenditure.Id,
-                    OrgId = expenditure.OrgId,
-                    Description = expenditure.Description,
-                    Type = expenditure.Type,
-                    Amount = expenditure.Amount,
-                    Status = expenditure.Status,
-                    CreatedDate = expenditure.CreatedDate
-                };
+                    var expenditureForUi = new ExpenditureForUi()
+                    {
+                        Id = expenditure.Id,
+                        OrgId = expenditure.OrgId,
+                        Description = expenditure.Description,
+                        Type = expenditure.Type,
+                        Amount = expenditure.Amount,
+                        Status = expenditure.Status,
+                        CreatedDate = expenditure.CreatedDate
+                    };
 
-                expenditureForList.Add(expenditureForUi);
+                    expenditureForList.Add(expenditureForUi);
+                }
+            } else
+            {
+                foreach (var expenditure in expenditureList.ToList())
+                {
+                    if (expenditure.Description.Contains(request.SearchKey))
+                    {
+                        var expenditureForUi = new ExpenditureForUi()
+                        {
+                            Id = expenditure.Id,
+                            OrgId = expenditure.OrgId,
+                            Description = expenditure   .Description,
+                            Type = expenditure.Type,
+                            Amount = expenditure.Amount,
+                            Status = expenditure.Status,
+                            CreatedDate = expenditure.CreatedDate
+                        };
+
+                        expenditureForList.Add(expenditureForUi);
+                    }
+                }
             }
 
             return expenditureForList;
         }
-
     }
 }

@@ -44,36 +44,74 @@ namespace CommandHandlers.QueryHandlers
         {
             var teamForList = new List<TeamForUi>();
             var teamList = await _baseRepositoryTeam.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
-            foreach (var team in teamList.ToList())
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var teamForUi = _mapper.Map<Team, TeamForUi>(team);
-                var createdUser = await _baseRepositoryUser.GetByIdAsync(team.CreatedBy);
-                if (team.Role != null)
+                foreach (var team in teamList.ToList())
                 {
-                    var role = await _baseRepositoryRole.GetByIdAsync(team.Role);
-                    if (role != null)
+                    var teamForUi = _mapper.Map<Team, TeamForUi>(team);
+                    var createdUser = await _baseRepositoryUser.GetByIdAsync(team.CreatedBy);
+                    if (team.Role != null)
                     {
-                        teamForUi.Role = role.Title;
+                        var role = await _baseRepositoryRole.GetByIdAsync(team.Role);
+                        if (role != null)
+                        {
+                            teamForUi.Role = role.Title;
+                        }
+                        else
+                        {
+                            teamForUi.Role = "N/A";
+                        }
                     }
                     else
                     {
                         teamForUi.Role = "N/A";
                     }
+                    teamForUi.CreatedBy = createdUser?.DisplayName;
+                    teamForUi.Users = new List<UserForUi>();
+                    var teamUsers = await _baseRepositoryTeamUserMapping.GetAllAsync(x => x.TeamId == team.Id);
+                    foreach (var teamUserMapping in teamUsers.ToList())
+                    {
+                        var user = await _baseRepositoryUser.GetByIdAsync(teamUserMapping.UserId);
+                        var userForUi = _mapper.Map<User, UserForUi>(user);
+                        teamForUi.Users.Add(userForUi);
+                    }
+                    teamForList.Add(teamForUi);
                 }
-                else
+            } else
+            {
+                foreach (var team in teamList.ToList())
                 {
-                    teamForUi.Role = "N/A";
+                    var teamForUi = _mapper.Map<Team, TeamForUi>(team);
+                    var createdUser = await _baseRepositoryUser.GetByIdAsync(team.CreatedBy);
+                    if (team.Role != null)
+                    {
+                        var role = await _baseRepositoryRole.GetByIdAsync(team.Role);
+                        if (role != null)
+                        {
+                            teamForUi.Role = role.Title;
+                        }
+                        else
+                        {
+                            teamForUi.Role = "N/A";
+                        }
+                    }
+                    else
+                    {
+                        teamForUi.Role = "N/A";
+                    }
+                    teamForUi.CreatedBy = createdUser?.DisplayName;
+                    teamForUi.Users = new List<UserForUi>();
+                    var teamUsers = await _baseRepositoryTeamUserMapping.GetAllAsync(x => x.TeamId == team.Id);
+                    foreach (var teamUserMapping in teamUsers.ToList())
+                    {
+                        var user = await _baseRepositoryUser.GetByIdAsync(teamUserMapping.UserId);
+                        var userForUi = _mapper.Map<User, UserForUi>(user);
+                        teamForUi.Users.Add(userForUi);
+                    }
+
+                    if (teamForUi.TeamName.Contains(request.SearchKey))
+                        teamForList.Add(teamForUi);
                 }
-                teamForUi.CreatedBy = createdUser?.DisplayName;
-                teamForUi.Users = new List<UserForUi>();
-                var teamUsers = await _baseRepositoryTeamUserMapping.GetAllAsync(x => x.TeamId == team.Id);
-                foreach (var teamUserMapping in teamUsers.ToList())
-                {
-                    var user = await _baseRepositoryUser.GetByIdAsync(teamUserMapping.UserId);
-                    var userForUi = _mapper.Map<User, UserForUi>(user);
-                    teamForUi.Users.Add(userForUi);
-                }
-                teamForList.Add(teamForUi);
             }
 
             return teamForList;

@@ -35,15 +35,28 @@ namespace CommandHandlers.QueryHandlers
         {
             var propertyForList = new List<PropertyForList>();
             var properties = await _baseRepositoryProperties.GetAllWithPagingAsync(x => x.OrgId == request.OrgId, request.PageNumber, request.PageSize);
-            foreach (var property in properties.ToList())
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var propertyForUi = _mapper.Map<Properties, PropertyForList>(property);
-                propertyForUi.CampaignStatus = propertyForUi.CampaignStatus ?? "Not Assigned";
-                propertyForList.Add(propertyForUi);
+                foreach (var property in properties.ToList())
+                {
+                    var propertyForUi = _mapper.Map<Properties, PropertyForList>(property);
+                    propertyForUi.CampaignStatus = propertyForUi.CampaignStatus ?? "Not Assigned";
+                    propertyForList.Add(propertyForUi);
+                }
+            } else
+            {
+                foreach (var property in properties.ToList())
+                {
+                    if (property.PropertyAddress.Contains(request.SearchKey) || property.OwnerName.Contains(request.SearchKey))
+                    {
+                        var propertyForUi = _mapper.Map<Properties, PropertyForList>(property);
+                        propertyForUi.CampaignStatus = propertyForUi.CampaignStatus ?? "Not Assigned";
+                        propertyForList.Add(propertyForUi);
+                    }
+                }
             }
 
             return propertyForList;
         }
-
     }
 }

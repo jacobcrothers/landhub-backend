@@ -30,18 +30,35 @@ namespace CommandHandlers.QueryHandlers
 
         public async Task<List<Invitation>> Handle(GetAllInvitationQuery request, CancellationToken cancellationToken)
         {
-            var teamForList = await _baseRepositoryInvitation.GetAllWithPagingAsync(x => x.OrgId == request.OrgId,
+            var invitationForList = await _baseRepositoryInvitation.GetAllWithPagingAsync(x => x.OrgId == request.OrgId,
                 request.PageNumber, request.PageSize);
 
-            foreach (Invitation invitation in teamForList)
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var team = await _baseRepositoryTeam.GetByIdAsync(invitation.TeamId);
-                if (team != null)
+                foreach (Invitation invitation in invitationForList)
                 {
-                    invitation.TeamId = team.TeamName;
+                    var team = await _baseRepositoryTeam.GetByIdAsync(invitation.TeamId);
+                    if (team != null)
+                    {
+                        invitation.TeamId = team.TeamName;
+                    }
+                }
+
+            } else
+            {
+                foreach (Invitation invitation in invitationForList)
+                {
+                    if (invitation.Name.Contains(request.SearchKey))
+                    {
+                        var team = await _baseRepositoryTeam.GetByIdAsync(invitation.TeamId);
+                        if (team != null)
+                        {
+                            invitation.TeamId = team.TeamName;
+                        }
+                    }
                 }
             }
-            return teamForList.ToList();
+            return invitationForList.ToList();
         }
 
     }

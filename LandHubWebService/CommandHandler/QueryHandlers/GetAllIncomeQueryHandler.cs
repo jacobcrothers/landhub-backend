@@ -33,24 +33,46 @@ namespace CommandHandlers.QueryHandlers
         {
             var incomeForList = new List<IncomeForUi>();
             var incomeList = await _baseRepositoryIncome.GetAllWithPagingAsync(x => x.OrgId == request.OrgId, request.PageNumber, request.PageSize);
-            foreach (var income in incomeList.ToList())
+            if (request.SearchKey == null || request.SearchKey == "")
             {
-                var incomeForUi = new IncomeForUi()
+                foreach (var income in incomeList.ToList())
                 {
-                    Id = income.Id,
-                    OrgId = income.OrgId,
-                    Description = income.Description,
-                    Type = income.Type,
-                    Amount = income.Amount,
-                    Status = income.Status,
-                    CreatedDate = income.CreatedDate
-                };
 
-                incomeForList.Add(incomeForUi);
+                    var incomeForUi = new IncomeForUi()
+                    {
+                        Id = income.Id,
+                        OrgId = income.OrgId,
+                        Description = income.Description,
+                        Type = income.Type,
+                        Amount = income.Amount,
+                        Status = income.Status,
+                        CreatedDate = income.CreatedDate
+                    };
+
+                    incomeForList.Add(incomeForUi);
+                }
+            } else
+            {
+                foreach (var income in incomeList.ToList())
+                {
+                    if (income.Description.Contains(request.SearchKey)) {
+                        var incomeForUi = new IncomeForUi()
+                        {
+                            Id = income.Id,
+                            OrgId = income.OrgId,
+                            Description = income.Description,
+                            Type = income.Type,
+                            Amount = income.Amount,
+                            Status = income.Status,
+                            CreatedDate = income.CreatedDate
+                        };
+
+                        incomeForList.Add(incomeForUi);
+                    }
+                }
             }
 
             return incomeForList;
         }
-
     }
 }
