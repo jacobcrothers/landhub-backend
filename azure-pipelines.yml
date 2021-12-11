@@ -6,7 +6,7 @@
 trigger:
 - Development
 
-pool: Default
+pool: Azure Pipeline
 
 variables:
   - group: dev-ph-saas-api
