@@ -7,7 +7,7 @@ trigger:
 - Development
 
 pool: 
-vmImage: 'ubuntu-latest'
+  vmImage: 'ubuntu-latest'
 
 variables:
   - group: dev-ph-saas-api
