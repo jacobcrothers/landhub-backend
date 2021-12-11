@@ -6,7 +6,7 @@
 trigger:
 - Development
 
-pool: Azure Pipeline
+pool: vmimage
 
 variables:
   - group: dev-ph-saas-api
