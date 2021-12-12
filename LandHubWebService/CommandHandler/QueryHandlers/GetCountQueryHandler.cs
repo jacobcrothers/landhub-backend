@@ -16,6 +16,7 @@ namespace CommandHandlers.QueryHandlers
     {
 
         private readonly IBaseRepository<Team> _baseRepositoryTeam;
+        private readonly IBaseRepository<Income> _baseRepositoryIncome;
         private readonly IBaseRepository<UserOrganizationMapping> _baseRepositoryUser;
         private readonly IBaseRepository<Role> _baseRepositoryRole;
         private readonly IBaseRepository<Invitation> _baseRepositoryInvitation;
@@ -26,6 +27,7 @@ namespace CommandHandlers.QueryHandlers
 
         public GetCountQueryHandler(IBaseRepository<Team> baseRepositoryTeam
              , IBaseRepository<Role> baseRepositoryRole
+            , IBaseRepository<Income> baseRepositoryIncome
              , IBaseRepository<UserOrganizationMapping> baseRepositoryUser
              , IBaseRepository<Invitation> baseRepositoryInvitation
              , IBaseRepository<Properties> baseRepositoryProperties
@@ -35,6 +37,7 @@ namespace CommandHandlers.QueryHandlers
         {
             _baseRepositoryRole = baseRepositoryRole;
             _baseRepositoryTeam = baseRepositoryTeam;
+            _baseRepositoryIncome = baseRepositoryIncome;
             _baseRepositoryUser = baseRepositoryUser;
             _baseRepositoryInvitation = baseRepositoryInvitation;
             _baseRepositoryProperties = baseRepositoryProperties;
@@ -50,6 +53,9 @@ namespace CommandHandlers.QueryHandlers
             {
                 case "Team":
                     count = _baseRepositoryTeam.GetTotalCount(x => x.OrganizationId == request.OrganizationId);
+                    break;
+                case "Income":
+                    count = _baseRepositoryIncome.GetTotalCount(x => x.OrgId == request.OrganizationId);
                     break;
                 case "Role":
                     count = _baseRepositoryRole.GetTotalCount(x => x.OrganizationId == request.OrganizationId || x.OrganizationId == null);
