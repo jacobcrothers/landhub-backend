@@ -35,7 +35,7 @@ namespace PropertyHatchWebApi.ApplicationContext
             OrgName = claimsIdentity.Claims.First((Claim c) => c.Type == "OrgName").Value;
             OrgId = claimsIdentity.Claims.First((Claim c) => c.Type == "OrgId").Value;
             DisplayName = claimsIdentity.Claims.First((Claim c) => c.Type == "DisplayName").Value;
-
+            claims = claimsIdentity;
         }
 
     }

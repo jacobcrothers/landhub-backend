@@ -10,7 +10,9 @@ using Microsoft.AspNetCore.Mvc;
 
 using PropertyHatchWebApi.ApplicationContext;
 using System;
+using System.Security.Claims;
 using System.Threading.Tasks;
+using System.Linq;
 
 namespace PropertyHatchWebApi.Controllers
 {
@@ -23,10 +25,12 @@ namespace PropertyHatchWebApi.Controllers
         {
             this._mediator = mediator;
         }
-
+        [Authorize]
         [HttpPost("[action]")]
-        public async Task<string> Campaign([FromBody] CampaignMailerCommand command = null)
+        public async Task<ActionResult<string>> Campaign([FromBody] CampaignMailerCommand command = null)
         {
+            if (!SecurityContext.claims.Claims.Any() || SecurityContext.OrgName != "SYSTEM" || !SecurityContext.Permission.Where(x =>x == "edit_campaigns").Any())
+                return Forbid();
             if (command == null)
                 command = new CampaignMailerCommand();
             return await _mediator.Send(command);
