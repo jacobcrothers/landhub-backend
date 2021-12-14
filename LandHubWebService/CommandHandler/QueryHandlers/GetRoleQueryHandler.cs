@@ -43,39 +43,125 @@ namespace CommandHandlers.QueryHandlers
             var roles = await _roleBaseRepository.GetAllWithPagingAsync(x => (x.OrganizationId == request.OrgId || x.OrganizationId == null), request.PageNumber, request.PageSize);
             var permissions = await _permissionBaseRepository.GetAsync();
 
+            var allowed = new List<bool>();
             foreach (Role role in roles)
             {
-                RolePermissionMappingTemplate defaultRoleTemplate = new RolePermissionMappingTemplate();
+                allowed.Add(true);
+            }
 
-                if (role.OrganizationId == null)
+            if (request.SearchKey != null && request.SearchKey.Length > 0)
+            {
+                int j = 0;
+                foreach (Role role in roles)
                 {
-                    var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
-                    var defaultRole = defaultRolePermissionMapping.ToList().FirstOrDefault(x => x.Id == role.Id);
-                    defaultRolePermissionMappingList.Add(defaultRole);
+                    RolePermissionMappingTemplate defaultRoleTemplate = new RolePermissionMappingTemplate();
+
+                    if (role.OrganizationId == null)
+                    {
+                        var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
+                        var defaultRole = defaultRolePermissionMapping.ToList().FirstOrDefault(x => x.Id == role.Id);
+                        defaultRolePermissionMappingList.Add(defaultRole);
+                    }
+                    else
+                    {
+                        defaultRoleTemplate = new RolePermissionMappingTemplate
+                        {
+                            Id = role.Id,
+                            Title = role.Title,
+                            Category = role.Category,
+                            Description = role.Description,
+                            IsActive = role.IsActive,
+                            IsShownInUi = role.IsShownInUi,
+                            Permissions = new List<Permission>()
+                        };
+                        var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
+                        foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                        {
+                            defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                        }
+
+                        if (defaultRoleTemplate.Title.Contains(request.SearchKey) == false)
+                            allowed[j] = false;
+                        j++;
+                    }
                 }
-                else
+            }
+
+            int w = 0;
+            if (request.FilterObj != null)
+            {
+                foreach (Role role in roles)
                 {
-                    defaultRoleTemplate = new RolePermissionMappingTemplate
+                    RolePermissionMappingTemplate defaultRoleTemplate = new RolePermissionMappingTemplate();
+
+                    if (role.OrganizationId == null)
                     {
-                        Id = role.Id,
-                        Title = role.Title,
-                        Category = role.Category,
-                        Description = role.Description,
-                        IsActive = role.IsActive,
-                        IsShownInUi = role.IsShownInUi,
-                        Permissions = new List<Permission>()
-                    };
-                    var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
-                    foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                        var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
+                        var defaultRole = defaultRolePermissionMapping.ToList().FirstOrDefault(x => x.Id == role.Id);
+                        defaultRolePermissionMappingList.Add(defaultRole);
+                    }
+                    else
                     {
-                        defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                        defaultRoleTemplate = new RolePermissionMappingTemplate
+                        {
+                            Id = role.Id,
+                            Title = role.Title,
+                            Category = role.Category,
+                            Description = role.Description,
+                            IsActive = role.IsActive,
+                            IsShownInUi = role.IsShownInUi,
+                            Permissions = new List<Permission>()
+                        };
+                        var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
+                        foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                        {
+                            defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                        }
                     }
 
-                    defaultRolePermissionMappingList.Add(defaultRoleTemplate);
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && defaultRoleTemplate.Title != request.FilterObj[0])
+                        allowed[w] = false;
+                    w++;
                 }
-
-
             }
+
+            w = 0;
+            foreach (Role role in roles)
+            {
+                if (allowed[w])
+                {
+                    RolePermissionMappingTemplate defaultRoleTemplate = new RolePermissionMappingTemplate();
+
+                    if (role.OrganizationId == null)
+                    {
+                        var defaultRolePermissionMapping = await _rolePermissionMappingTemplateBaseRepository.GetAsync();
+                        var defaultRole = defaultRolePermissionMapping.ToList().FirstOrDefault(x => x.Id == role.Id);
+                        defaultRolePermissionMappingList.Add(defaultRole);
+                    }
+                    else
+                    {
+                        defaultRoleTemplate = new RolePermissionMappingTemplate
+                        {
+                            Id = role.Id,
+                            Title = role.Title,
+                            Category = role.Category,
+                            Description = role.Description,
+                            IsActive = role.IsActive,
+                            IsShownInUi = role.IsShownInUi,
+                            Permissions = new List<Permission>()
+                        };
+                        var rolePermissionMappingList = await _rolePermissionMappingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.RoleId == role.Id);
+                        foreach (RolePermissionMapping mapping in rolePermissionMappingList)
+                        {
+                            defaultRoleTemplate.Permissions.Add(permissions.FirstOrDefault(x => x.Id == mapping.PermissionId));
+                        }
+
+                        defaultRolePermissionMappingList.Add(defaultRoleTemplate);
+                    }
+                }
+                w++;
+            }
+
             return defaultRolePermissionMappingList;
         }
 

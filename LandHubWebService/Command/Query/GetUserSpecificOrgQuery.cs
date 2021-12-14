@@ -13,6 +13,7 @@ namespace Commands
         [JsonIgnore]
         public string UserId { get; set; }
         public string SearchKey { get; set; }
+        public string[] FilterObj { get; set; }
 
     }
 }

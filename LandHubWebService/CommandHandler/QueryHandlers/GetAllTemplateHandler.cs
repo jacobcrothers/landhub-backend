@@ -27,31 +27,48 @@ namespace CommandHandlers.QueryHandlers
         public async Task<List<DocumentTemplate>> Handle(GetAllTemplateQuery request, CancellationToken cancellationToken)
         {
             var documentForList = new List<DocumentTemplate>();
-            if (request.SearchKey == null || request.SearchKey == "")
+            var documents = await _documentListBaseRepository.GetAllWithPagingAsync(x => x.OrgId == request.OrganizationId, request.PageNumber, request.PageSize);
+            var allowed = new List<bool>();
+            foreach (DocumentTemplate template in documents)
             {
-                var documents = await _documentListBaseRepository.GetAllWithPagingAsync(x => x.OrgId == request.OrganizationId, request.PageNumber, request.PageSize);
+                allowed.Add(true);
+            }
 
+            if (request.SearchKey != null && request.SearchKey.Length > 0)
+            {
+                int j = 0;
                 foreach (DocumentTemplate template in documents)
+                {
+                    if (template.TemplateName.Contains(request.SearchKey) == false)
+                        allowed[j] = false;
+                    j++;
+                }
+            }
+
+            int w = 0;
+            if (request.FilterObj != null)
+            {
+                foreach (DocumentTemplate template in documents)
+                {
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && template.TemplateType != request.FilterObj[0])
+                        allowed[w] = false;
+                    w++;
+                }
+            }
+
+            w = 0;
+            foreach (DocumentTemplate template in documents)
+            {
+                if (allowed[w])
                 {
                     var user = await _userListBaseRepository.GetByIdAsync(template.CreatedBy);
                     template.CreatedBy = user.DisplayName;
+                    documentForList.Add(template);
                 }
-                return documents.ToList();
-            } else
-            {
-                var documents = await _documentListBaseRepository.GetAllWithPagingAsync(x => x.OrgId == request.OrganizationId, request.PageNumber, request.PageSize);
-
-                foreach (DocumentTemplate template in documents)
-                {
-                    if (template.TemplateName.Contains(request.SearchKey))
-                    {
-                        var user = await _userListBaseRepository.GetByIdAsync(template.CreatedBy);
-                        template.CreatedBy = user.DisplayName;
-                        documentForList.Add(template);
-                    }
-                }
-                return documentForList;
+                w++;
             }
+
+            return documentForList;
         }
     }
 }

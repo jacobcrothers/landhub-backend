@@ -32,33 +32,56 @@ namespace CommandHandlers.QueryHandlers
         {
             var invitationForList = await _baseRepositoryInvitation.GetAllWithPagingAsync(x => x.OrgId == request.OrgId,
                 request.PageNumber, request.PageSize);
+            List<Invitation> invitationLIst = new List<Invitation>();
 
-            if (request.SearchKey == null || request.SearchKey == "")
+            var allowed = new List<bool>();
+            foreach (Invitation invitation in invitationForList)
+            {
+                allowed.Add(true);
+            }
+
+            if (request.SearchKey != null && request.SearchKey.Length > 0)
+            {
+                int j = 0;
+                foreach (Invitation invitation in invitationForList)
+                {
+                    if (invitation.Name.Contains(request.SearchKey) == false)
+                        allowed[j] = false;
+                    j++;
+                }
+            }
+
+            int w = 0;
+            if (request.FilterObj != null)
             {
                 foreach (Invitation invitation in invitationForList)
+                {
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && invitation.Name != request.FilterObj[0])
+                        allowed[w] = false;
+                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && invitation.InvitedUserEmail != request.FilterObj[1])
+                        allowed[w] = false;
+                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && invitation.Phone != request.FilterObj[2])
+                        allowed[w] = false;
+                    w++;
+                }
+            }
+
+            w = 0;
+            foreach (Invitation invitation in invitationForList)
+            {
+                if (allowed[w])
                 {
                     var team = await _baseRepositoryTeam.GetByIdAsync(invitation.TeamId);
                     if (team != null)
                     {
                         invitation.TeamId = team.TeamName;
                     }
+                    invitationLIst.Add(invitation);
                 }
-
-            } else
-            {
-                foreach (Invitation invitation in invitationForList)
-                {
-                    if (invitation.Name.Contains(request.SearchKey))
-                    {
-                        var team = await _baseRepositoryTeam.GetByIdAsync(invitation.TeamId);
-                        if (team != null)
-                        {
-                            invitation.TeamId = team.TeamName;
-                        }
-                    }
-                }
+                w++;
             }
-            return invitationForList.ToList();
+
+            return invitationLIst;
         }
 
     }
