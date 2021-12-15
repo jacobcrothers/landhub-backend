@@ -33,24 +33,76 @@ namespace CommandHandlers.QueryHandlers
         {
             var incomeForList = new List<IncomeForUi>();
             var incomeList = await _baseRepositoryIncome.GetAllWithPagingAsync(x => x.OrgId == request.OrgId, request.PageNumber, request.PageSize);
+
+            var allowed = new List<bool>();
             foreach (var income in incomeList.ToList())
             {
-                var incomeForUi = new IncomeForUi()
-                {
-                    Id = income.Id,
-                    OrgId = income.OrgId,
-                    Description = income.Description,
-                    Type = income.Type,
-                    Amount = income.Amount,
-                    Status = income.Status,
-                    CreatedDate = income.CreatedDate
-                };
+                allowed.Add(true);
+            }
 
-                incomeForList.Add(incomeForUi);
+            if (request.SearchKey != null && request.SearchKey.Length > 0)
+            {
+                int j = 0;
+                foreach (var income in incomeList.ToList())
+                {
+                    var incomeForUi = new IncomeForUi()
+                    {
+                        Id = income.Id,
+                        OrgId = income.OrgId,
+                        Description = income.Description,
+                        Type = income.Type,
+                        Amount = income.Amount,
+                        Status = income.Status,
+                        CreatedDate = income.CreatedDate
+                    };
+                    if (incomeForUi.Description.Contains(request.SearchKey) == false)
+                        allowed[j] = false;
+                    j++;
+                }
+            }
+
+            int w = 0;
+            if (request.FilterObj != null)
+            {
+                foreach (var income in incomeList.ToList())
+                {
+                    var incomeForUi = new IncomeForUi()
+                    {
+                        Id = income.Id,
+                        OrgId = income.OrgId,
+                        Description = income.Description,
+                        Type = income.Type,
+                        Amount = income.Amount,
+                        Status = income.Status,
+                        CreatedDate = income.CreatedDate
+                    };
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && incomeForUi.Type != request.FilterObj[0])
+                        allowed[w] = false;
+                    w++;
+                }
+            }
+
+            w = 0;
+            foreach (var income in incomeList.ToList())
+            {
+                if (allowed[w])
+                {
+                    var incomeForUi = new IncomeForUi()
+                    {
+                        Id = income.Id,
+                        OrgId = income.OrgId,
+                        Description = income.Description,
+                        Type = income.Type,
+                        Amount = income.Amount,
+                        Status = income.Status,
+                        CreatedDate = income.CreatedDate
+                    };
+                    incomeForList.Add(incomeForUi);
+                }
+                w++;
             }
 
             return incomeForList;
         }
-
     }
 }

@@ -11,6 +11,8 @@ namespace Commands.Query
     {
         [JsonIgnore]
         public string OrgId { get; set; }
+        public string SearchKey { get; set; }
+        public string[] FilterObj { get; set; }
 
     }
 }
