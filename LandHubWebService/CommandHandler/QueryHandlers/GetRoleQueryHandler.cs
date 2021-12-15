@@ -119,7 +119,7 @@ namespace CommandHandlers.QueryHandlers
                         }
                     }
 
-                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && defaultRoleTemplate.Title != request.FilterObj[0])
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && defaultRoleTemplate.Title.ToLower().Contains(request.FilterObj[0].ToLower()) == false)
                         allowed[w] = false;
                     w++;
                 }

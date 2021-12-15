@@ -146,11 +146,11 @@ namespace CommandHandlers.QueryHandlers
 
                     uiUser.Status = user.Status ?? "Active";
 
-                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && uiUser.DisplayName != request.FilterObj[0])
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && uiUser.DisplayName.ToLower().Contains(request.FilterObj[0].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && uiUser.Email != request.FilterObj[1])
+                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && uiUser.Email.ToLower().Contains(request.FilterObj[1].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && uiUser.PhoneNumber!= request.FilterObj[1])
+                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && uiUser.PhoneNumber.ToLower().Contains(request.FilterObj[1].ToLower()) == false)
                         allowed[w] = false;
                     w++;
                 }

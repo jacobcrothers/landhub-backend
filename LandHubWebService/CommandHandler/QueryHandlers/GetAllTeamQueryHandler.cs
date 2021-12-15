@@ -123,7 +123,7 @@ namespace CommandHandlers.QueryHandlers
                         teamForUi.Users.Add(userForUi);
                     }
 
-                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && teamForUi.TeamName!= request.FilterObj[0])
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && teamForUi.TeamName.ToLower().Contains(request.FilterObj[0].ToLower()) == false)
                         allowed[w] = false;
                     w++;
                 }

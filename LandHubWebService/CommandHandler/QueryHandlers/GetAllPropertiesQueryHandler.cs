@@ -56,11 +56,11 @@ namespace CommandHandlers.QueryHandlers
             {
                 foreach (var property in properties.ToList())
                 {
-                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && property.PZip != request.FilterObj[0])
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && property.PZip.ToLower().Contains(request.FilterObj[0].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && property.OwnerName != request.FilterObj[1])
+                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && property.OwnerName.ToLower().Contains(request.FilterObj[1].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && property.PCity != request.FilterObj[2])
+                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && property.PCity.ToLower().Contains(request.FilterObj[2].ToLower()) == false)
                         allowed[w] = false;
                     if (request.FilterObj[3] != null && request.FilterObj[3].Length > 0 && property.CountyName != request.FilterObj[3])
                         allowed[w] = false;

@@ -56,11 +56,11 @@ namespace CommandHandlers.QueryHandlers
             {
                 foreach (Invitation invitation in invitationForList)
                 {
-                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && invitation.Name != request.FilterObj[0])
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && invitation.Name.ToLower().Contains(request.FilterObj[0].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && invitation.InvitedUserEmail != request.FilterObj[1])
+                    if (request.FilterObj[1] != null && request.FilterObj[1].Length > 0 && invitation.InvitedUserEmail.ToLower().Contains(request.FilterObj[1].ToLower()) == false)
                         allowed[w] = false;
-                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && invitation.Phone != request.FilterObj[2])
+                    if (request.FilterObj[2] != null && request.FilterObj[2].Length > 0 && invitation.Phone.ToLower().Contains(request.FilterObj[2].ToLower()) == false)
                         allowed[w] = false;
                     w++;
                 }
