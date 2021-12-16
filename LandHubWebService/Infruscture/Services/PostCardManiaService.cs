@@ -10,6 +10,10 @@ using RestSharp;
 
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Domains.Dtos.Pcm;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 
 namespace PropertyHatchCoreService.Services
 {
@@ -41,19 +45,19 @@ namespace PropertyHatchCoreService.Services
             return "";
         }
 
-        public async Task<List<Order>> GetAllOrdersAsync()
+        public async Task<List<Domains.PostMania.Order>> GetAllOrdersAsync()
         {
             var token = await GetAccessToken();
             var orderResponse = await GetRequestToPostCardManiaApiAsync(_postCardManiaUrl.AllOrdersUrl, null, token);
-            var orderList = JsonConvert.DeserializeObject<List<Order>>(orderResponse);
+            var orderList = JsonConvert.DeserializeObject<List<Domains.PostMania.Order>>(orderResponse);
             return orderList;
         }
 
-        public async Task<Order> GetOrderByIdAsync(int orderId)
+        public async Task<Domains.PostMania.Order> GetOrderByIdAsync(int orderId)
         {
             var token = await GetAccessToken();
             var orderResponse = await GetRequestToPostCardManiaApiAsync(string.Format(_postCardManiaUrl.OrderDetailsUrl, orderId), null, token);
-            var order = JsonConvert.DeserializeObject<Order>(orderResponse);
+            var order = JsonConvert.DeserializeObject<Domains.PostMania.Order>(orderResponse);
             return order;
         }
 
@@ -75,6 +79,23 @@ namespace PropertyHatchCoreService.Services
                 return response.Content;
             }
             return "";
+        }
+        private async Task<TResult> JsonPostRequestToPostCardManiaApiAsync<TResult>(string url, object payload, string token)
+        {
+            var client = new HttpClient();
+            client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", token);
+            var jsonPayLoad = JsonConvert.SerializeObject(payload);
+            var response = await client.PostAsync(url, new StringContent(jsonPayLoad, Encoding.UTF8, "application/json"));
+            response.EnsureSuccessStatusCode();
+            var responseStr = await response.Content.ReadAsStringAsync();
+            return JsonConvert.DeserializeObject<TResult>(responseStr);
+        }
+
+        public async Task<OrderResponse> PlaceNewOrder(List<Domains.Dtos.Pcm.Order> orders)
+        {
+            var token = await GetAccessToken();
+            var url = _postCardManiaUrl.PlaceOrderUrl;
+            return await JsonPostRequestToPostCardManiaApiAsync<OrderResponse>(url, orders, token);
         }
 
     }

@@ -1,16 +1,10 @@
 ﻿using Commands;
-using Commands.Query;
-
-using Domains.DBModels;
 
 using MediatR;
 
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 using PropertyHatchWebApi.ApplicationContext;
-using System;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using System.Linq;
 
@@ -25,7 +19,7 @@ namespace PropertyHatchWebApi.Controllers
         {
             this._mediator = mediator;
         }
-        [Authorize]
+        //[Authorize]
         [HttpPost("[action]")]
         public async Task<ActionResult<string>> Campaign([FromBody] CampaignMailerCommand command = null)
         {

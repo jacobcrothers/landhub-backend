@@ -18,5 +18,6 @@
         public string CampaignStatus { get; set; }
         public string PropertyStatus { get; set; }
         public string CountyName { get; set; }
+        public short CampaignMailCount { get; set; }
     }
 }
