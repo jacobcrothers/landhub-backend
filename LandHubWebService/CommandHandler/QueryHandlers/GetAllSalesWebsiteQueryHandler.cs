@@ -22,8 +22,48 @@ namespace CommandHandlers.QueryHandlers
         }
         public async Task<List<SalesWebsite>> Handle(GetAllSalesWebsiteQuery request, CancellationToken cancellationToken)
         {
-            var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId , request.PageNumber,request.PageSize);
-            return saleswebsites.ToList();
+            var saleswebsitesForList = new List<SalesWebsite>();
+            var saleswebsites = await _saleswebsiteBaseRepository.GetAllWithPagingAsync(x => x.OrganizationId == request.OrgId, request.PageNumber, request.PageSize);
+
+            var allowed = new List<bool>();
+            foreach (var saleswebsite in saleswebsites)
+            {
+                allowed.Add(true);
+            }
+
+            if (request.SearchKey != null && request.SearchKey.Length > 0)
+            {
+                int j = 0;
+                foreach (var saleswebsite in saleswebsites)
+                {
+                    if (saleswebsite.WebAddress.Contains(request.SearchKey) == false)
+                        allowed[j] = false;
+                    j++;
+                }
+            }
+
+            int w = 0;
+            if (request.FilterObj != null)
+            {
+                foreach (var saleswebsite in saleswebsites)
+                {
+                    if (request.FilterObj[0] != null && request.FilterObj[0].Length > 0 && saleswebsite.Status.ToString() != request.FilterObj[0])
+                        allowed[w] = false;
+                    w++;
+                }
+            }
+
+            w = 0;
+            foreach (var saleswebsite in saleswebsites)
+            {
+                if (allowed[w])
+                {
+                    saleswebsitesForList.Add(saleswebsite);
+                }
+                w++;
+            }
+
+            return saleswebsitesForList;
         }
     }
 }
