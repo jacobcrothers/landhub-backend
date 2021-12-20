@@ -49,5 +49,19 @@ namespace Domains.Dtos.Pcm
         public bool MailTrackingEnabled { get; set; }
         [JsonProperty("globalDesignVariables")]
         public List<KeyValuePair<string, string>> GlobalDesignVariables { get; set; }
+        [JsonProperty("letterConfig")]
+        public LetterConfig LetterConfig { get; set; }
+    }
+
+    public class LetterConfig
+    {
+        [JsonProperty("color")]
+        public bool Color { get; set; }
+        [JsonProperty("printOnBothSides")]
+        public bool PrintOnBothSides { get; set; }
+        [JsonProperty("insertAddressingPage")]
+        public bool InsertAddressingPage { get; set; }
+        [JsonProperty("envelopeType")]
+        public string EnvelopeType { get; set; }
     }
 }

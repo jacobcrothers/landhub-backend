@@ -18,7 +18,7 @@ namespace Domains.Dtos.Pcm
     public class OrderResult
     {
         [JsonProperty("orderID")]
-        public int OrderID { get; set; }
+        public int? OrderID { get; set; }
         [JsonProperty("orderIndex")]
         public int OrderIndex { get; set; }
         [JsonProperty("errors")]
@@ -34,7 +34,7 @@ namespace Domains.Dtos.Pcm
     public class FailedRecipient
     {
         [JsonProperty("recipientIndex")]
-        public int RecipientIndex { get; set; }
+        public int? RecipientIndex { get; set; }
         [JsonProperty("extRefNbr")]
         public string ExtRefNbr { get; set; }
         [JsonProperty("missingFields")]
