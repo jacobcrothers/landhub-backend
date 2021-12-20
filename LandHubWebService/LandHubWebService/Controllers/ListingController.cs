@@ -48,6 +48,19 @@ namespace PropertyHatchWebApi.Controllers
         }
 
         [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetTotalCount()
+        {
+            var getCountQuery = new GetCountQuery()
+            {
+                OrganizationId = SecurityContext.OrgId,
+                EntityName = typeof(Listing)
+            };
+            var result = await _mediator.Send(getCountQuery);
+            return Ok(result);
+        }
+
+        [HttpGet("[action]")]
         public async Task<ActionResult> GetById(string listingId)
         {
             var getListingQuery = new GetListingQuery

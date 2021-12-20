@@ -22,7 +22,8 @@ namespace CommandHandlers.QueryHandlers
         }
         public async Task<List<Listing>> Handle(GetAllListingQuery request, CancellationToken cancellationToken)
         {
-            var listings = await _listingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.IsMarketingSelected);
+            // var listings = await _listingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId && x.IsMarketingSelected);
+            var listings = await _listingBaseRepository.GetAllAsync(x => x.OrganizationId == request.OrgId);
             return listings.ToList();
         }
     }
