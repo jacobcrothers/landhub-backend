@@ -35,16 +35,21 @@ namespace PropertyHatchWebApi.Controllers
             //    _dbCollection.DeleteManyAsync(x=>true);
         }
 
-        [HttpGet("[action]")]
-        public async Task<ActionResult> GetAll(string orgId)
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetAll([FromBody] GetAllListingQuery getAllListingQuery)
         {
-            var getAllListingQuery = new GetAllListingQuery
+            getAllListingQuery.OrgId = SecurityContext.OrgId;
+            var result = await _mediator.Send(getAllListingQuery);
+            return Ok(result);
+
+            /* var getAllListingQuery = new GetAllListingQuery
             {
                 OrgId = orgId
             };
 
             var result = await _mediator.Send(getAllListingQuery);
-            return Ok(result);
+            return Ok(result); */
         }
 
         [HttpGet("[action]")]
