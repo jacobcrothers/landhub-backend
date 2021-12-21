@@ -133,7 +133,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> OfferPrice([FromBody] SetOfferPriceCommand setOfferPriceCommand)
+        {
+            var result = await _mediator.Send(setOfferPriceCommand);
+            return Ok(result);
+        }
 
         /* [HttpGet("[action]")]
          public async Task<ActionResult> GetAll(string orgId)
