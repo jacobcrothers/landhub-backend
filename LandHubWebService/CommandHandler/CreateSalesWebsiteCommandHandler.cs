@@ -30,6 +30,15 @@ namespace CommandHandlers
 
         public async Task<string> Handle(CreateSalesWebsiteCommand request, CancellationToken cancellationToken)
         {
+            if (request.Status == Domains.Enum.Enums.WebsiteStatus.Published)
+            {
+                var getWebsite = await _baseRepositorySalesWebsite.GetAllAsync(m => m.Status == Domains.Enum.Enums.WebsiteStatus.Published && m.OrganizationId == request.OrganizationId);
+                foreach (var item in getWebsite)
+                {
+                    item.Status = Domains.Enum.Enums.WebsiteStatus.InActive;
+                    await _baseRepositorySalesWebsite.UpdateAsync(item);
+                }
+            }
             var saleswebsite = _mapper.Map<CreateSalesWebsiteCommand, SalesWebsite>(request);
             saleswebsite.Id = Guid.NewGuid().ToString();
             saleswebsite.Status = request.Status;
