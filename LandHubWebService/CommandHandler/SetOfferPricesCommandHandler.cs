@@ -11,22 +11,21 @@ using System.Threading.Tasks;
 
 namespace CommandHandlers
 {
-    public class SetOfferPriceCommandHandler : AsyncRequestHandler<SetOfferPriceCommand>
+    public class SetOfferPricesCommandHandler : AsyncRequestHandler<SetOfferPricesCommand>
     {
         private IBaseRepository<Properties> _propertiesRepository;
-        public SetOfferPriceCommandHandler(IBaseRepository<Properties> propertiesRepository)
+        public SetOfferPricesCommandHandler(IBaseRepository<Properties> propertiesRepository)
         {
             _propertiesRepository = propertiesRepository;
         }
-        protected override async Task Handle(SetOfferPriceCommand request, CancellationToken cancellationToken)
+        protected override async Task Handle(SetOfferPricesCommand request, CancellationToken cancellationToken)
         {
-            foreach (var id in request.PropertyIds)
+            foreach (var entry in request.SetOfferPrices)
             {
-                var property = await _propertiesRepository.GetByIdAsync(id);
-                property.OfferPrice = request.OfferPrice;
+                var property = await _propertiesRepository.GetByIdAsync(entry.PropertyId);
+                property.OfferPrice = entry.OfferPrice;
                 await _propertiesRepository.UpdateAsync(property);
             }
-
         }
     }
 }
