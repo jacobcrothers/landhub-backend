@@ -7,9 +7,14 @@ using System.Threading.Tasks;
 
 namespace Commands
 {
-    public class SetOfferPriceCommand : IRequest
+    public class SetOfferPricesCommand : IRequest
+    {
+        public List<SetOfferPrice> SetOfferPrices { get; set; }
+    }
+
+    public class SetOfferPrice
     {
         public string OfferPrice { get; set; }
-        public List<string> PropertyIds { get; set; }
+        public string PropertyId { get; set; }
     }
 }
