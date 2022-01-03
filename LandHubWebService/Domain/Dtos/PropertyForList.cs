@@ -20,5 +20,6 @@
         public string CountyName { get; set; }
         public string OfferPrice { get; set; }
         public short CampaignMailCount { get; set; }
+        public string TotalAssessedValue { get; set; }
     }
 }

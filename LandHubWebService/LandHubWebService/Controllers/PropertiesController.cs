@@ -135,7 +135,7 @@ namespace PropertyHatchWebApi.Controllers
 
         [HttpPost("[action]")]
         [Authorize]
-        public async Task<IActionResult> OfferPrice([FromBody] SetOfferPriceCommand setOfferPriceCommand)
+        public async Task<IActionResult> OfferPrice([FromBody] SetOfferPricesCommand setOfferPriceCommand)
         {
             var result = await _mediator.Send(setOfferPriceCommand);
             return Ok(result);
