@@ -1,14 +1,17 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using MediatR;
 
-namespace Domains.DBModels
+using System.Text.Json.Serialization;
+
+namespace Commands
 {
-    public class DueDeligence : BaseEntity
+    public class PropertyUpdateCommand : IRequest<bool>
     {
-        public string marketValue { get; set; }
-        public string apn { get; set; }
-        public string propertyDimension { get; set; }
+        [JsonIgnore]
         public string OrgId { get; set; }
+        public string PropertiesId { get; set; }
+        public string ResourceStatus { get; set; }
+        public string totalAssessedValue { get; set; }
+        public string propertyDimension { get; set; }
         public string hoaRestriction { get; set; }
         public string zoingRestriction { get; set; }
         public string accessType { get; set; }
@@ -19,8 +22,7 @@ namespace Domains.DBModels
         public string pertTest { get; set; }
         public string floodZone { get; set; }
         public string survey { get; set; }
-        public string zoing { get; set; }
-        public List<string> utilities { get; set; }
-        public DateTime CreatedDate { get; set; }
+        public string zoning { get; set; }
+        public string[] utilities { get; set; }
     }
 }

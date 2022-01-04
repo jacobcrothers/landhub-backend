@@ -97,7 +97,13 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<ActionResult> Update([FromBody] PropertyUpdateCommand propertyUpdateCommand)
+        {
+            await _mediator.Send(propertyUpdateCommand);
+            return Ok();
+        }
 
         [HttpPost("[action]")]
         [Authorize]
