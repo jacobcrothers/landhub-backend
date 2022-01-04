@@ -302,7 +302,7 @@ namespace Domains.DBModels
         public string ResourceStatus { get; set; }
         public string propertyDimension { get; set; }
         public string hoaRestriction { get; set; }
-        public string zoingRestriction { get; set; }
+        public string zoningRestriction { get; set; }
         public string accessType { get; set; }
         public string visualAccess { get; set; }
         public string topography { get; set; }

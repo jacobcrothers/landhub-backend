@@ -26,7 +26,7 @@ namespace CommandHandlers
             property.TotalAssessedValue = request.totalAssessedValue;
             property.propertyDimension = request.propertyDimension;
             property.hoaRestriction = request.hoaRestriction;
-            property.zoingRestriction = request.zoingRestriction;
+            property.zoningRestriction = request.zoningRestriction;
             property.accessType = request.accessType;
             property.visualAccess = request.visualAccess;
             property.topography = request.topography;
