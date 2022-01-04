@@ -1,14 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Domains.DBModels
+namespace Domains.Dtos
 {
-    public class DueDeligence : BaseEntity
+    public class DueDeligenceForUi
     {
-        public string marketValue { get; set; }
-        public string apn { get; set; }
-        public string propertyDimension { get; set; }
+        public string Id { get; set; }
         public string OrgId { get; set; }
+        public string apn { get; set; }
+        public string marketValue { get; set; }
+        public string propertyDimension { get; set; }
         public string hoaRestriction { get; set; }
         public string zoingRestriction { get; set; }
         public string accessType { get; set; }

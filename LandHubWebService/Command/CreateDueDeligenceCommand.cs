@@ -9,6 +9,7 @@ namespace Commands
     public class CreateDueDeligenceCommand : IRequest
     {
         public string marketValue { get; set; }
+        public string apn { get; set; }
         public string propertyDimension { get; set; }
         public string OrgId { get; set; }
         public string hoaRestriction { get; set; }

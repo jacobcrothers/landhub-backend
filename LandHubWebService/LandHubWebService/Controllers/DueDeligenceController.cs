@@ -33,5 +33,19 @@ namespace PropertyHatchWebApi.Controllers
             await _mediator.Send(createDueDeligenceCommand);
             return Ok();
         }
+
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<ActionResult> GetByAPN(string apn)
+        {
+            var getDueDeligenceQuery = new GetDueDeligenceQuery
+            {
+                OrgId = SecurityContext.OrgId,
+                apn = apn
+            };
+
+            var result = await _mediator.Send(getDueDeligenceQuery);
+            return Ok(result);
+        }
     }
 }
