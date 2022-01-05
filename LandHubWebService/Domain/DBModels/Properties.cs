@@ -286,19 +286,14 @@ namespace Domains.DBModels
         public string Filtered_Out { get; set; }
         public string ListingId { get; set; }
 
-
-
         public string[] Images { get; set; }
         public string[] Documents { get; set; }
-
         public string OrgId { get; set; }
         public DateTime ImportedTime { get; set; }
         public string UserId { get; set; }
         public string ImportFileId { get; set; }
         public string CampaignStatus { get; set; }
-
         public string PropertyStatus { get; set; }
-
         public string ResourceStatus { get; set; }
         public string propertyDimension { get; set; }
         public string hoaRestriction { get; set; }
