@@ -26,15 +26,18 @@ namespace CommandHandlers
     {
         private IBaseRepository<PropertiesFileImport> _baseRepositoryPropertiesFileImport;
         private IBaseRepository<AgentPro> _baseRepositoryPropertiesAgentPro;
+        private IBaseRepository<Properties> _baseRepositoryProperties;
         private IBaseRepository<Prycd> _baseRepositoryPropertiesPrycd;
         private readonly ILogger<InitiatetFileImportCommandHandler> _logger;
         public InitiatetFileImportCommandHandler(IBaseRepository<PropertiesFileImport> baseRepositoryPropertiesFileImport
             , IBaseRepository<AgentPro> baseRepositoryPropertiesAgentPro
+            , IBaseRepository<Properties> baseRepositoryProperties
             , ILogger<InitiatetFileImportCommandHandler> logger
             , IBaseRepository<Prycd> baseRepositoryPropertiesPrycd)
         {
             _baseRepositoryPropertiesFileImport = baseRepositoryPropertiesFileImport;
             _baseRepositoryPropertiesAgentPro = baseRepositoryPropertiesAgentPro;
+            _baseRepositoryProperties = baseRepositoryProperties;
             _logger = logger;
             _baseRepositoryPropertiesPrycd = baseRepositoryPropertiesPrycd;
         }
@@ -74,6 +77,14 @@ namespace CommandHandlers
                                     ImportFileId = propertiesFileImport.Id
                                 };
 
+                                var property = new Properties()
+                                {
+                                    Id = Guid.NewGuid().ToString(),
+                                    UserId = propertiesFileImport.UserId,
+                                    OrgId = propertiesFileImport.OrgId,
+                                    ImportFileId = propertiesFileImport.Id
+                                };
+
                                 if (record.Count() > 1)
                                 {
                                     totalRecordCount++;
@@ -87,8 +98,16 @@ namespace CommandHandlers
                                                 var data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
                                                 agentPro.GetType().GetProperty(propertyName).SetValue(agentPro, data ?? string.Empty);
                                             }
+
+                                            if (property.HasProperty(propertyName))
+                                            {
+                                                var data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
+                                                property.GetType().GetProperty(propertyName).SetValue(property, data ?? string.Empty);
+                                            }
                                         }
                                     }
+
+                                    await _baseRepositoryProperties.Create(property);
                                     if (await IsPropertyNotAvaliableInAgentPro(agentPro.APN, request.OrgId))
                                     {
                                         await _baseRepositoryPropertiesAgentPro.Create(agentPro);
