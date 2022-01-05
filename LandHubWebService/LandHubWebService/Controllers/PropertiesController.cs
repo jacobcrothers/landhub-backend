@@ -139,7 +139,20 @@ namespace PropertyHatchWebApi.Controllers
             return Ok(result);
         }
 
-
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> OfferPrice([FromBody] SetOfferPricesCommand setOfferPriceCommand)
+        {
+            var result = await _mediator.Send(setOfferPriceCommand);
+            return Ok(result);
+        }
+        [HttpPost("[action]")]
+        [Authorize]
+        public async Task<IActionResult> DeletePropertyBulk([FromBody] DeletePropertyBulkCommand deletePropertyBulkCommand)
+        {
+            var result = await _mediator.Send(deletePropertyBulkCommand);
+            return Ok(result);
+        }
 
         /* [HttpGet("[action]")]
          public async Task<ActionResult> GetAll(string orgId)
