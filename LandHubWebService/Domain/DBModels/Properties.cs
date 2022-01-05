@@ -285,7 +285,7 @@ namespace Domains.DBModels
         public string Reference { get; set; }
         public string Filtered_Out { get; set; }
         public string ListingId { get; set; }
-
+        public string OfferPrice { get; set; }
         public string[] Images { get; set; }
         public string[] Documents { get; set; }
         public string OrgId { get; set; }
