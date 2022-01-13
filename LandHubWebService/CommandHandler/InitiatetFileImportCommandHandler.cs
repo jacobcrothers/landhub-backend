@@ -95,13 +95,30 @@ namespace CommandHandlers
                                             var propertyName = propertiesFileImport.ColumnMapping.FirstOrDefault(x => x.Value == fileColumns[j]).Key;
                                             if (agentPro.HasProperty(propertyName))
                                             {
-                                                var data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
+                                                string data = string.Empty;
+                                                try
+                                                {
+                                                    data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    data = record[j].ToString();
+                                                }
+
                                                 agentPro.GetType().GetProperty(propertyName).SetValue(agentPro, data ?? string.Empty);
                                             }
 
                                             if (property.HasProperty(propertyName))
                                             {
-                                                var data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
+                                                string data = string.Empty;
+                                                try
+                                                {
+                                                    data = (JsonConvert.DeserializeObject(record[j]))?.ToString().Trim();
+                                                }
+                                                catch (Exception ex)
+                                                {
+                                                    data = record[j].ToString();
+                                                }
                                                 property.GetType().GetProperty(propertyName).SetValue(property, data ?? string.Empty);
                                             }
                                         }
