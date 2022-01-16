@@ -24,9 +24,12 @@ namespace CommandHandlers
 
         protected override async Task Handle(CreatePropertyDocumentCommand request, CancellationToken cancellationToken)
         {
-            var pd = _mapper.Map<CreatePropertyDocumentCommand, PropertyDocument>(request);
-            pd.Id = Guid.NewGuid().ToString();
-            await _baseRepositoryCampaign.Create(pd);
+            foreach(var entry in request.List)
+            {
+                var pd = _mapper.Map<CreatePropertyDocumentCommand, PropertyDocument>(request);
+                await _baseRepositoryCampaign.Create(pd);
+            }
+            
         }
 
     }

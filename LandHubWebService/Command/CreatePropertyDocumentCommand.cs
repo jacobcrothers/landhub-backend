@@ -1,9 +1,15 @@
 ﻿using MediatR;
 using System;
+using System.Collections.Generic;
 
 namespace Commands
 {
     public class CreatePropertyDocumentCommand : IRequest
+    {
+        public List<CreatePropertyDocument> List { get; set; }
+    }
+
+    public class CreatePropertyDocument
     {
         public string Name { get; set; }
         public string DocumentType { get; set; }
