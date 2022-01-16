@@ -26,7 +26,7 @@ namespace CommandHandlers
         {
             foreach(var entry in request.List)
             {
-                var pd = _mapper.Map<CreatePropertyDocumentCommand, PropertyDocument>(request);
+                var pd = _mapper.Map<CreatePropertyDocument, PropertyDocument>(entry);
                 await _baseRepositoryCampaign.Create(pd);
             }
             
